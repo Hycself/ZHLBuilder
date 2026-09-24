@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "app_name", "value": "ZHLBuilder" },
+    { "name": "module_desc", "value": "ZHLBuilder 设备管理" },
+    { "name": "camera_reason", "value": "扫描设备端配对二维码" }
+  ]
+}
