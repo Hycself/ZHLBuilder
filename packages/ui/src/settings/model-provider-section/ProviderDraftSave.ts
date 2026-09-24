@@ -1,4 +1,4 @@
-import { isApiKeyAccess, type ProviderApiType } from "@zcode/provider";
+import { isApiKeyAccess, type ProviderApiType } from "@zhlbuilder/provider";
 import {
   getProviderFormLabel,
   type ProviderSettingsFormProvider,

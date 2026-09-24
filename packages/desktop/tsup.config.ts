@@ -1,4 +1,4 @@
-import { pickProductEndpointEnv } from "@zcode/shared/zcodeEndpoint";
+import { pickProductEndpointEnv } from "@zhlbuilder/shared/zcodeEndpoint";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -153,19 +153,19 @@ export default defineConfig([
     // desktop 保持 undici 为外部依赖，remote 单文件 bundle 再单独内联。
     external: desktopNodeRuntimeExternals,
     noExternal: [
-      "@zcode/server",
-      "@zcode/shared",
-      "@zcode/rpc",
-      "@zcode/services",
-      "@zcode/client",
+      "@zhlbuilder/server",
+      "@zhlbuilder/shared",
+      "@zhlbuilder/rpc",
+      "@zhlbuilder/services",
+      "@zhlbuilder/client",
       // Provider Refactor 的 workspace 包导出 TypeScript 源码；Electron 生产运行时没有
       // TS loader，必须随 Desktop bundle 内联，不能留下指向 src/index.ts 的裸包引用。
-      "@zcode/provider",
-      "@zcode/provider-node",
+      "@zhlbuilder/provider",
+      "@zhlbuilder/provider-node",
       // services 已内联进 main，但其 producer import 曾被保留为裸包引用；
       // electron-builder 又会排除 node_modules/@zcode，导致安装包启动即 ERR_MODULE_NOT_FOUND。
       // producer 的 JS broker 必须跟随 services 一起内联，原生 addon 仍只存在于独立 Helper。
-      "@zcode/zcode-cua",
+      "@zhlbuilder/zcode-cua",
     ],
     // OTLP 端点与鉴权只在运行时读取；构建环境中的凭据不能写进公开安装包。
     define: createSharedDefines(),
@@ -194,7 +194,7 @@ export default defineConfig([
     platform: "node",
     target: "node22",
     external: ["electron"],
-    noExternal: ["@zcode/shared"],
+    noExternal: ["@zhlbuilder/shared"],
     outExtension: () => ({ js: ".cjs" }),
     define: createSharedDefines(),
     esbuildOptions(options) {
@@ -217,14 +217,14 @@ export default defineConfig([
     // 这里同样保留为外部依赖，避免 desktop 开发态和打包态 host 进程启动失败。
     external: desktopNodeRuntimeExternals,
     noExternal: [
-      "@zcode/server",
-      "@zcode/shared",
-      "@zcode/rpc",
-      "@zcode/services",
-      "@zcode/client",
-      "@zcode/provider",
-      "@zcode/provider-node",
-      "@zcode/zcode-cua",
+      "@zhlbuilder/server",
+      "@zhlbuilder/shared",
+      "@zhlbuilder/rpc",
+      "@zhlbuilder/services",
+      "@zhlbuilder/client",
+      "@zhlbuilder/provider",
+      "@zhlbuilder/provider-node",
+      "@zhlbuilder/zcode-cua",
     ],
     define: createSharedDefines(),
     // 与 main 保持一致的 chunk 隔离策略，避免 host/main 产物相互覆盖。
@@ -242,18 +242,18 @@ export default defineConfig([
     format: "esm",
     platform: "node",
     target: "node22",
-    // 与 host 同构：常驻 cron scheduler 进程复用 @zcode/services（tasks-index + cron），
+    // 与 host 同构：常驻 cron scheduler 进程复用 @zhlbuilder/services（tasks-index + cron），
     // 同样保留 undici 等为外部依赖，避免 Electron ESM runtime 的 dynamic require 崩溃。
     external: desktopNodeRuntimeExternals,
     noExternal: [
-      "@zcode/server",
-      "@zcode/shared",
-      "@zcode/rpc",
-      "@zcode/services",
-      "@zcode/client",
-      "@zcode/provider",
-      "@zcode/provider-node",
-      "@zcode/zcode-cua",
+      "@zhlbuilder/server",
+      "@zhlbuilder/shared",
+      "@zhlbuilder/rpc",
+      "@zhlbuilder/services",
+      "@zhlbuilder/client",
+      "@zhlbuilder/provider",
+      "@zhlbuilder/provider-node",
+      "@zhlbuilder/zcode-cua",
     ],
     define: createSharedDefines(),
     esbuildOptions(options) {

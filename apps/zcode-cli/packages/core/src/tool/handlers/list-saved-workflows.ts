@@ -17,7 +17,7 @@ import {
   SAVED_WORKFLOW_PROJECT_DIR,
   type ListSavedWorkflowsOutput,
   type ModelMessageContent,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type { ToolEntry, ToolHandler } from "../types.js";
 import { listSavedWorkflows } from "./saved-workflows/index.js";
 

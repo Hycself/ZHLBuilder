@@ -7,8 +7,8 @@ import {
   type SessionGoal,
   type TurnFileChangeSummary,
   type TurnId,
-} from "@zcode/contracts";
-import type { ConversationSnapshot } from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/contracts";
+import type { ConversationSnapshot } from "@zhlbuilder/shared/zcode-protocol-v4";
 import {
   goalVerificationEntriesFromSessionEntries,
   synthesizeEventsFromMessages,
@@ -26,22 +26,22 @@ interface ConversationMaterializationSource {
 }
 
 interface PersistedConversationMaterializationStore {
-  getSession(sessionId: import("@zcode/contracts").SessionId): Promise<{
+  getSession(sessionId: import("@zhlbuilder/contracts").SessionId): Promise<{
     title?: string;
     revert?: {
-      branchCutAfterMessageID?: import("@zcode/contracts").MessageId;
+      branchCutAfterMessageID?: import("@zhlbuilder/contracts").MessageId;
       branchGeneration?: number;
-      createdMessageID?: import("@zcode/contracts").MessageId;
-      keptMessageIDs?: import("@zcode/contracts").MessageId[];
-      targetMessageID?: import("@zcode/contracts").MessageId;
+      createdMessageID?: import("@zhlbuilder/contracts").MessageId;
+      keptMessageIDs?: import("@zhlbuilder/contracts").MessageId[];
+      targetMessageID?: import("@zhlbuilder/contracts").MessageId;
     };
   } | null>;
-  messages(input: { sessionID: import("@zcode/contracts").SessionId }): Promise<MessageWithParts[]>;
+  messages(input: { sessionID: import("@zhlbuilder/contracts").SessionId }): Promise<MessageWithParts[]>;
   readTarget(input: {
-    sessionID: import("@zcode/contracts").SessionId;
+    sessionID: import("@zhlbuilder/contracts").SessionId;
   }): Promise<SessionGoal | null>;
   sessionEntries?(input: {
-    sessionID: import("@zcode/contracts").SessionId;
+    sessionID: import("@zhlbuilder/contracts").SessionId;
     type?: string;
   }): Promise<SessionEntryInfo[]>;
 }
@@ -68,7 +68,7 @@ export async function loadPersistedConversationMaterialization(input: {
       messages: [],
     };
   }
-  const sessionID = input.sessionId as import("@zcode/contracts").SessionId;
+  const sessionID = input.sessionId as import("@zhlbuilder/contracts").SessionId;
   const [session, allMessages, target, entries] = await Promise.all([
     input.store.getSession(sessionID),
     input.persistedMessages ?? input.store.messages({ sessionID }),

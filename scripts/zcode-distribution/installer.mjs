@@ -5,7 +5,7 @@ export function installScriptSource(baseUrl) {
 set -eu
 
 BASE_URL="\${ZCODE_DIST_BASE_URL:-${baseUrl}}"
-INSTALL_DIR="\${ZCODE_DIST_HOME:-$HOME/.zcode/runtime}"
+INSTALL_DIR="\${ZCODE_DIST_HOME:-$HOME/.zhlbuilder/runtime}"
 BIN_DIR="\${ZCODE_DIST_BIN_DIR:-$HOME/.local/bin}"
 
 need_cmd() {
@@ -42,14 +42,14 @@ mv "$TARGET.new/${packageDirName}" "$TARGET"
 rm -rf "$TARGET.new"
 ln -sfn "$TARGET" "$INSTALL_DIR/current"
 
-cat > "$BIN_DIR/zcode" <<SH
+cat > "$BIN_DIR/zhlbuilder" <<SH
 #!/usr/bin/env sh
 exec node "$INSTALL_DIR/current/bin/zcode.mjs" "\\$@"
 SH
-chmod +x "$BIN_DIR/zcode"
+chmod +x "$BIN_DIR/zhlbuilder"
 
 echo "ZCode $VERSION installed."
-echo "Run: zcode (TUI) or zcode --web (Web)"
+echo "Run: zhlbuilder (TUI) or zhlbuilder --web (Web)"
 case ":$PATH:" in
   *":$BIN_DIR:"*) ;;
   *) echo "Note: $BIN_DIR is not in PATH." ;;

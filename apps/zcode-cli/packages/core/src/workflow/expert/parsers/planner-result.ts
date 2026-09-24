@@ -1,7 +1,7 @@
 import {
   WorkflowGraphPlannerResultSchema,
   type WorkflowGraphPlannerResult,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { normalizeWorkflowGraphSeedCandidate } from "./graph-seed.js";
 import {
   isRecord,

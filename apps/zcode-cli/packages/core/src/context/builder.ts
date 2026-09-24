@@ -2,7 +2,7 @@
 // Context Builder - System prompt assembly
 // ============================================================
 
-import type { ModelInputMessage } from "@zcode/contracts";
+import type { ModelInputMessage } from "@zhlbuilder/contracts";
 import type {
   ContextMetaUserAttachment,
   ContextSection,

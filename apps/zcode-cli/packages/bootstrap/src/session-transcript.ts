@@ -6,8 +6,8 @@ import {
   type SessionId,
   type SessionStorePort,
   type ToolResultDisplayPayload,
-} from "@zcode/contracts";
-import { getConversationMessageProjectionPolicy } from "@zcode/shared";
+} from "@zhlbuilder/contracts";
+import { getConversationMessageProjectionPolicy } from "@zhlbuilder/shared";
 
 export type SessionTranscriptPart =
   | {

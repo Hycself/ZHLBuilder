@@ -1,4 +1,4 @@
-import { InternalChannels, type RemoteTarget } from "@zcode/shared";
+import { InternalChannels, type RemoteTarget } from "@zhlbuilder/shared";
 
 export interface RemoteWorkspaceServicePortRegistration {
   attachmentId: string;

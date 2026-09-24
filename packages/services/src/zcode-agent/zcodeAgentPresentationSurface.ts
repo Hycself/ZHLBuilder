@@ -1,4 +1,4 @@
-import type { ServiceAuthorityMode } from "@zcode/shared";
+import type { ServiceAuthorityMode } from "@zhlbuilder/shared";
 
 export type ZCodeAgentPresentationSurface = "desktop";
 

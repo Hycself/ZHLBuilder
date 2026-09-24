@@ -1,5 +1,5 @@
-import type { ZCodeProvider, SkillsPromptContext, SkillsListResult } from "@zcode/shared";
-import { ServiceChannels } from "@zcode/shared";
+import type { ZCodeProvider, SkillsPromptContext, SkillsListResult } from "@zhlbuilder/shared";
+import { ServiceChannels } from "@zhlbuilder/shared";
 import { createServiceDescriptor } from "../descriptors.js";
 
 export interface ISkillsService {

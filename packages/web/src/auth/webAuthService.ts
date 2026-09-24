@@ -1,4 +1,4 @@
-import { ZAI_PROVIDER_ID, type UserInfo } from "@zcode/shared";
+import { ZAI_PROVIDER_ID, type UserInfo } from "@zhlbuilder/shared";
 import {
   BrowserOAuthCredentialRepo,
   type WebOAuthProviderId,

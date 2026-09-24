@@ -17,7 +17,8 @@ supportedArchitectures:
     - current
     - glibc
 allowBuilds:
-  cpu-features: true
+  # cpu-features(ssh2 可选原生构建)在本机 Node 24 上 postinstall 必失败，禁用其构建走 JS 回退
+  cpu-features: false
   edgedriver: true
   electron: true
   electron-winstaller: true

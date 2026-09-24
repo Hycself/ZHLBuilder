@@ -4,9 +4,9 @@ import {
   type SessionEvent,
   type SessionId,
   type SessionStorePort,
-} from "@zcode/contracts";
-import type { AgentRuntime } from "@zcode/core";
-import type { ZCodeSessionSubagentsResult } from "@zcode/shared";
+} from "@zhlbuilder/contracts";
+import type { AgentRuntime } from "@zhlbuilder/core";
+import type { ZCodeSessionSubagentsResult } from "@zhlbuilder/shared";
 import { projectSessionTranscript, type SessionTranscriptMessage } from "../session-transcript.js";
 import {
   collectSubagentChildSessionIds,

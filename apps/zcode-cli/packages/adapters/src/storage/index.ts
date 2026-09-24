@@ -18,18 +18,18 @@ import type {
   ToolArtifactWriteRequest,
   ToolArtifactWriteResult,
   ToolBinaryArtifactReadResult,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { maybeThrowStorageFsFault } from "./fs-fault-injection.js";
 
 export * from "./session-store.js";
 
-// 内存 event store 实现已下沉到 @zcode/contracts，
-// 这里保持 `@zcode/adapters/storage` 的导出路径不变，避免调用方改 import。
+// 内存 event store 实现已下沉到 @zhlbuilder/contracts，
+// 这里保持 `@zhlbuilder/adapters/storage` 的导出路径不变，避免调用方改 import。
 export {
   InMemorySessionEventStore,
   createInMemorySessionEventStore,
   type InMemorySessionEventStoreOptions,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 
 export interface NodeToolArtifactStoreOptions {
   imageCacheRootDir: string;

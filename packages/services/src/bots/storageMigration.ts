@@ -5,7 +5,7 @@ import {
   modelSelectionSchema,
   ZCODE_AGENT_PROVIDER,
   type ModelSelection,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { normalizeBotCurrentOptions, normalizeBotDraftOptions } from "./config.js";
 
 function isRecord(value: unknown): value is Record<string, unknown> {

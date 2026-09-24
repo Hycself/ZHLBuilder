@@ -9,13 +9,13 @@
     },
     "build:desktop-agent": {
       "dependsOn": [
-        "@zcode/shared-types#build",
-        "@zcode/contracts#build",
-        "@zcode/dynamic-workflow#build",
-        "@zcode/core#build",
-        "@zcode/adapters#build",
-        "@zcode/bootstrap#build",
-        "@zcode/i18n#build"
+        "@zhlbuilder/shared-types#build",
+        "@zhlbuilder/contracts#build",
+        "@zhlbuilder/dynamic-workflow#build",
+        "@zhlbuilder/core#build",
+        "@zhlbuilder/adapters#build",
+        "@zhlbuilder/bootstrap#build",
+        "@zhlbuilder/i18n#build"
       ],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -54,7 +54,7 @@
     "clean": {
       "cache": false
     },
-    "@zcode/cli#build": {
+    "@zhlbuilder/cli#build": {
       "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",

@@ -6,7 +6,7 @@ import {
   type ZCodeConfigOption,
   type ZCodeProvider,
   type ZCodeTaskMeta,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 interface ModelConfigSyncScope {
   provider: ZCodeProvider;

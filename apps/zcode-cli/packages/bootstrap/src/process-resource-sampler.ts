@@ -3,7 +3,7 @@ import { availableParallelism, totalmem } from "node:os";
 import {
   ZCODE_CLI_RESOURCE_SAMPLE_INTERVAL_MS,
   type ZCodeProcessResourceSample,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 /** 采样周期与 app 侧聚合共用 shared 的同一个常量，避免两侧节拍各自漂移。 */
 const ZCODE_PROCESS_RESOURCE_SAMPLE_INTERVAL_MS = ZCODE_CLI_RESOURCE_SAMPLE_INTERVAL_MS;

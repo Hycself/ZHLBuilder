@@ -6,8 +6,8 @@ import type {
   CommandSetEnabledParams,
   CommandAgentSource,
   UserCommand,
-} from "@zcode/shared";
-import { ServiceChannels } from "@zcode/shared";
+} from "@zhlbuilder/shared";
+import { ServiceChannels } from "@zhlbuilder/shared";
 import { createServiceDescriptor } from "../descriptors.js";
 
 export interface ICommandsService {

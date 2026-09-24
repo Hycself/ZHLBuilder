@@ -2,8 +2,8 @@ import {
   BOT_TASK_STREAM_BROADCAST_CHANNEL,
   type ZCodeStreamEvent,
   type BotTaskStreamBroadcastPayload,
-} from "@zcode/shared";
-import type { BroadcastMessage } from "@zcode/services";
+} from "@zhlbuilder/shared";
+import type { BroadcastMessage } from "@zhlbuilder/services";
 import { buildTaskWorkspaceKey } from "@/lib/taskQueryCache.js";
 import type { WindowTabState } from "@/store/tabStore.js";
 import { isWorkspaceTab } from "@/store/tabStore.js";

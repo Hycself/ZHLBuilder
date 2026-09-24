@@ -1,13 +1,13 @@
 import { z } from "zod";
-import { modelSelectionSchema } from "@zcode/shared/model-selection";
-import { completeModelConfigDataSchema, modelConfigDataSchema } from "@zcode/shared/model-config";
+import { modelSelectionSchema } from "@zhlbuilder/shared/model-selection";
+import { completeModelConfigDataSchema, modelConfigDataSchema } from "@zhlbuilder/shared/model-config";
 import {
   parsePersonalModelConfigRules,
   parsePersonalProviderConfigMap,
   extractManualModelConfig,
   manualModelConfigSchema,
   type ProviderConfigLayerUpdate,
-} from "@zcode/provider";
+} from "@zhlbuilder/provider";
 
 const CURRENT_SCHEMA_VERSION = 1 as const;
 

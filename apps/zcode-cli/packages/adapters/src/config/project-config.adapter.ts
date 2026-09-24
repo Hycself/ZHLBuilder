@@ -1,11 +1,11 @@
 import { basename, dirname, isAbsolute, resolve } from "node:path";
-import type { McpServerConfig, RuntimeConfigPatch } from "@zcode/contracts";
+import type { McpServerConfig, RuntimeConfigPatch } from "@zhlbuilder/contracts";
 import {
   createWorkspaceHookSourceInput,
   discoverWorkspaceHookConfigPaths,
   workspaceHooksConfigSchema,
   type WorkspaceHookSourceInput,
-} from "@zcode/shared/workspace-hook-discovery";
+} from "@zhlbuilder/shared/workspace-hook-discovery";
 import { loadFileConfig, type LoadedConfig } from "./file-config.adapter.js";
 
 const CURRENT_DIRECTORY = ".";

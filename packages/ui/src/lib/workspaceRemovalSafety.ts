@@ -1,5 +1,5 @@
-import type { FileEntry, ZCodeTaskMeta, ZCodeTaskRuntimeStatus } from "@zcode/shared";
-import type { IFileService } from "@zcode/services";
+import type { FileEntry, ZCodeTaskMeta, ZCodeTaskRuntimeStatus } from "@zhlbuilder/shared";
+import type { IFileService } from "@zhlbuilder/services";
 import type { WorkspaceZCodeUIState } from "@/store/zcodeSessionStoreTypes.js";
 import { isChatTaskRunning } from "@/lib/chatStatus.js";
 import { logger } from "@/logger.js";

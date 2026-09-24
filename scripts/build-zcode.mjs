@@ -13,9 +13,9 @@ import {
 import { installScriptSource } from "./zcode-distribution/installer.mjs";
 
 const root = resolve(import.meta.dirname, "..");
-const defaultOutDir = resolve(root, "dist", "zcode");
+const defaultOutDir = resolve(root, "dist", "zhlbuilder");
 const defaultBaseUrl = (await loadEndpointEnv()).ZCODE_DIST_BASE_URL?.trim() || "";
-const packageDirName = "zcode";
+const packageDirName = "zhlbuilder";
 const usage = `Usage:
   pnpm build:zcode
   node scripts/build-zcode.mjs --skip-build
@@ -145,19 +145,19 @@ async function buildOutputs(skipBuild) {
     return;
   }
 
-  run("pnpm", ["--filter", "@zcode/cli...", "build"]);
+  run("pnpm", ["--filter", "@zhlbuilder/cli...", "build"]);
   await rm(resolve(root, "packages", "server", "dist"), {
     force: true,
     recursive: true,
   });
-  run("pnpm", ["--filter", "@zcode/server", "build"]);
-  run("pnpm", ["--filter", "@zcode/web", "build"]);
+  run("pnpm", ["--filter", "@zhlbuilder/server", "build"]);
+  run("pnpm", ["--filter", "@zhlbuilder/web", "build"]);
 }
 
 async function stageZCodePackage({ packageRoot, version }) {
   const webDist = resolve(root, "packages", "web", "dist");
   const serverDist = resolve(root, "packages", "server", "dist");
-  const agentBundle = resolve(root, "apps", "zcode-cli", "packages", "cli", "dist", "zcode.cjs");
+  const agentBundle = resolve(root, "apps", "zcode-cli", "packages", "cli", "dist", "zhlbuilder.cjs");
   const agentProvider = resolve(root, "apps/zcode-cli/packages/cli/dist/provider");
 
   await assertDirectory(webDist, "web dist");
@@ -183,14 +183,14 @@ async function stageZCodePackage({ packageRoot, version }) {
   await mkdir(resolve(packageRoot, "agent"), {
     recursive: true,
   });
-  await cp(agentBundle, resolve(packageRoot, "agent", "zcode.cjs"));
+  await cp(agentBundle, resolve(packageRoot, "agent", "zhlbuilder.cjs"));
   // TUI 入口通过真正的 CLI 路径定位伴随配置；只复制 JS 会在仓库外启动失败。
   await cp(agentProvider, resolve(packageRoot, "agent/provider"), { recursive: true });
   await cp(
     resolve(root, "apps/zcode-cli/packages/cli/dist/THIRD-PARTY-NOTICES.md"),
     resolve(packageRoot, "agent/THIRD-PARTY-NOTICES.md"),
   );
-  await chmod(resolve(packageRoot, "agent", "zcode.cjs"), 0o755);
+  await chmod(resolve(packageRoot, "agent", "zhlbuilder.cjs"), 0o755);
 
   await stageTuiRuntime(packageRoot);
   await copyRuntimeNodeModules(packageRoot);
@@ -276,7 +276,7 @@ async function main() {
       {
         baseUrl: options.baseUrl,
         createdAt: new Date().toISOString(),
-        name: "zcode",
+        name: "zhlbuilder",
         sha256,
         tarball: tarballName,
         version,

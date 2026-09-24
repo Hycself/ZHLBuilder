@@ -32,7 +32,7 @@ import {
   CodingPlanWebviewChannels,
   type CodingPlanPurchaseCompletePayload,
   ZCODE_VERSION,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 interface CodingPlanEmbeddedWebviewDialogProps {
   credentialService: {

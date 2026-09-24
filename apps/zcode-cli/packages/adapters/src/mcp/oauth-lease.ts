@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { dirname, join } from "node:path";
-import { acquireFileLock } from "@zcode/shared/node";
-import { ZCODE_FILE_LOCK_TIMEOUT_ERROR_CODE } from "@zcode/shared";
+import { acquireFileLock } from "@zhlbuilder/shared/node";
+import { ZCODE_FILE_LOCK_TIMEOUT_ERROR_CODE } from "@zhlbuilder/shared";
 import type { SharedZCodeCredentialStore } from "../auth/shared-credentials.js";
 import { isRecord, mcpOAuthCredentialKey } from "./oauth-credentials.js";
 

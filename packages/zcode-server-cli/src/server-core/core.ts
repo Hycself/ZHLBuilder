@@ -4,9 +4,9 @@ import {
   materializeZCodeBuiltinProviderConfig,
   getAppConfigDir,
   ZCODE_BUILTIN_PROVIDER_CONFIG_FILE_ENV,
-} from "@zcode/services/node";
-import { IZCodeAgentService } from "@zcode/services";
-import { ZCODE_VERSION } from "@zcode/shared";
+} from "@zhlbuilder/services/node";
+import { IZCodeAgentService } from "@zhlbuilder/services";
+import { ZCODE_VERSION } from "@zhlbuilder/shared";
 import { createCoreHttpServer } from "./http.js";
 import { installParentDisconnectHandler } from "./parentDisconnect.js";
 import { resolveCoreServerId } from "./serverIdentity.js";

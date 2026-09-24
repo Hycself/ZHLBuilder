@@ -1,4 +1,4 @@
-import type { TuiSubmitPrompt } from "@zcode/tui";
+import type { TuiSubmitPrompt } from "@zhlbuilder/tui";
 import {
   formatAvailableCommandNames,
   listCustomCommandsForHelp,

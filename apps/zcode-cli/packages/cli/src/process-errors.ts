@@ -5,7 +5,7 @@ import {
   ZCODE_PROCESS_DIAGNOSTIC_MESSAGE_MAX_CHARS,
   ZCODE_PROCESS_DIAGNOSTIC_STACK_MAX_CHARS,
   type ZCodeProcessDiagnostic,
-} from "@zcode/shared/process-diagnostic";
+} from "@zhlbuilder/shared/process-diagnostic";
 
 interface CliProcessErrorBoundaryTarget {
   on(event: string, listener: (...args: unknown[]) => void): unknown;

@@ -1,10 +1,10 @@
-import { createConfig, resolvePath } from "@zcode/adapters/config";
-import type { Logger, McpConnectionSnapshot, McpPort, McpServerStatus } from "@zcode/contracts";
+import { createConfig, resolvePath } from "@zhlbuilder/adapters/config";
+import type { Logger, McpConnectionSnapshot, McpPort, McpServerStatus } from "@zhlbuilder/contracts";
 import {
   zcodeMcpListParamsSchema,
   zcodeMcpListResultSchema,
   type ZCodeMcpListResult,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   listMcpServerStatuses,
   omitMcpServers,

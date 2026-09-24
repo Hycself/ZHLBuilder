@@ -1,10 +1,10 @@
-import { Emitter, type Event, type IDisposable } from "@zcode/rpc";
+import { Emitter, type Event, type IDisposable } from "@zhlbuilder/rpc";
 import type {
   IZCodeAgentService,
   ZCodeAgentRuntimeLifecycleEvent,
   ZCodeAgentWorkspaceTarget,
-} from "@zcode/services";
-import type { ConversationTelemetryFact } from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/services";
+import type { ConversationTelemetryFact } from "@zhlbuilder/shared/zcode-protocol-v4";
 
 interface TaskActivityTracker extends IDisposable {
   readonly onDidChangeRunningTaskCount: Event<number>;

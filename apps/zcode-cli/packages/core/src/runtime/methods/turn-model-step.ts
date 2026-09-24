@@ -1,4 +1,4 @@
-import { beginLocalTurnPreparation } from "@zcode/contracts";
+import { beginLocalTurnPreparation } from "@zhlbuilder/contracts";
 import {
   CompactTrigger,
   CoreErrorType,

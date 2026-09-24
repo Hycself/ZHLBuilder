@@ -12,7 +12,7 @@ import {
   updatePluginEnabledInFileConfig,
   updatePluginOptionsInFileConfig,
   type ConfigResult,
-} from "@zcode/adapters/config";
+} from "@zhlbuilder/adapters/config";
 import {
   addMarketplace,
   comparePluginUpdate,
@@ -40,16 +40,16 @@ import {
   type KnownMarketplaceRecord,
   type MarketplaceSource,
   type PluginMarketplaceEntry,
-} from "@zcode/adapters/plugins";
+} from "@zhlbuilder/adapters/plugins";
 import type {
   Logger,
   PluginHookDetail,
   PluginLoadOutcome,
   PluginMetadata,
   PluginStoreListing,
-} from "@zcode/contracts";
-import { ZCODE_OFFICIAL_PLUGIN_MARKETPLACE, isOfficialMarketplaceId } from "@zcode/contracts";
-import { ZCODE_CUA_OFFICIAL_PLUGIN_ID, isZCodeCuaInternalFeatureEnabled } from "@zcode/shared";
+} from "@zhlbuilder/contracts";
+import { ZCODE_OFFICIAL_PLUGIN_MARKETPLACE, isOfficialMarketplaceId } from "@zhlbuilder/contracts";
+import { ZCODE_CUA_OFFICIAL_PLUGIN_ID, isZCodeCuaInternalFeatureEnabled } from "@zhlbuilder/shared";
 import { resolveOfficialPluginRoots } from "./app/bundled-plugins.js";
 import {
   DEFAULT_ENABLED_OFFICIAL_PLUGIN_IDS,

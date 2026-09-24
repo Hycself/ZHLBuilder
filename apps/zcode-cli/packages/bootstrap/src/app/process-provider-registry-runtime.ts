@@ -4,12 +4,12 @@ import {
   parseAccountProviderConfigMap,
   type AccountProviderConfigSnapshot,
   type AccountProviderStates,
-} from "@zcode/provider";
+} from "@zhlbuilder/provider";
 import {
   isBuiltinModelProviderId,
   resolveRuntimeZCodeEndpointOrigin,
   ZCODE_VERSION,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { dirname, join } from "node:path";
 import {
   NodeModelSelectionConfigRepository,
@@ -19,11 +19,11 @@ import {
   resolveZCodeBuiltinClientPlatform,
   ZCODE_BUILTIN_PROVIDER_BUNDLED_CONFIG_FILE_ENV,
   type ZCodeBuiltinRefreshEvent,
-} from "@zcode/provider-node";
+} from "@zhlbuilder/provider-node";
 import {
   createSharedZCodeCredentialStore,
   type SharedZCodeCredentialStore,
-} from "@zcode/adapters/auth";
+} from "@zhlbuilder/adapters/auth";
 import { readLegacyCliPersonalProviderConfig } from "./legacy-cli-personal-provider-config-importer.js";
 import {
   createStandaloneProviderRuntimeHeadersPort,

@@ -1,10 +1,10 @@
 import {
   ZCODE_MCP_BROWSER_SCREENSHOT_CONTENT_INDICES_META_KEY,
   ZCODE_MCP_NODE_REPL_CUA_APP_META_KEY,
-} from "@zcode/contracts/mcp";
-import { isOfficialCuaImageRefText } from "@zcode/zcode-cua/frame-contract";
-import { CUA_APP_ASSOCIATIONS_META_KEY } from "@zcode/zcode-cua/host-display-contract";
-import type { NodeReplRunResult } from "@zcode/core/repl";
+} from "@zhlbuilder/contracts/mcp";
+import { isOfficialCuaImageRefText } from "@zhlbuilder/zcode-cua/frame-contract";
+import { CUA_APP_ASSOCIATIONS_META_KEY } from "@zhlbuilder/zcode-cua/host-display-contract";
+import type { NodeReplRunResult } from "@zhlbuilder/core/repl";
 import type { CallToolResult } from "@modelcontextprotocol/server";
 
 type EmbeddedContentBlock = CallToolResult["content"][number];

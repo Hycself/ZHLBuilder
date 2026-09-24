@@ -50,8 +50,8 @@ import type {
   StartPlanPreviewConfig,
   ZCodeModelContextBudgetStrategy,
   DynamicWorkflowClientConfig,
-} from "@zcode/shared";
-import type { ModelSelectionView } from "@zcode/provider";
+} from "@zhlbuilder/shared";
+import type { ModelSelectionView } from "@zhlbuilder/provider";
 import type { OffPeakClientConfig } from "./codingPlanSubscription.js";
 import {
   BIGMODEL_PROVIDER_ID,
@@ -69,7 +69,7 @@ import {
   resolveDynamicWorkflowClientConfig,
   DEFAULT_DYNAMIC_WORKFLOW_MODE,
   ZCODE_DYNAMIC_WORKFLOW_MODE_ENV,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import type { ICredentialService } from "../credential/credential.js";
 import { readApiJson } from "../providers/api/apiJson.js";
 import { createServiceLogger } from "../logger/serviceLogger.js";

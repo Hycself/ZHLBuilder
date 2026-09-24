@@ -1,8 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 import { access, mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import type { Logger, SkillRoot } from "@zcode/contracts";
-import { DYNAMIC_WORKFLOW_SKILL_NAME } from "@zcode/contracts";
+import type { Logger, SkillRoot } from "@zhlbuilder/contracts";
+import { DYNAMIC_WORKFLOW_SKILL_NAME } from "@zhlbuilder/contracts";
 import { candidateBaseDirs } from "./bundled-plugins.js";
 
 /**
@@ -15,7 +15,7 @@ import { candidateBaseDirs } from "./bundled-plugins.js";
  * - 开发态 / Electron 桌面：沿官方插件同款候选目录在入口旁找到 `packages/bundled-skills`，原地读取，不拷贝。
  * - SEA 二进制：资产内嵌在 `zcode-bundled-skills/` 前缀下，首启按内容 hash 解压到
  *   `<cli storage>/bundled-skills/<hash>/`；目录名即内容身份，重复启动幂等，并发只会有一个赢家。
- * - 远端主机：prepare-prebuilds 把目录 stage 到远端 zcode.cjs 旁，与桌面同路。
+ * - 远端主机：prepare-prebuilds 把目录 stage 到远端 zhlbuilder.cjs 旁，与桌面同路。
  */
 
 export const BUNDLED_SKILL_PACK_DIRECTORY_NAME = "bundled-skills";

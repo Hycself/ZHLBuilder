@@ -41,7 +41,7 @@ import type {
   TelemetryIdentitySnapshot,
   ToolExecutionSpanWriter,
   ToolTraceStart,
-} from "@zcode/contracts/telemetry";
+} from "@zhlbuilder/contracts/telemetry";
 import {
   activeWriterContext,
   BaseSpanWriter,

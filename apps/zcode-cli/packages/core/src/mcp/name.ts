@@ -1,4 +1,4 @@
-import type { McpToolDescriptor } from "@zcode/contracts";
+import type { McpToolDescriptor } from "@zhlbuilder/contracts";
 
 export function toMcpToolName(
   descriptor: Pick<McpToolDescriptor, "name" | "serverName" | "toolName">,

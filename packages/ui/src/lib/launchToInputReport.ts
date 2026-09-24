@@ -1,4 +1,4 @@
-import type { LaunchMarks } from "@zcode/shared";
+import type { LaunchMarks } from "@zhlbuilder/shared";
 
 export function shouldReportLaunchToInput(state: {
   isStartupRenderBlocked: boolean;

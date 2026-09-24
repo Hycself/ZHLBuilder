@@ -3,20 +3,20 @@ import {
   localTtftFactsSchema,
   sessionDebugSnapshotSchema,
   type LocalTtftFacts,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 /* oxlint-disable eslint(max-lines) -- ZCode Protocol transport、通知 wiring 和 app-facing session 方法必须共享同一个 client/emitter 上下文。 */
 import { randomUUID } from "node:crypto";
 import { ensureIndependentPlanSupport } from "./independentPlanSupport.js";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { Emitter } from "@zcode/rpc";
-import type { IDisposable } from "@zcode/rpc";
+import { Emitter } from "@zhlbuilder/rpc";
+import type { IDisposable } from "@zhlbuilder/rpc";
 import type {
   AccountProviderConfigSnapshot,
   ModelSelectionView,
   ProviderSource,
-} from "@zcode/provider";
-import { completeNewModelSelection } from "@zcode/provider";
+} from "@zhlbuilder/provider";
+import { completeNewModelSelection } from "@zhlbuilder/provider";
 import type { OffPeakClientConfig } from "#src/coding-plan-subscription/codingPlanSubscription.js";
 import {
   ZCODE_SESSION_RUNTIME_PREFERENCES_REQUEST_TIMEOUT_MS,
@@ -112,7 +112,7 @@ import {
   type ZCodeToolExecResource,
   type ZCodePluginOperationProgressNotification,
   type ZCodeTaskMode,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { createServiceLogger } from "#src/logger/serviceLogger.js";
 import { createOfficialMcpIssuanceAudit } from "#src/official-mcp/officialMcpIssuanceAudit.js";
 import type {
@@ -135,7 +135,7 @@ import type {
   ZCodeWorkspacePresentation,
   ZCodeWorkspaceRef,
   ZCodeSessionRuntimePreferencesResult,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import type {
   IZCodeAgentService,
   ZCodeAgentBackgroundBashOutputParams,
@@ -285,7 +285,7 @@ import {
   type SessionsIndexTopicWireCandidate,
   type WorkspaceConfigTopicWireCandidate,
   type CommandEnvelope,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 import {
   readTrustedZCodeAgentV4Connection,
   readTrustedZCodeAgentV4UnsubscribeRoute,
@@ -313,7 +313,7 @@ import {
   type CuaOperationWorkspaceTarget,
   type CuaOperationStateReporter,
 } from "./cuaOperationTurnTracker.js";
-import type { PipSessionEvent } from "@zcode/zcode-cua/pip-session";
+import type { PipSessionEvent } from "@zhlbuilder/zcode-cua/pip-session";
 import { registerMemoryDiagnosticsProvider } from "#src/memoryDiagnostics.js";
 
 const logger = createServiceLogger("zcode-agent-service");

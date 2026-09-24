@@ -145,22 +145,22 @@ importers:
       '@modelcontextprotocol/client':
         specifier: 2.0.0
         version: 2.0.0
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/dynamic-workflow':
+      '@zhlbuilder/dynamic-workflow':
         specifier: workspace:*
         version: link:../dynamic-workflow
-      '@zcode/model-option-map':
+      '@zhlbuilder/model-option-map':
         specifier: workspace:*
         version: link:../../../../packages/model-option-map
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../../../../packages/provider
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
-      '@zcode/zcode-cua':
+      '@zhlbuilder/zcode-cua':
         specifier: workspace:*
         version: link:../../../../packages/zcode-cua
       ai:
@@ -209,34 +209,34 @@ importers:
 
   apps/zcode-cli/packages/bootstrap:
     dependencies:
-      '@zcode/adapters':
+      '@zhlbuilder/adapters':
         specifier: workspace:*
         version: link:../adapters
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/core':
+      '@zhlbuilder/core':
         specifier: workspace:*
         version: link:../core
-      '@zcode/dynamic-workflow':
+      '@zhlbuilder/dynamic-workflow':
         specifier: workspace:*
         version: link:../dynamic-workflow
-      '@zcode/dynamic-workflow-runtime':
+      '@zhlbuilder/dynamic-workflow-runtime':
         specifier: workspace:*
         version: link:../dynamic-workflow-runtime
-      '@zcode/i18n':
+      '@zhlbuilder/i18n':
         specifier: workspace:*
         version: link:../i18n
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../../../../packages/provider
-      '@zcode/provider-node':
+      '@zhlbuilder/provider-node':
         specifier: workspace:*
         version: link:../../../../packages/provider-node
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
-      '@zcode/telemetry':
+      '@zhlbuilder/telemetry':
         specifier: workspace:*
         version: link:../telemetry
       diff:
@@ -252,7 +252,7 @@ importers:
       '@types/yazl':
         specifier: ^3.3.1
         version: 3.3.1
-      '@zcode/formal-proof':
+      '@zhlbuilder/formal-proof':
         specifier: workspace:*
         version: link:../../../../packages/formal-proof
       yazl:
@@ -264,16 +264,16 @@ importers:
       '@modelcontextprotocol/server':
         specifier: 2.0.0
         version: 2.0.0
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/core':
+      '@zhlbuilder/core':
         specifier: workspace:*
         version: link:../core
-      '@zcode/node-repl-host':
+      '@zhlbuilder/node-repl-host':
         specifier: workspace:*
         version: link:../node-repl-host
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
       zod:
@@ -286,10 +286,10 @@ importers:
       '@types/node':
         specifier: ^24.0.0
         version: 24.12.2
-      '@zcode/adapters':
+      '@zhlbuilder/adapters':
         specifier: workspace:*
         version: link:../adapters
-      '@zcode/bootstrap':
+      '@zhlbuilder/bootstrap':
         specifier: workspace:*
         version: link:../bootstrap
       esbuild:
@@ -304,34 +304,34 @@ importers:
 
   apps/zcode-cli/packages/cli:
     dependencies:
-      '@zcode/adapters':
+      '@zhlbuilder/adapters':
         specifier: workspace:*
         version: link:../adapters
-      '@zcode/bootstrap':
+      '@zhlbuilder/bootstrap':
         specifier: workspace:*
         version: link:../bootstrap
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/core':
+      '@zhlbuilder/core':
         specifier: workspace:*
         version: link:../core
-      '@zcode/dynamic-workflow-runtime':
+      '@zhlbuilder/dynamic-workflow-runtime':
         specifier: workspace:*
         version: link:../dynamic-workflow-runtime
-      '@zcode/i18n':
+      '@zhlbuilder/i18n':
         specifier: workspace:*
         version: link:../i18n
-      '@zcode/provider-node':
+      '@zhlbuilder/provider-node':
         specifier: workspace:*
         version: link:../../../../packages/provider-node
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
-      '@zcode/shared-types':
+      '@zhlbuilder/shared-types':
         specifier: workspace:*
         version: link:../shared-types
-      '@zcode/tui':
+      '@zhlbuilder/tui':
         specifier: workspace:*
         version: link:../tui
       dotenv:
@@ -340,10 +340,13 @@ importers:
       playwright-core:
         specifier: 1.59.1
         version: 1.59.1
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
 
   apps/zcode-cli/packages/contracts:
     dependencies:
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
       zod:
@@ -359,19 +362,19 @@ importers:
 
   apps/zcode-cli/packages/core:
     dependencies:
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/dynamic-workflow':
+      '@zhlbuilder/dynamic-workflow':
         specifier: workspace:*
         version: link:../dynamic-workflow
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
-      '@zcode/shared-types':
+      '@zhlbuilder/shared-types':
         specifier: workspace:*
         version: link:../shared-types
-      '@zcode/zcode-cua':
+      '@zhlbuilder/zcode-cua':
         specifier: workspace:*
         version: link:../../../../packages/zcode-cua
       cheerio:
@@ -458,7 +461,7 @@ importers:
 
   apps/zcode-cli/packages/dynamic-workflow-runtime:
     dependencies:
-      '@zcode/dynamic-workflow':
+      '@zhlbuilder/dynamic-workflow':
         specifier: workspace:*
         version: link:../dynamic-workflow
     devDependencies:
@@ -468,7 +471,7 @@ importers:
 
   apps/zcode-cli/packages/i18n:
     dependencies:
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
 
@@ -477,16 +480,16 @@ importers:
       '@modelcontextprotocol/server':
         specifier: 2.0.0
         version: 2.0.0
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/core':
+      '@zhlbuilder/core':
         specifier: workspace:*
         version: link:../core
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
-      '@zcode/zcode-cua':
+      '@zhlbuilder/zcode-cua':
         specifier: workspace:*
         version: link:../../../../packages/zcode-cua
       zod:
@@ -514,7 +517,7 @@ importers:
 
   apps/zcode-cli/packages/swift-bridge:
     dependencies:
-      '@zcode/shared-types':
+      '@zhlbuilder/shared-types':
         specifier: workspace:*
         version: link:../shared-types
 
@@ -544,7 +547,7 @@ importers:
       '@opentelemetry/sdk-trace-base':
         specifier: 2.6.1
         version: 2.6.1(@opentelemetry/api@1.9.1)
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
     devDependencies:
@@ -560,13 +563,13 @@ importers:
       '@mbears/opentui-react':
         specifier: 0.2.15
         version: 0.2.15(react-devtools-core@7.0.1)(react@19.2.7)(typescript@6.0.2)(web-tree-sitter@0.25.10)(ws@8.18.0)
-      '@zcode/contracts':
+      '@zhlbuilder/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@zcode/i18n':
+      '@zhlbuilder/i18n':
         specifier: workspace:*
         version: link:../i18n
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../../../../packages/shared
       react:
@@ -608,13 +611,13 @@ importers:
 
   packages/client:
     dependencies:
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/services':
+      '@zhlbuilder/services':
         specifier: workspace:*
         version: link:../services
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:
@@ -660,31 +663,31 @@ importers:
       '@opentelemetry/sdk-trace-base':
         specifier: 2.6.1
         version: 2.6.1(@opentelemetry/api@1.9.1)
-      '@zcode/client':
+      '@zhlbuilder/client':
         specifier: workspace:*
         version: link:../client
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../provider
-      '@zcode/provider-node':
+      '@zhlbuilder/provider-node':
         specifier: workspace:*
         version: link:../provider-node
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/server':
+      '@zhlbuilder/server':
         specifier: workspace:*
         version: link:../server
-      '@zcode/services':
+      '@zhlbuilder/services':
         specifier: workspace:*
         version: link:../services
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
-      '@zcode/ui':
+      '@zhlbuilder/ui':
         specifier: workspace:*
         version: link:../ui
-      '@zcode/zcode-cua':
+      '@zhlbuilder/zcode-cua':
         specifier: workspace:*
         version: link:../zcode-cua
       electron-updater:
@@ -809,10 +812,10 @@ importers:
 
   packages/provider:
     dependencies:
-      '@zcode/model-option-map':
+      '@zhlbuilder/model-option-map':
         specifier: workspace:*
         version: link:../model-option-map
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
       zod:
@@ -825,10 +828,10 @@ importers:
 
   packages/provider-node:
     dependencies:
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../provider
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
       zod:
@@ -838,7 +841,7 @@ importers:
       '@types/node':
         specifier: ^25.5.0
         version: 25.6.0
-      '@zcode/model-option-map':
+      '@zhlbuilder/model-option-map':
         specifier: workspace:*
         version: link:../model-option-map
       typescript:
@@ -874,16 +877,16 @@ importers:
       '@lydell/node-pty-linux-x64':
         specifier: 1.2.0-beta.10
         version: 1.2.0-beta.10
-      '@zcode/client':
+      '@zhlbuilder/client':
         specifier: workspace:*
         version: link:../client
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/services':
+      '@zhlbuilder/services':
         specifier: workspace:*
         version: link:../services
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
       axios:
@@ -956,19 +959,19 @@ importers:
       '@larksuiteoapi/node-sdk':
         specifier: 1.64.0
         version: 1.64.0
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../provider
-      '@zcode/provider-node':
+      '@zhlbuilder/provider-node':
         specifier: workspace:*
         version: link:../provider-node
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
-      '@zcode/zcode-cua':
+      '@zhlbuilder/zcode-cua':
         specifier: workspace:*
         version: link:../zcode-cua
       croner:
@@ -1014,7 +1017,7 @@ importers:
 
   packages/shared:
     dependencies:
-      '@zcode/model-option-map':
+      '@zhlbuilder/model-option-map':
         specifier: workspace:*
         version: link:../model-option-map
       zod:
@@ -1099,16 +1102,16 @@ importers:
       '@xyflow/react':
         specifier: ^12.10.1
         version: 12.10.2(@types/react@19.2.14)(immer@11.1.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@zcode/provider':
+      '@zhlbuilder/provider':
         specifier: workspace:*
         version: link:../provider
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/services':
+      '@zhlbuilder/services':
         specifier: workspace:*
         version: link:../services
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
       ai:
@@ -1247,13 +1250,13 @@ importers:
 
   packages/web:
     dependencies:
-      '@zcode/client':
+      '@zhlbuilder/client':
         specifier: workspace:*
         version: link:../client
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
-      '@zcode/ui':
+      '@zhlbuilder/ui':
         specifier: workspace:*
         version: link:../ui
       react:
@@ -1298,13 +1301,13 @@ importers:
       '@hono/node-ws':
         specifier: ^1.3.0
         version: 1.3.0(@hono/node-server@1.19.14(hono@4.12.12))(hono@4.12.12)
-      '@zcode/rpc':
+      '@zhlbuilder/rpc':
         specifier: workspace:*
         version: link:../rpc
-      '@zcode/services':
+      '@zhlbuilder/services':
         specifier: workspace:*
         version: link:../services
-      '@zcode/shared':
+      '@zhlbuilder/shared':
         specifier: workspace:*
         version: link:../shared
       hono:
@@ -16172,11 +16175,11 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lodash.pickby@4.6.0: {}
+
   lodash.uniqby@4.7.0: {}
 
   lodash@4.18.1: {}
-
-  lodash.pickby@4.6.0: {}
 
   log-symbols@4.1.0:
     dependencies:

@@ -15,8 +15,8 @@
 import type {
   DynamicWorkflowRunRetuneRequest,
   DynamicWorkflowRunRetuneResult,
-} from "@zcode/contracts";
-import type { JournalStorePort } from "@zcode/dynamic-workflow";
+} from "@zhlbuilder/contracts";
+import type { JournalStorePort } from "@zhlbuilder/dynamic-workflow";
 import type { RunRegistryEntry } from "./dynamic-workflow-run-observation.js";
 import { clampRunConcurrency } from "./workflow-concurrency-ceiling.js";
 

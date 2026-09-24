@@ -18,7 +18,7 @@ import type {
   UsageStatsRequest,
   UsageStatsSnapshot,
   ZCodeAccountAccess,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   ApiError,
   BUILTIN_MODEL_PROVIDER_IDS,
@@ -28,8 +28,8 @@ import {
   buildBigModelApiUrl,
   buildRuntimeZaiBusinessUrl,
   buildRuntimeZCodeApiUrl,
-} from "@zcode/shared";
-import type { ProviderFamilyDomain } from "@zcode/shared";
+} from "@zhlbuilder/shared";
+import type { ProviderFamilyDomain } from "@zhlbuilder/shared";
 import { createServiceLogger } from "#src/logger/serviceLogger.js";
 import type { ICredentialService } from "../../credential/credential.js";
 import type { IAccountRequestAuthService } from "../../model-provider/accountRequestAuthService.js";

@@ -21,7 +21,7 @@ import {
   type TraceId,
   type WorkspaceId,
   type SessionTaskType,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { decodeJson } from "./json.js";
 import type { MessageRow, PartRow, SessionEntryRow, SessionRow, TodoRow } from "./rows.js";
 

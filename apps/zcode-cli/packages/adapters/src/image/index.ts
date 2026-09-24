@@ -5,7 +5,7 @@ import {
   type ImageProcessorPort,
   type ImageResizeRequest,
   type ImageResizeResult,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { prepareJimpImageForModel } from "./jimp-compression.js";
 import { jimpOutputMediaType, throwIfAborted } from "./jimp-media.js";
 

@@ -16,8 +16,8 @@ import type {
   WorkflowSchedulerNodePromise,
 } from "./scheduler/types.js";
 
-export { deriveWorkflowRunSchedulerState, deriveWorkflowSchedulerState } from "@zcode/contracts";
-export type { WorkflowSchedulerDerivedNode, WorkflowSchedulerState } from "@zcode/contracts";
+export { deriveWorkflowRunSchedulerState, deriveWorkflowSchedulerState } from "@zhlbuilder/contracts";
+export type { WorkflowSchedulerDerivedNode, WorkflowSchedulerState } from "@zhlbuilder/contracts";
 export type {
   WorkflowGraphSchedulerActivityInput,
   WorkflowGraphSchedulerActivityResult,

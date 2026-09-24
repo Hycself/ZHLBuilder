@@ -7,7 +7,7 @@ import {
   type ErrorAttribution,
   type ModelErrorCode,
   type ModelId,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 
 export const ModelErrorSource = {
   Network: "network",

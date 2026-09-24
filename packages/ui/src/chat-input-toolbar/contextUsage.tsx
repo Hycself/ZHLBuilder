@@ -13,7 +13,7 @@ import {
   type CodingPlanResetType,
   type ZCodeContextUsageBreakdownItem,
   type ZCodeProvider,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   Context,
   ContextContentBody,

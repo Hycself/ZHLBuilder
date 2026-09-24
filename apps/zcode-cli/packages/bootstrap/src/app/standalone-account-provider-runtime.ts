@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import type { SharedZCodeCredentialStore } from "@zcode/adapters/auth";
-import type { ProviderRuntimeHeadersPort } from "@zcode/core";
+import type { SharedZCodeCredentialStore } from "@zhlbuilder/adapters/auth";
+import type { ProviderRuntimeHeadersPort } from "@zhlbuilder/core";
 import {
   createAccountProviderConfigSnapshot,
   ProviderConfig,
@@ -8,12 +8,12 @@ import {
   ZhipuAccountAccessConfig,
   type AccountProviderConfigSnapshot,
   type ProviderConfigLayerSnapshot,
-} from "@zcode/provider";
+} from "@zhlbuilder/provider";
 import {
   NodeZCodeBuiltinProviderConfigSource,
   ZCODE_BUILTIN_PROVIDER_CONFIG_FILE_ENV,
-} from "@zcode/provider-node";
-import type { ProviderFamilyDomain } from "@zcode/shared";
+} from "@zhlbuilder/provider-node";
+import type { ProviderFamilyDomain } from "@zhlbuilder/shared";
 
 interface StandaloneCodingPlanProvider {
   readonly family: ProviderFamilyDomain;

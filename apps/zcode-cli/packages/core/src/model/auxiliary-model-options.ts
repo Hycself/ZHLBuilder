@@ -1,4 +1,4 @@
-import type { Model, ModelOptions } from "@zcode/contracts";
+import type { Model, ModelOptions } from "@zhlbuilder/contracts";
 
 const AUXILIARY_MAX_OUTPUT_TOKENS = 5_000;
 

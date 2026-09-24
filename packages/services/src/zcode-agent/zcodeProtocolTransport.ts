@@ -1,5 +1,5 @@
-import type { Event, IDisposable } from "@zcode/rpc";
-import type { ZCodeProtocolMessage } from "@zcode/shared";
+import type { Event, IDisposable } from "@zhlbuilder/rpc";
+import type { ZCodeProtocolMessage } from "@zhlbuilder/shared";
 
 export type ZCodeProtocolTransportKind = "stdio" | "websocket" | "memory";
 

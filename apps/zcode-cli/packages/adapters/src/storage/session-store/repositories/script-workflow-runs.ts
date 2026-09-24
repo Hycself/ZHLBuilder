@@ -6,7 +6,7 @@ import type {
   ScriptWorkflowRunStatus,
   UpsertScriptWorkflowDefinitionInput,
   UpdateScriptWorkflowRunInput,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { encodeJson } from "../json.js";
 import {
   decodeDefinition,

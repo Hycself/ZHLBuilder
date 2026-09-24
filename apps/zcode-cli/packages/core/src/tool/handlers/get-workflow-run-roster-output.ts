@@ -19,8 +19,8 @@ import type {
   GetWorkflowRunPhase,
   GetWorkflowRunSubagent,
   GetWorkflowRunSubagentAsk,
-} from "@zcode/contracts";
-import { GET_WORKFLOW_RUN_ROSTER_LIMITS } from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
+import { GET_WORKFLOW_RUN_ROSTER_LIMITS } from "@zhlbuilder/contracts";
 
 export function toGetWorkflowRunPhases(
   phases: readonly DynamicWorkflowRunPhaseView[] | undefined,

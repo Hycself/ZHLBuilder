@@ -68,3 +68,25 @@ AI 生成的代码、命令、解释、文件和建议可能存在错误、遗�
 ## 四、第三方许可与版权声明
 
 本仓库第一方代码依照根 [LICENSE](LICENSE) 采用 Apache-2.0；该许可不替其他权利人新增授权，也不覆盖第三方软件、复制代码、原生二进制、字体、图标、网页素材及其他资源的独立条款。具体依赖包详见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。受第三方版权、许可及再分发条件等约束，不承诺提供官方产品的全部功能及活动政策，具体以实际发布的源码和构建产物为准。
+
+## 五、ZHLBuilder 分发修改声明（2026-09-25 追加）
+
+本仓库由 XFlySim-ZHL 基于 zai-org/ZCode v3.14.3（Apache-2.0，Copyright 2026 Z.AI Co., Ltd.）
+修改而来，以 ZHLBuilder 之名分发，同样适用 Apache-2.0。依据 Apache-2.0 第 4(b) 条声明修改：
+
+1. 品牌：产品名 ZCode → ZHLBuilder；应用图标与字标替换为 XFSZHL 飞机标；桌面应用
+   productName/appId 更改（`packages/desktop/scripts/desktop-product-identity.mjs`）。
+2. CLI 命令名：`zcode` → `zhlbuilder`（bin 字段与分发产物名，`apps/zcode-cli/packages/cli`
+   与 `scripts/build-zcode.mjs`）。
+3. 数据目录：默认数据根 `~/.zcode` → `~/.zhlbuilder`（`packages/services/src/paths.ts`、
+   `apps/zcode-cli/packages/adapters/src/config/file-config.adapter.ts` 等），避免与上游
+   ZCode 安装共享数据。
+4. 工作区包名：`@zhlbuilder/*` → `@zhlbuilder/*`（纯内部标识符变更）。
+5. 构建配置：`pnpm-workspace.yaml` 中禁用 `cpu-features` 原生构建（部分环境失败，走 JS 回退）。
+6. 新增 ZHL 设备中枢对接代码（设备配对/PIN/任务中继，后续版本合入）。
+
+未修改且明确保留：上游模型服务端点与协议（`zcode.z.ai`、`api.z.ai`、
+`open.bigmodel.cn`、"ZCode Protocol" wire-protocol、`config/provider/zcode-builtin.json`）、
+根 [LICENSE](LICENSE) 原文、上文第一至四节的全部披露内容，以及
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。ZCode 与 Z.ai 为 Z.AI 的商标/标识，
+本分发不对其作任何权利主张；对上游的引用仅用于说明来源（Apache-2.0 第 4(6) 条允许）。

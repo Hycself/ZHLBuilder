@@ -12,7 +12,7 @@ import type {
   CustomCommandOperationOptions,
   CustomCommandPort,
   CustomCommandRoot,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   resolveDefaultCustomCommandRoots,
   type CustomCommandRootResolutionOptions,

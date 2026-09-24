@@ -1,4 +1,4 @@
-import type { ModelReasoningContentBlock } from "@zcode/contracts";
+import type { ModelReasoningContentBlock } from "@zhlbuilder/contracts";
 
 type ReasoningTransformOptions = {
   providerKind?: "openai" | "anthropic" | "openai-compatible" | "gateway" | "custom";

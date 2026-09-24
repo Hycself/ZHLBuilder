@@ -1,4 +1,4 @@
-import { resolveRuntimeZCodeEndpointOrigin } from "@zcode/shared";
+import { resolveRuntimeZCodeEndpointOrigin } from "@zhlbuilder/shared";
 import type { EnvRecord } from "./model-execution.js";
 
 /**

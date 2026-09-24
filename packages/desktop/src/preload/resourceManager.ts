@@ -1,12 +1,12 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { PlatformChannels, formatZCodeRendererProcessName } from "@zcode/shared";
+import { PlatformChannels, formatZCodeRendererProcessName } from "@zhlbuilder/shared";
 import type {
   ResourceUsageSnapshot,
   StorageCleanRequest,
   StorageCleanResult,
   StorageManagementBridge,
   StorageUsageSnapshot,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 process.title = formatZCodeRendererProcessName("Resource Manager");
 

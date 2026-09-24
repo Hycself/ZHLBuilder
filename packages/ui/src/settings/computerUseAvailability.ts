@@ -1,5 +1,5 @@
-import type { RemoteTarget } from "@zcode/shared";
-import { isRemoteWorkspaceIdentity } from "@zcode/shared";
+import type { RemoteTarget } from "@zhlbuilder/shared";
+import { isRemoteWorkspaceIdentity } from "@zhlbuilder/shared";
 
 type ComputerUseAvailabilityKind =
   | "local-macos"

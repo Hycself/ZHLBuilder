@@ -3,8 +3,8 @@ import { Client as SSHClient } from "ssh2";
 import type { ConnectConfig } from "ssh2";
 import { createReadStream } from "node:fs";
 import { posix } from "node:path";
-import { Emitter } from "@zcode/rpc";
-import { resolveZCodeRuntimeEnv } from "@zcode/shared";
+import { Emitter } from "@zhlbuilder/rpc";
+import { resolveZCodeRuntimeEnv } from "@zhlbuilder/shared";
 import type {
   IRemoteBackend,
   RemoteDisconnectEvent,
@@ -12,29 +12,29 @@ import type {
   RemoteEnvironment,
   RemoteUploadOptions,
   StdioStream,
-} from "@zcode/server/remote/backend.js";
+} from "@zhlbuilder/server/remote/backend.js";
 import {
   normalizeRemoteArch,
   normalizeRemotePlatform,
   resolveRemotePlatform,
-} from "@zcode/server/remote/detectEnv.js";
-import { createCloseEventController } from "@zcode/server/remote/closeEvent.js";
+} from "@zhlbuilder/server/remote/detectEnv.js";
+import { createCloseEventController } from "@zhlbuilder/server/remote/closeEvent.js";
 import {
   buildPosixShellExecCommand,
   quotePosixShellArg,
   resolvePosixHomePath,
-} from "@zcode/server/remote/posixShell.js";
+} from "@zhlbuilder/server/remote/posixShell.js";
 import {
   buildSSHConnectConfig,
   createKeyboardInteractiveResponder,
   normalizeSSHConnectError,
-} from "@zcode/server/remote/sshAuth.js";
+} from "@zhlbuilder/server/remote/sshAuth.js";
 import {
   createSSHUploadProgressReporter,
   formatSSHUploadError,
   formatSSHUploadLabel,
   readLocalFileSize,
-} from "@zcode/server/remote/sshUploadProgress.js";
+} from "@zhlbuilder/server/remote/sshUploadProgress.js";
 
 export interface SSHBackendOptions {
   host: string;

@@ -1,4 +1,4 @@
-import { zcodeProtocolMethods, zcodeRuntimeCapabilitiesSchema } from "@zcode/shared";
+import { zcodeProtocolMethods, zcodeRuntimeCapabilitiesSchema } from "@zhlbuilder/shared";
 import type { ZCodeProtocolClient } from "./zcodeProtocolClient.js";
 
 const checks = new WeakMap<object, Promise<void>>();

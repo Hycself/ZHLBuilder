@@ -8,7 +8,7 @@ import {
   type OAuthProviderId,
   type OAuthStateRegistration,
   PlatformChannels,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   extractWorkspaceOpenPath,
   extractShareImportCode,

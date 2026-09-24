@@ -23,14 +23,14 @@ import {
   type EvalWorkflowSnippetOutput,
   type ModelMessageContent,
   type TraceContext,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   collectDiagnostics,
   collectSites,
   collectWorldRunCommands,
   createWorkflowProgram,
   SNIPPET_FACADE_DTS,
-} from "@zcode/dynamic-workflow";
+} from "@zhlbuilder/dynamic-workflow";
 import type {
   ToolApprovalGate,
   ToolEntry,

@@ -9,11 +9,11 @@ import type {
   ToolCallId,
   TraceId,
   TurnId,
-} from "@zcode/contracts";
-import type { ModelToolCall as ToolCall } from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
+import type { ModelToolCall as ToolCall } from "@zhlbuilder/contracts";
 
 // Re-export ToolCall for consumers of this module
-export type { ModelToolCall as ToolCall } from "@zcode/contracts";
+export type { ModelToolCall as ToolCall } from "@zhlbuilder/contracts";
 
 // Note: ModelMessage is defined locally to avoid conflicts with contracts' ModelMessage
 // which uses ToolCallPayload[] instead of ModelToolCall[]

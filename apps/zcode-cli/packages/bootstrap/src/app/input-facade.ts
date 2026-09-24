@@ -1,4 +1,4 @@
-import type { AgentRuntime, TurnAttachment, TurnResult } from "@zcode/core";
+import type { AgentRuntime, TurnAttachment, TurnResult } from "@zhlbuilder/core";
 import {
   SessionEventType,
   traceContextToLogContext,
@@ -9,7 +9,7 @@ import {
   type SessionId,
   type ToolArtifactStorePort,
   type TraceContext,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   externalizePromptAttachments,
   materializeInputHistoryEntry,

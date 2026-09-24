@@ -2,29 +2,29 @@ import { isAbsolute, join, resolve } from "node:path";
 import {
   createInMemorySessionEventStore,
   createNodeToolArtifactStore,
-} from "@zcode/adapters/storage";
-import { createNodeLoggerFactory } from "@zcode/adapters/logging";
-import { createConfig, resolvePath } from "@zcode/adapters/config";
+} from "@zhlbuilder/adapters/storage";
+import { createNodeLoggerFactory } from "@zhlbuilder/adapters/logging";
+import { createConfig, resolvePath } from "@zhlbuilder/adapters/config";
 import {
   createNodeExecutionAdapter,
   resolveEffectiveBashShellSelection,
-} from "@zcode/adapters/exec";
-import { createNodeFileSystemAdapter } from "@zcode/adapters/fs";
-import { createNodeWebFetchHttpClientAdapter } from "@zcode/adapters/http";
-import { createJimpImageProcessorAdapter } from "@zcode/adapters/image";
-import { createPopplerPdfDocumentAdapter } from "@zcode/adapters/pdf";
-import { createNodeSessionMailboxAdapter } from "@zcode/adapters/mailbox";
-import { createNodeContextSourceAdapter } from "@zcode/adapters/context";
-import { createNodeSkillAdapter } from "@zcode/adapters/skills";
-import { createMcpAdapter } from "@zcode/adapters/mcp";
+} from "@zhlbuilder/adapters/exec";
+import { createNodeFileSystemAdapter } from "@zhlbuilder/adapters/fs";
+import { createNodeWebFetchHttpClientAdapter } from "@zhlbuilder/adapters/http";
+import { createJimpImageProcessorAdapter } from "@zhlbuilder/adapters/image";
+import { createPopplerPdfDocumentAdapter } from "@zhlbuilder/adapters/pdf";
+import { createNodeSessionMailboxAdapter } from "@zhlbuilder/adapters/mailbox";
+import { createNodeContextSourceAdapter } from "@zhlbuilder/adapters/context";
+import { createNodeSkillAdapter } from "@zhlbuilder/adapters/skills";
+import { createMcpAdapter } from "@zhlbuilder/adapters/mcp";
 import {
   AgentRuntime,
   PermissionService,
   buildPluginReferenceCatalog,
   type AmendWorkflowRunSettingsInput,
   type ResumeSessionResult,
-} from "@zcode/core";
-import { createModelTelemetry } from "@zcode/telemetry";
+} from "@zhlbuilder/core";
+import { createModelTelemetry } from "@zhlbuilder/telemetry";
 import {
   createRootTraceContext,
   traceContextToLogContext,
@@ -33,12 +33,12 @@ import {
   createSessionEvent,
   type ExecutionShellSelection,
   type MessageId,
-} from "@zcode/contracts";
-import { isRemoteWorkspaceIdentity, resolveZCodeRuntimeEnv } from "@zcode/shared";
+} from "@zhlbuilder/contracts";
+import { isRemoteWorkspaceIdentity, resolveZCodeRuntimeEnv } from "@zhlbuilder/shared";
 import {
   ZCODE_ATTACHMENT_FAULT_CODES,
   ZCodeAttachmentFaultError,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 
 import { createModelAdapter } from "../model-factory.js";
 import { StartupTimer, startupNow } from "../startup-logging.js";

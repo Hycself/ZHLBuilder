@@ -11,7 +11,7 @@ import {
   type TelemetryEventPayload,
   type TelemetryRendererContext,
   type OAuthLoginAttribution,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   ensureDeviceMid,
   ensureDeviceMidInLockedState,

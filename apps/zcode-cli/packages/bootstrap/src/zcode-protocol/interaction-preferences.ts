@@ -1,4 +1,4 @@
-import { zcodeWorkspaceUpdateInteractionPreferencesParamsSchema } from "@zcode/shared";
+import { zcodeWorkspaceUpdateInteractionPreferencesParamsSchema } from "@zhlbuilder/shared";
 import { parseParams, type ZCodeProtocolAgentServerContext } from "./server-types.js";
 
 /**

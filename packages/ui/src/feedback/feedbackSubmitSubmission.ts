@@ -3,8 +3,8 @@ import {
   type FeedbackTicketModule,
   type FeedbackTicketSeverity,
   type FeedbackTicketType,
-} from "@zcode/shared";
-import type { IFeedbackService } from "@zcode/services";
+} from "@zhlbuilder/shared";
+import type { IFeedbackService } from "@zhlbuilder/services";
 import { persistFeedbackContactPreference } from "@/feedback/feedbackContactPreference.js";
 import type { FeedbackSubmitDraft } from "@/feedback/feedbackStore.js";
 import type { ScreenshotAttachmentDraft } from "@/feedback/FeedbackScreenshotPicker.js";

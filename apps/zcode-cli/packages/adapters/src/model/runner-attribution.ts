@@ -8,8 +8,8 @@
 import type {
   ModelRequestSessionType as ModelRequestSessionTypeValue,
   ResolvedModelApiCallObservation,
-} from "@zcode/contracts";
-import { ModelApiActorKind, ModelApiOperation, ModelRequestSessionType } from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
+import { ModelApiActorKind, ModelApiOperation, ModelRequestSessionType } from "@zhlbuilder/contracts";
 import { isOpenCodeGoBaseUrl } from "./opencode-session.js";
 import type { ModelStatusContext } from "./runner-status.js";
 

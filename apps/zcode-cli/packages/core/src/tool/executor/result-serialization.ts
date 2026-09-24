@@ -7,11 +7,11 @@ import {
   type ModelMessageContentBlock,
   type ToolResultBudget,
   type TraceContext,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   OFFICIAL_CUA_FRAME_MODEL_CONTENT_PROTECTION,
   containsOfficialCuaImageRefCredentialText,
-} from "@zcode/zcode-cua/frame-contract";
+} from "@zhlbuilder/zcode-cua/frame-contract";
 import type { ToolEntry, ToolResultSerialization } from "../types.js";
 import { formatHookAdditionalContexts } from "./hook-flow.js";
 import {

@@ -9,7 +9,7 @@ import {
   ZCODE_COMMIT,
   ZCODE_ENV,
   ZCODE_VERSION,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { createCustomAboutDialogHtml } from "./aboutWindow.js";
 
 interface DesktopBuildMetadata {

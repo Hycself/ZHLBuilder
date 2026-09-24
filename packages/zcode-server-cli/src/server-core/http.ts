@@ -12,19 +12,19 @@ import {
   ChannelServer,
   LoggingChannelServer,
   type ISocket,
-} from "@zcode/rpc";
+} from "@zhlbuilder/rpc";
 import {
   createZCodeAgentConnectionScope,
   IZCodeAgentService,
   ServiceCollection,
-} from "@zcode/services";
-import { createServiceLogger } from "@zcode/services/node";
+} from "@zhlbuilder/services";
+import { createServiceLogger } from "@zhlbuilder/services/node";
 import {
   SERVER_REMOTE_PROTOCOL_VERSION,
   ZCODE_RPC_HOST_CAPABILITY_HEADER,
   ZCODE_VERSION,
   type ServerRemoteInfo,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { createHostCapabilityStore, type HostCapabilityStore } from "./hostCapability.js";
 
 interface CoreHttpServer {

@@ -1,9 +1,9 @@
-import type { ApiClient } from "@zcode/shared";
+import type { ApiClient } from "@zhlbuilder/shared";
 import {
   buildRuntimeZCodeEndpointUrls,
   normalizeOfficialGlmModelId,
   ZCODE_VERSION,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { readApiJson } from "../providers/api/apiJson.js";
 
 const REQUEST_TIMEOUT_MS = 15_000;

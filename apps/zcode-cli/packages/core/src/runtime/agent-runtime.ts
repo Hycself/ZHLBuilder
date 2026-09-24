@@ -1,5 +1,5 @@
-import { DEFAULT_ZCODE_MODEL_CONTEXT_BUDGET_STRATEGY, resolveExecutionState } from "@zcode/shared";
-import type { BackgroundBashOutputResult } from "@zcode/shared";
+import { DEFAULT_ZCODE_MODEL_CONTEXT_BUDGET_STRATEGY, resolveExecutionState } from "@zhlbuilder/shared";
+import type { BackgroundBashOutputResult } from "@zhlbuilder/shared";
 import {
   createDenyPermissionBroker,
   createRootTraceContext,

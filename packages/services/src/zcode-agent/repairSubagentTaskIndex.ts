@@ -1,4 +1,4 @@
-import { resolveWorkspaceKey, ZCODE_AGENT_PROVIDER } from "@zcode/shared";
+import { resolveWorkspaceKey, ZCODE_AGENT_PROVIDER } from "@zhlbuilder/shared";
 import type { TaskIndexRepo } from "#src/session/taskIndexRepo.js";
 import type { IZCodeAgentService, ZCodeAgentWorkspaceTarget } from "#src/zcode-agent/zcodeAgent.js";
 

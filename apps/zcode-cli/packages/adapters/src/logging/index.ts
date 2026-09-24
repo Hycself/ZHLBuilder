@@ -5,9 +5,9 @@
 import { appendFileSync, existsSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { LogContext, LogEntry, Logger, LoggerFactory, LogRedactor } from "@zcode/contracts";
-import { LogLevel, LogLevelName } from "@zcode/contracts";
-import { ZCODE_RUNTIME_ENV_KEY, normalizeZCodeRuntimeEnv } from "@zcode/shared";
+import type { LogContext, LogEntry, Logger, LoggerFactory, LogRedactor } from "@zhlbuilder/contracts";
+import { LogLevel, LogLevelName } from "@zhlbuilder/contracts";
+import { ZCODE_RUNTIME_ENV_KEY, normalizeZCodeRuntimeEnv } from "@zhlbuilder/shared";
 import {
   formatLocalLogDate,
   scheduleLogRetentionCleanup as scheduleRetentionCleanup,

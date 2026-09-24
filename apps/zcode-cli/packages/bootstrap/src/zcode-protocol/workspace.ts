@@ -1,4 +1,4 @@
-import { parseRemoteWorkspaceIdentity, type ZCodeWorkspaceRef } from "@zcode/shared";
+import { parseRemoteWorkspaceIdentity, type ZCodeWorkspaceRef } from "@zhlbuilder/shared";
 
 export function buildWorkspaceRef(input: {
   workspaceIdentity?: string;

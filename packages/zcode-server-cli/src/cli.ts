@@ -3,7 +3,7 @@ import { fork } from "node:child_process";
 import { access, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, isAbsolute, join } from "node:path";
-import { ZCODE_VERSION } from "@zcode/shared";
+import { ZCODE_VERSION } from "@zhlbuilder/shared";
 import {
   controlRequestSchema,
   createStoppedServerStatus,
@@ -505,7 +505,7 @@ async function readControlStatus(
 async function delegateLegacyCli(argv: readonly string[], io: CliIO): Promise<number> {
   const candidate =
     process.env.ZCODE_LEGACY_CLI_ENTRY?.trim() ||
-    join(dirname(fileURLToPath(import.meta.url)), "zcode.cjs");
+    join(dirname(fileURLToPath(import.meta.url)), "zhlbuilder.cjs");
   try {
     await access(candidate);
   } catch {

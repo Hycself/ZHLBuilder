@@ -1,4 +1,4 @@
-import { ServiceChannels } from "@zcode/shared";
+import { ServiceChannels } from "@zhlbuilder/shared";
 import { createServiceDescriptor } from "../descriptors.js";
 import type {
   ZCodeConfigOption,
@@ -13,7 +13,7 @@ import type {
   BotWorkspaceRef,
   BotsConfigFile,
   ZCodeAutomationBotDeliveryTarget,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import type { ZCodeAgentAppRuntimePreferences } from "../zcode-agent/zcodeAgent.js";
 
 export interface BotCreateBindCodeParams {

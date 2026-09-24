@@ -19,7 +19,7 @@ const pnpmRunEnv = {
   ...process.env,
   ZCODE_ENV: await resolveBuiltinProviderBuildEnvironment({ root: repoRoot }),
   // pnpm 11 的 verify-deps-before-run 会在 apps/zcode-cli 子 workspace
-  // 执行每个 run 前触发 pnpm install；子 workspace 运行时依赖根仓库 @zcode/shared，
+  // 执行每个 run 前触发 pnpm install；子 workspace 运行时依赖根仓库 @zhlbuilder/shared，
   // 自动 install 无法解析根 workspace 包，导致 dev:desktop:test 和 E2E onPrepare 失败。
   PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false",
 };
@@ -28,23 +28,23 @@ const pnpmRunEnv = {
 // 干净 CI 中该依赖的 dist 尚不存在，bootstrap 会因无法解析类型入口而失败。
 // 两条路径统一从这一份有序清单派生，避免后续新增 workspace 依赖时再次漂移。
 const cliWorkspaceBuilds = [
-  { packageName: "@zcode/shared-types", packageDir: "shared-types" },
-  { packageName: "@zcode/contracts", packageDir: "contracts" },
+  { packageName: "@zhlbuilder/shared-types", packageDir: "shared-types" },
+  { packageName: "@zhlbuilder/contracts", packageDir: "contracts" },
   // dynamic-workflow 的 tsc 构建依赖 gitignored 的 libs.generated.ts，
   // 而 bare-tsc 路径（runBootstrapWithRemoteBuild）不会执行 package build script，
-  // 所以需要先跑生成脚本；必须排在 @zcode/core 之前，core 依赖 dynamic-workflow。
+  // 所以需要先跑生成脚本；必须排在 @zhlbuilder/core 之前，core 依赖 dynamic-workflow。
   {
-    packageName: "@zcode/dynamic-workflow",
+    packageName: "@zhlbuilder/dynamic-workflow",
     packageDir: "dynamic-workflow",
     prepareScript: "scripts/generate-libs.mjs",
   },
   // dynamic-workflow-runtime 的类型入口是 dist/index.d.ts，必须先于 bootstrap 构建。
-  { packageName: "@zcode/dynamic-workflow-runtime", packageDir: "dynamic-workflow-runtime" },
-  { packageName: "@zcode/core", packageDir: "core" },
-  { packageName: "@zcode/adapters", packageDir: "adapters" },
-  { packageName: "@zcode/i18n", packageDir: "i18n" },
-  { packageName: "@zcode/telemetry", packageDir: "telemetry" },
-  { packageName: "@zcode/bootstrap", packageDir: "bootstrap" },
+  { packageName: "@zhlbuilder/dynamic-workflow-runtime", packageDir: "dynamic-workflow-runtime" },
+  { packageName: "@zhlbuilder/core", packageDir: "core" },
+  { packageName: "@zhlbuilder/adapters", packageDir: "adapters" },
+  { packageName: "@zhlbuilder/i18n", packageDir: "i18n" },
+  { packageName: "@zhlbuilder/telemetry", packageDir: "telemetry" },
+  { packageName: "@zhlbuilder/bootstrap", packageDir: "bootstrap" },
 ];
 // 官方插件 manifest 可以在 server.js 缺失时被 filesystem seed，直到 session
 // 连接 MCP 才报错，造成“Helper ready 但 CUA 工具不存在”的半启动状态。所有普通 Dev 必需的
@@ -52,12 +52,12 @@ const cliWorkspaceBuilds = [
 const requiredDevPluginRuntimeBuilds = [
   {
     // node_repl 宿主：Browser Use 与 Computer Use 共用，产物归属独立包。
-    packageName: "@zcode/node-repl-host",
+    packageName: "@zhlbuilder/node-repl-host",
     artifactPath: "node-repl-host/dist/mcp/server.js",
   },
   {
     // browser-use 自己的 runtime 只剩 browser-client；宿主不再由它携带。
-    packageName: "@zcode/browser-use-plugin",
+    packageName: "@zhlbuilder/browser-use-plugin",
     artifactPath: "browser-use-plugin/scripts/browser-client.mjs",
   },
 ];
@@ -99,7 +99,7 @@ function stageDevAgentBundle() {
 }
 
 async function runBootstrapWithRemoteBuild() {
-  if (existsSync(resolve(repoRoot, "apps/zcode-cli/packages/cli/dist/zcode.cjs"))) {
+  if (existsSync(resolve(repoRoot, "apps/zcode-cli/packages/cli/dist/zhlbuilder.cjs"))) {
     await stageBuiltinProviderConfig({
       root: repoRoot,
       env: pnpmRunEnv,
@@ -145,7 +145,7 @@ if (useBootstrapWithRemoteBuild) {
 if (!useTurboBuild) {
   // Linux 容器 demo 里没有仓库级 turbo 根，`turbo --cwd apps/zcode-cli`
   // 会把 apps/zcode-cli 当根目录，并拒绝 turbo.json 中指向 ../../packages/shared 的 inputs。
-  // 同时 agent 子 workspace 不包含根 packages/shared，但 agent 包依赖 @zcode/shared。
+  // 同时 agent 子 workspace 不包含根 packages/shared，但 agent 包依赖 @zhlbuilder/shared。
   // 因此默认改用仓库根 workspace 的明确 pnpm 包顺序构建，避免 WDIO 前置构建卡在子 workspace 解析。
   for (const filter of defaultBuildFilters) {
     runCommand("pnpm", ["--filter", filter, "build"], {
@@ -155,7 +155,7 @@ if (!useTurboBuild) {
   }
 
   await verifyRequiredDevPluginRuntimeArtifacts();
-  runCommand("pnpm", ["--filter", "@zcode/cli", "build:desktop-agent"], {
+  runCommand("pnpm", ["--filter", "@zhlbuilder/cli", "build:desktop-agent"], {
     env: pnpmRunEnv,
     stdio: "inherit",
   });
@@ -173,7 +173,7 @@ runCommand(
     "apps/zcode-cli",
     "run",
     "build:desktop-agent",
-    "--filter=@zcode/cli",
+    "--filter=@zhlbuilder/cli",
   ],
   {
     env: pnpmRunEnv,

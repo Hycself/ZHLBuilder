@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { isZCodeAgentProvider, ZCODE_AGENT_PROVIDER, type ZCodeProvider } from "@zcode/shared";
-import type { IModelSelectionService, ModelSelectionView } from "@zcode/services";
+import { isZCodeAgentProvider, ZCODE_AGENT_PROVIDER, type ZCodeProvider } from "@zhlbuilder/shared";
+import type { IModelSelectionService, ModelSelectionView } from "@zhlbuilder/services";
 import {
   buildModelConfigMissingUiError,
   type ModelConfigMissingUiError,

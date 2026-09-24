@@ -1,13 +1,13 @@
-import type { AiSdkModelAdapter } from "@zcode/adapters/model";
-import type { Model } from "@zcode/contracts";
-import type { AgentRuntimeDeps } from "@zcode/core";
+import type { AiSdkModelAdapter } from "@zhlbuilder/adapters/model";
+import type { Model } from "@zhlbuilder/contracts";
+import type { AgentRuntimeDeps } from "@zhlbuilder/core";
 import {
   type ModelSelection,
   type ModelSelectionValidation,
   type Provider,
   type ProviderModel,
   type ProviderRegistryView,
-} from "@zcode/provider";
+} from "@zhlbuilder/provider";
 import { createRegistrySelectionProtocolError } from "./provider-registry-selection.js";
 
 export type RuntimeModelFactory = NonNullable<AgentRuntimeDeps["modelFactory"]>;

@@ -1,7 +1,7 @@
-import type { ConfigResult } from "@zcode/adapters/config";
-import { resolveInitialModelSelection, type ModelSelectionOptions } from "@zcode/provider";
-import { resolveBashTimeoutPolicy, type AgentProfile, type AgentRuntimeConfig } from "@zcode/core";
-import { type BuiltInSubagentModelSelectionOverrides } from "@zcode/shared";
+import type { ConfigResult } from "@zhlbuilder/adapters/config";
+import { resolveInitialModelSelection, type ModelSelectionOptions } from "@zhlbuilder/provider";
+import { resolveBashTimeoutPolicy, type AgentProfile, type AgentRuntimeConfig } from "@zhlbuilder/core";
+import { type BuiltInSubagentModelSelectionOverrides } from "@zhlbuilder/shared";
 import {
   type CollaborationMode,
   type HookConfigSource,
@@ -9,7 +9,7 @@ import {
   type HookMatcherConfig,
   type HooksRuntimeConfig,
   type McpServerConfig,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { omitMcpServers, resolveTrustedOfficialCuaServerNames } from "../mcp-config.js";
 import { resolveDefaultEmbeddedSearchBackend } from "./embedded-search-backend.js";
 import { getProjectMemoryRoot } from "./paths.js";

@@ -57,7 +57,7 @@ const root = resolve(import.meta.dirname, "../../..");
 const repositoryRoot = resolve(root, "../..");
 const cliRoot = resolve(import.meta.dirname, "..");
 const dist = resolve(cliRoot, "dist");
-const cliBundle = resolve(dist, "zcode.cjs");
+const cliBundle = resolve(dist, "zhlbuilder.cjs");
 const seaBlobForTarget = (target) => resolve(dist, `zcode-${target}.sea.blob`);
 const seaConfigForTarget = (target) => resolve(dist, `sea-config-${target}.json`);
 const seaAssetStagingForTarget = (target) => resolve(dist, "sea-assets", target);
@@ -193,7 +193,7 @@ const prepareSeaBlob = async (target, nodeVersion) => {
           "zcode-node-license": nodeLicensePath,
         },
         disableExperimentalSEAWarning: true,
-        main: "dist/zcode.cjs",
+        main: "dist/zhlbuilder.cjs",
         output: `dist/zcode-${target}.sea.blob`,
         useCodeCache: false,
         useSnapshot: false,
@@ -302,7 +302,7 @@ export const main = async (argv = process.argv.slice(2)) => {
   }
 
   if (!existsSync(cliBundle)) {
-    throw new Error("Missing dist/zcode.cjs. Run `pnpm build` first.");
+    throw new Error("Missing dist/zhlbuilder.cjs. Run `pnpm build` first.");
   }
   const postjectBin = resolvePostjectBin();
   if (!postjectBin) {

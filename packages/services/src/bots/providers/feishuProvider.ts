@@ -6,7 +6,7 @@ import type {
   BotOutboundMessage,
   BotProvider,
   SelectionPrompt,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import type {
   BotProviderAdapter,
   BotStreamingReplyCardHandle,

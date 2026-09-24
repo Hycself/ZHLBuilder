@@ -13,7 +13,7 @@ import type {
   ConversationShareContinuation,
   ConversationShareRecord,
   Locale,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   decodeConversationShareRows,
   buildConversationPreviewArtifactCandidates,
@@ -22,14 +22,14 @@ import {
   type ConversationPreviewArtifactCandidate,
   localizeConversationShareUrl,
   resolveRuntimeZCodeEndpointOrigin,
-} from "@zcode/shared";
-import type { ConversationRow } from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared";
+import type { ConversationRow } from "@zhlbuilder/shared/zcode-protocol-v4";
 import {
   PROTOCOL_V4_LIMITS,
   ZCODE_ATTACHMENT_FAULT_CODES,
   readZCodeAttachmentFaultCode,
-} from "@zcode/shared/zcode-protocol-v4";
-import { Emitter } from "@zcode/rpc";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
+import { Emitter } from "@zhlbuilder/rpc";
 
 import type { IZCodeAgentService } from "../zcode-agent/zcodeAgent.js";
 import type { IZCodeSessionService } from "#src/zcode-session/zcodeSession.js";

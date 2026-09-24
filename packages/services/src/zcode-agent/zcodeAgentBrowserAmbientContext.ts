@@ -5,7 +5,7 @@ import {
   type BrowserClientMode,
   type BrowserCommand,
   type ZCodeBrowserAmbientContext,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 export interface BrowserAmbientContextExecutor {
   list(input: {

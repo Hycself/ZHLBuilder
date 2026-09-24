@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import type { IServiceAccessor } from "@zcode/services";
-import type { ZCodeConfigOption } from "@zcode/shared";
+import type { IServiceAccessor } from "@zhlbuilder/services";
+import type { ZCodeConfigOption } from "@zhlbuilder/shared";
 import {
   buildTaskContextUsageFromUsageUpdate,
   recordTaskContextUsageUpdate,

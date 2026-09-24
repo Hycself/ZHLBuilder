@@ -14,7 +14,7 @@ import {
   ChannelServer,
   LoggingChannelServer,
   type ISocket,
-} from "@zcode/rpc";
+} from "@zhlbuilder/rpc";
 import {
   ServiceCollection,
   IZCodeAgentService,
@@ -25,7 +25,7 @@ import {
   ITerminalService,
   IBotsService,
   IProviderProvisioningTargetService,
-} from "@zcode/services";
+} from "@zhlbuilder/services";
 import {
   botProviders,
   formatLogPrefix,
@@ -37,7 +37,7 @@ import {
   type BotProvider,
   type ServerRemoteInfo,
   type ServerRemoteWorkspaceInfo,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { connectRemote, createRemoteBackend, type RemoteConnection } from "./remote/index.js";
 import { createHostCapabilityStore } from "./hostCapability.js";
 

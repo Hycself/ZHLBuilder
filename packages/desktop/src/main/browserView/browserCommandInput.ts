@@ -1,4 +1,4 @@
-import type { BrowserKeyModifier, BrowserMouseButton } from "@zcode/shared";
+import type { BrowserKeyModifier, BrowserMouseButton } from "@zhlbuilder/shared";
 import { RESOLVE_SCRIPT } from "./browserCommandScripts.js";
 import type { BrowserPoint, ControlledView } from "./browserCommandTypes.js";
 

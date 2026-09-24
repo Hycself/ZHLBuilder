@@ -1,16 +1,16 @@
-import { formatJson } from "@zcode/core";
-import type { Logger } from "@zcode/contracts";
-import type { GlobalOptions, RunContext } from "@zcode/shared-types";
+import { formatJson } from "@zhlbuilder/core";
+import type { Logger } from "@zhlbuilder/contracts";
+import type { GlobalOptions, RunContext } from "@zhlbuilder/shared-types";
 import type {
   inspectZCodeCustomCommand,
   InspectZCodeCustomCommandOptions,
   listZCodeCustomCommands,
   ListZCodeCustomCommandsOptions,
   ZCodeCustomCommandInspection,
-} from "@zcode/bootstrap";
+} from "@zhlbuilder/bootstrap";
 import type { CliEnv } from "./env.js";
 
-type BootstrapModule = typeof import("@zcode/bootstrap");
+type BootstrapModule = typeof import("@zhlbuilder/bootstrap");
 type CustomCommandListOutcome = Awaited<ReturnType<typeof listZCodeCustomCommands>>;
 type CustomCommandListItem = CustomCommandListOutcome["commands"][number];
 
@@ -108,13 +108,13 @@ async function runCommandsInspectCommand(
 
 async function resolveListCustomCommands(deps: CommandsCommandDependencies) {
   if (deps.listCustomCommands) return deps.listCustomCommands;
-  const bootstrap = deps.loadBootstrapModule ?? (() => import("@zcode/bootstrap"));
+  const bootstrap = deps.loadBootstrapModule ?? (() => import("@zhlbuilder/bootstrap"));
   return (await bootstrap()).listZCodeCustomCommands;
 }
 
 async function resolveInspectCustomCommand(deps: CommandsCommandDependencies) {
   if (deps.inspectCustomCommand) return deps.inspectCustomCommand;
-  const bootstrap = deps.loadBootstrapModule ?? (() => import("@zcode/bootstrap"));
+  const bootstrap = deps.loadBootstrapModule ?? (() => import("@zhlbuilder/bootstrap"));
   return (await bootstrap()).inspectZCodeCustomCommand;
 }
 

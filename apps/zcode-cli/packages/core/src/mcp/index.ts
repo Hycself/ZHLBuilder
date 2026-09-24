@@ -13,9 +13,9 @@ import {
   type ModelToolSideEffectScope,
   type PermissionCapabilityGroup,
   type RiskLevel,
-} from "@zcode/contracts";
-import { ZCODE_CUA_OFFICIAL_MCP_NAMESPACE_NAME as ZCODE_CUA_OFFICIAL_MCP_SERVER_NAME } from "@zcode/shared";
-import { OFFICIAL_CUA_FRAME_MODEL_CONTENT_PROTECTION } from "@zcode/zcode-cua/frame-contract";
+} from "@zhlbuilder/contracts";
+import { ZCODE_CUA_OFFICIAL_MCP_NAMESPACE_NAME as ZCODE_CUA_OFFICIAL_MCP_SERVER_NAME } from "@zhlbuilder/shared";
+import { OFFICIAL_CUA_FRAME_MODEL_CONTENT_PROTECTION } from "@zhlbuilder/zcode-cua/frame-contract";
 import type { ToolRegistry } from "../tool/registry.js";
 import type { ToolEntry } from "../tool/types.js";
 import { createToolRuleNameSet } from "../tool/tool-visibility.js";

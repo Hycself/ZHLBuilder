@@ -1,11 +1,11 @@
-import type { WorkspaceHookReasonCode, WorkspaceHookReviewFlowState } from "@zcode/contracts";
-import { workspaceHookReviewFlowStateSchema } from "@zcode/contracts";
+import type { WorkspaceHookReasonCode, WorkspaceHookReviewFlowState } from "@zhlbuilder/contracts";
+import { workspaceHookReviewFlowStateSchema } from "@zhlbuilder/contracts";
 import {
   workspaceHookReviewDecisionSchema,
   workspaceHookReviewRequestPayloadSchema,
   type WorkspaceHookReviewDecision,
   type WorkspaceHookReviewRequestPayload,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 
 export interface WorkspaceHookReviewTarget {
   sessionId: string;

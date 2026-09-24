@@ -4,10 +4,10 @@ import {
   SessionEventType,
   type DynamicWorkflowRunProgressPayload,
   type SessionEvent,
-} from "@zcode/contracts";
-import { createDenyPermissionBroker } from "@zcode/core";
-import type { GlobalOptions } from "@zcode/shared-types";
-import type { ZCodeAppOptions } from "@zcode/bootstrap";
+} from "@zhlbuilder/contracts";
+import { createDenyPermissionBroker } from "@zhlbuilder/core";
+import type { GlobalOptions } from "@zhlbuilder/shared-types";
+import type { ZCodeAppOptions } from "@zhlbuilder/bootstrap";
 import { readRuntimeFunction } from "./runtime-event-subscriber.js";
 
 /**

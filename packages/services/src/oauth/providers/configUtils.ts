@@ -2,7 +2,7 @@ import {
   ZCODE_VERSION,
   buildRuntimeZCodeApiUrl,
   buildRuntimeZCodeEndpointUrls,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 const DESKTOP_OAUTH_CALLBACK_URI = "zcode://oauth/callback";
 

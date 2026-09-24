@@ -1,6 +1,6 @@
 import { extname } from "node:path";
-import { formatJson, type PresentationSurface } from "@zcode/core";
-import type { RunContext, GlobalOptions } from "@zcode/shared-types";
+import { formatJson, type PresentationSurface } from "@zhlbuilder/core";
+import type { RunContext, GlobalOptions } from "@zhlbuilder/shared-types";
 import { loadBootstrapModule } from "./bootstrap-loader.js";
 import {
   buildManualSkillPrompt,

@@ -73,7 +73,7 @@ ZCODE_SERVER_WORKSPACE=/path/to/project pnpm dev:web
 
 This starts both the Web development server (default: `http://localhost:5173`) and the backend (default: `http://localhost:3030`). Open the Web development server in your browser. `/ws` and general `/api` requests are proxied to the local backend; `/api/v1/oauth/token` is proxied separately to the configured product service.
 
-After changing Agent source code, run `pnpm --filter @zcode/cli... build` and restart the service. To validate the complete distribution, extract and run it as described under Packaging → ZCode CLI distribution below.
+After changing Agent source code, run `pnpm --filter @zhlbuilder/cli... build` and restart the service. To validate the complete distribution, extract and run it as described under Packaging → ZCode CLI distribution below.
 
 ### ZCode CLI distribution
 
@@ -105,11 +105,11 @@ See Packaging below for build instructions. `pnpm build:zcode` only creates the 
 Use the source entry when developing the TUI or Agent:
 
 ```bash
-pnpm --filter @zcode/cli dev --help
-pnpm --filter @zcode/cli dev
+pnpm --filter @zhlbuilder/cli dev --help
+pnpm --filter @zhlbuilder/cli dev
 
 # Build the CLI and its workspace dependencies
-pnpm --filter @zcode/cli... build
+pnpm --filter @zhlbuilder/cli... build
 node apps/zcode-cli/packages/cli/dist/zcode.cjs --help
 ```
 

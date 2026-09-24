@@ -1,5 +1,5 @@
-import type { AppSettings } from "@zcode/shared";
-import { ServiceChannels } from "@zcode/shared";
+import type { AppSettings } from "@zhlbuilder/shared";
+import { ServiceChannels } from "@zhlbuilder/shared";
 import { createServiceDescriptor } from "../descriptors.js";
 
 export interface ISettingService {

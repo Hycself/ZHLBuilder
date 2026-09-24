@@ -1,11 +1,11 @@
-import type { Logger } from "@zcode/contracts";
+import type { Logger } from "@zhlbuilder/contracts";
 import {
   createMemorySampleWriteGate,
   memoryUsageToSampleFields,
   zcodeProtocolNotifications,
   type MemorySample,
   type ZCodeProtocolNotification,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   createZCodeProcessResourceSampler,
   type ZCodeProcessResourceSampler,

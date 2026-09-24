@@ -16,14 +16,14 @@ import type {
   BotState,
   BotWorkspaceRef,
   BotsConfigFile,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import {
   ALL_BOT_WORKSPACES,
   createUuid,
   DEFAULT_BOT_REPLY_GRANULARITY,
   isFeishuBotProvider,
   normalizeBotReplyGranularity,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { Button } from "@/components/ui/button.js";
 import {
   Dialog,

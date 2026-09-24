@@ -1,4 +1,4 @@
-import type { IZCodeSessionService } from "@zcode/services";
+import type { IZCodeSessionService } from "@zhlbuilder/services";
 import { logger } from "@/logger.js";
 import { useZCodeSessionStore } from "@/store/zcodeSessionStore.js";
 

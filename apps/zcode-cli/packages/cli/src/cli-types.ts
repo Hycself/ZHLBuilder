@@ -1,10 +1,10 @@
-import type { TuiReadClipboardImage, TuiWriteClipboardText } from "@zcode/tui";
-import type { UiLocale } from "@zcode/i18n";
-import type { Logger } from "@zcode/contracts";
+import type { TuiReadClipboardImage, TuiWriteClipboardText } from "@zhlbuilder/tui";
+import type { UiLocale } from "@zhlbuilder/i18n";
+import type { Logger } from "@zhlbuilder/contracts";
 import type {
   createManagedCdpBrowserRuntime,
   ManagedCdpBrowserRuntimeOptions,
-} from "@zcode/adapters/browser";
+} from "@zhlbuilder/adapters/browser";
 import type {
   createModelAdapter,
   createZCodeApp,
@@ -38,13 +38,13 @@ import type {
   startProcessProviderRegistryRuntime,
   shutdownZCodeTelemetry,
   ZCodeAppOptions,
-} from "@zcode/bootstrap";
+} from "@zhlbuilder/bootstrap";
 import type { CliEnv, DotenvLoadResult, LoadCliDotenvOptions } from "./env.js";
 import type { PluginsCommandOverrides } from "./plugins-command.js";
 import type { CliShutdownProcess } from "./shutdown.js";
 import type { resolveWorkspaceGitBranch } from "./tui-workspace-git.js";
 
-export type BootstrapModule = typeof import("@zcode/bootstrap");
+export type BootstrapModule = typeof import("@zhlbuilder/bootstrap");
 
 export interface RunDependencies extends PluginsCommandOverrides {
   protocolLifecycle?: RunZCodeProtocolAgentOptions["lifecycle"];
@@ -104,7 +104,7 @@ export interface RunDependencies extends PluginsCommandOverrides {
   resolveWorkspaceGitBranch?: typeof resolveWorkspaceGitBranch;
   logoutZCodeCli?: (options?: LogoutZCodeCliOptions) => ReturnType<typeof logoutZCodeCli>;
   runZCodeProtocolAgent?: (options?: RunZCodeProtocolAgentOptions) => Promise<void>;
-  runTui?: typeof import("@zcode/tui").runTui;
+  runTui?: typeof import("@zhlbuilder/tui").runTui;
   skipUserConfig?: boolean;
   userConfigPath?: string;
   exitProcess?: (code: number) => void;

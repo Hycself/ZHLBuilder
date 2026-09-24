@@ -1,5 +1,5 @@
-import type { HttpClientPort, HttpClientRunOptions, TraceContext } from "@zcode/contracts";
-import { resolveBigModelApiOrigin } from "@zcode/shared";
+import type { HttpClientPort, HttpClientRunOptions, TraceContext } from "@zhlbuilder/contracts";
+import { resolveBigModelApiOrigin } from "@zhlbuilder/shared";
 
 const ZAI_API_HOST = "https://api.z.ai";
 const JSON_CONTENT_TYPE = "application/json";

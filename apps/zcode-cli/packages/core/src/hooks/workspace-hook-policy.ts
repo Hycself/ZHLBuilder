@@ -1,5 +1,5 @@
-import type { WorkspaceHookPolicy } from "@zcode/contracts";
-import { workspaceHookPolicySchema } from "@zcode/contracts";
+import type { WorkspaceHookPolicy } from "@zhlbuilder/contracts";
+import { workspaceHookPolicySchema } from "@zhlbuilder/contracts";
 
 const DEFAULT_POLICY: WorkspaceHookPolicy = Object.freeze({
   mode: "user_decides",

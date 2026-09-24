@@ -1,4 +1,4 @@
-import { createDefaultFileWorkspaceHookTrustStore } from "@zcode/adapters/storage";
+import { createDefaultFileWorkspaceHookTrustStore } from "@zhlbuilder/adapters/storage";
 import {
   InMemoryWorkspaceHookPolicyProvider,
   WorkspaceHookTrustCoordinator,
@@ -8,21 +8,21 @@ import {
   type WorkspaceHookReviewTarget,
   type WorkspaceHookRuntimeAdmissionPort,
   type WorkspaceHookPolicyProvider,
-} from "@zcode/core";
-import { SessionEventType } from "@zcode/contracts";
+} from "@zhlbuilder/core";
+import { SessionEventType } from "@zhlbuilder/contracts";
 import type {
   Logger,
   SessionId,
   WorkspaceHookBundleSnapshot,
   WorkspaceHookPolicy,
   WorkspaceHookAdmissionUpdatedPayload,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type {
   WorkspaceHookReviewDecision,
   WorkspaceHookReviewRequestPayload,
   WorkspaceHookTrustRevokeTarget,
-} from "@zcode/shared/zcode-protocol-v4";
-import type { WorkspaceHookRuntimeRoot } from "@zcode/shared/workspace-hook-discovery";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
+import type { WorkspaceHookRuntimeRoot } from "@zhlbuilder/shared/workspace-hook-discovery";
 import {
   WorkspaceHookReviewController,
   type WorkspaceHookReviewCommandResult,

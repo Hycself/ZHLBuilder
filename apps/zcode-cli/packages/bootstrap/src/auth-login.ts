@@ -11,17 +11,17 @@ import {
   type CliOAuthInitData,
   type CliOAuthPollData,
   type CliOAuthUser,
-} from "@zcode/adapters";
-import { createConfig } from "@zcode/adapters/config";
-import { createNodeHttpClientAdapter } from "@zcode/adapters/http";
-import type { EnvRecord } from "@zcode/adapters/model";
-import { buildZCodeEndpointUrls, resolveRuntimeZCodeEndpointOrigin } from "@zcode/shared";
+} from "@zhlbuilder/adapters";
+import { createConfig } from "@zhlbuilder/adapters/config";
+import { createNodeHttpClientAdapter } from "@zhlbuilder/adapters/http";
+import type { EnvRecord } from "@zhlbuilder/adapters/model";
+import { buildZCodeEndpointUrls, resolveRuntimeZCodeEndpointOrigin } from "@zhlbuilder/shared";
 import {
   NodeModelSelectionConfigRepository,
   NodePersonalProviderConfigRepository,
   PERSONAL_PROVIDER_CONFIG_FILE_NAME,
   ZCODE_PERSONAL_PROVIDER_CONFIG_FILE_ENV,
-} from "@zcode/provider-node";
+} from "@zhlbuilder/provider-node";
 import { readLegacyCliPersonalProviderConfig } from "./app/legacy-cli-personal-provider-config-importer.js";
 import { dirname, join } from "node:path";
 import {

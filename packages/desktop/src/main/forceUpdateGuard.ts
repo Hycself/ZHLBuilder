@@ -6,7 +6,7 @@ import {
   resolveForceUpdateRequirement,
   type ForceUpdateRequirement,
   type Locale,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { requestForceAutoUpdate, type ForceAutoUpdateState } from "./autoUpdater.js";
 import { showForceUpdatePrompt } from "./forceUpdatePrompt.js";
 

@@ -1,5 +1,5 @@
-import type { TuiSelection, TuiSubmitPrompt } from "@zcode/tui";
-import { getZCodeCopy } from "@zcode/i18n";
+import type { TuiSelection, TuiSubmitPrompt } from "@zhlbuilder/tui";
+import { getZCodeCopy } from "@zhlbuilder/i18n";
 import type { CommandCenterApp, CommandCenterLoginResult } from "./types.js";
 import { randomUUID } from "node:crypto";
 

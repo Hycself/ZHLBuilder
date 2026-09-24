@@ -1,4 +1,4 @@
-import type { ModelToolContract } from "@zcode/contracts";
+import type { ModelToolContract } from "@zhlbuilder/contracts";
 import type { ToolEntry, ToolExecutionModelContext } from "./types.js";
 
 export function resolveToolEntryModelContract(

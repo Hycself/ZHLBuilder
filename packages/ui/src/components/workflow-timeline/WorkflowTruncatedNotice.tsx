@@ -1,4 +1,4 @@
-import { workflowRunStepCounts, type WorkflowRunState } from "@zcode/shared/zcode-protocol-v4";
+import { workflowRunStepCounts, type WorkflowRunState } from "@zhlbuilder/shared/zcode-protocol-v4";
 import { cn } from "@/components/lib/utils.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 

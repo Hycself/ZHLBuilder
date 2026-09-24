@@ -1,6 +1,6 @@
 // Env Config Adapter - Parse the intentionally small ZCODE_* environment surface.
 
-import type { RuntimeConfigPatch } from "@zcode/contracts";
+import type { RuntimeConfigPatch } from "@zhlbuilder/contracts";
 
 interface EnvConfigOptions {
   prefix?: string;

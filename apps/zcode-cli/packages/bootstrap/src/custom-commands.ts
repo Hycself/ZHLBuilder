@@ -1,12 +1,12 @@
 import { resolve } from "node:path";
-import { createConfig } from "@zcode/adapters/config";
-import { createNodeCustomCommandAdapter } from "@zcode/adapters/commands";
+import { createConfig } from "@zhlbuilder/adapters/config";
+import { createNodeCustomCommandAdapter } from "@zhlbuilder/adapters/commands";
 import type {
   CustomCommandContent,
   CustomCommandDiagnostic,
   CustomCommandLoadOutcome,
   Logger,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { resolveZCodePlugins } from "./plugins.js";
 import { collectDisabledPaths } from "./skill-command-overrides.js";
 

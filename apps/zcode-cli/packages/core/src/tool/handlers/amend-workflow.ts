@@ -20,7 +20,7 @@ import {
   type ModelMessageContent,
   createWorkflowPhaseAlongside,
   createWorkflowPhaseNames,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type {
   ToolApprovalGate,
   ToolEntry,

@@ -9,9 +9,9 @@ import {
   type FetchLike,
   type OAuthDiscoveryState,
 } from "@modelcontextprotocol/client";
-import type { Logger } from "@zcode/contracts";
-import { isZCodeFileLockTimeoutError } from "@zcode/shared";
-import { withFileLock } from "@zcode/shared/node";
+import type { Logger } from "@zhlbuilder/contracts";
+import { isZCodeFileLockTimeoutError } from "@zhlbuilder/shared";
+import { withFileLock } from "@zhlbuilder/shared/node";
 import type { SharedZCodeCredentialStore } from "../auth/shared-credentials.js";
 import {
   invalidateCanonicalCredentials,

@@ -73,9 +73,9 @@ export function nodeDistBase(env = process.env) {
   const mirror = env.ZCODE_NODE_DIST_MIRROR?.trim();
   return (mirror || DEFAULT_NODE_DIST_BASE).replace(/\/+$/u, "");
 }
-const BROWSER_USE_PLUGIN_PACKAGE_NAME = "@zcode/browser-use-plugin";
-// node_repl 宿主抽成独立包 @zcode/node-repl-host 之后，browser-use
-// 不再产出 dist/mcp/server.js，CUA 资产也已归 @zcode/zcode-cua-plugin。这是**第三份**平行清单
+const BROWSER_USE_PLUGIN_PACKAGE_NAME = "@zhlbuilder/browser-use-plugin";
+// node_repl 宿主抽成独立包 @zhlbuilder/node-repl-host 之后，browser-use
+// 不再产出 dist/mcp/server.js，CUA 资产也已归 @zhlbuilder/zcode-cua-plugin。这是**第三份**平行清单
 // （另两份：packages/desktop/scripts/prepare-agent-node-bundle.mjs 的生产打包、
 // scripts/build-desktop-agent-cli.mjs 的 dev 构建），当时只改了 dev 那份，于是先后在
 // build:macos:arm64 与 build:remote:assets 上以 "missing runtime" 挂掉两次。
@@ -98,9 +98,9 @@ const remoteOfficialPluginPackages = [
   // 清单、packages/server/src/remote/zcodeAgentOfficialPluginAssets.ts 的远端合同保持一致。
   {
     // 远端 shared-host 必须部署 node_repl runtime，否则只剩 skill 而没有 mcp__node_repl__js ——
-    // 该 runtime 现由 @zcode/node-repl-host 提供（见下一个条目），browser-use 只带自己的
+    // 该 runtime 现由 @zhlbuilder/node-repl-host 提供（见下一个条目），browser-use 只带自己的
     // client script 与 skill/docs。
-    packageName: "@zcode/browser-use-plugin",
+    packageName: "@zhlbuilder/browser-use-plugin",
     relativePath: "apps/zcode-cli/packages/browser-use-plugin",
     requiresRuntime: true,
     requiredRuntimePaths: browserUseRequiredRuntimePaths,
@@ -110,7 +110,7 @@ const remoteOfficialPluginPackages = [
   {
     // node_repl 宿主：Browser Use 与 Computer Use 共用的 MCP runtime。远端 shared-host 缺它
     // 就没有 mcp__node_repl__js，bua/cua 两边都会连不上。
-    packageName: "@zcode/node-repl-host",
+    packageName: "@zhlbuilder/node-repl-host",
     relativePath: "apps/zcode-cli/packages/node-repl-host",
     requiresRuntime: true,
     requiredRuntimePaths: ["dist/mcp/server.js"],
@@ -118,7 +118,7 @@ const remoteOfficialPluginPackages = [
     stagedPath: "packages/node-repl-host",
   },
 ];
-// 随 CLI 内置的技能包（不是插件）：远端 agent 的 bootstrap 沿官方插件同款候选目录在 zcode.cjs 旁
+// 随 CLI 内置的技能包（不是插件）：远端 agent 的 bootstrap 沿官方插件同款候选目录在 zhlbuilder.cjs 旁
 // 找 packages/bundled-skills 并原地读取；与 packages/desktop/scripts/prepare-agent-node-bundle.mjs 同一份清单。
 const remoteBundledSkillPack = {
   relativePath: "apps/zcode-cli/packages/bundled-skills",
@@ -516,35 +516,35 @@ async function stageRemoteBundledSkillPack(glmDir) {
   console.log(`  [ok] mock-cdn glm bundled skill pack ${remoteBundledSkillPack.stagedPath}`);
 }
 
-// 远端 agent 现在跑编译出来的 zcode.cjs（而不是各平台独立的原生二进制）：
-// 远端部署时已经有一份独立 node（跑 zcode-server.cjs），agent 复用它执行 zcode.cjs 即可，
-// 不必再为每个平台准备一份内嵌 node 的 SEA 二进制。zcode.cjs 跨平台同一份，逐平台只是放进各自的
+// 远端 agent 现在跑编译出来的 zhlbuilder.cjs（而不是各平台独立的原生二进制）：
+// 远端部署时已经有一份独立 node（跑 zcode-server.cjs），agent 复用它执行 zhlbuilder.cjs 即可，
+// 不必再为每个平台准备一份内嵌 node 的 SEA 二进制。zhlbuilder.cjs 跨平台同一份，逐平台只是放进各自的
 // glm/<platform> 组件目录，保持现有 manifest 组件结构不变。
 async function stageRemoteAgentBundles() {
   console.log("==> Building zcode-cli bundle for remote agents");
-  // 复用桌面同款构建脚本（turbo build:desktop-agent --filter=@zcode/cli），命中缓存时几乎瞬时。
+  // 复用桌面同款构建脚本（turbo build:desktop-agent --filter=@zhlbuilder/cli），命中缓存时几乎瞬时。
   runCommand(process.execPath, [join(rootDir, "scripts/build-desktop-agent-cli.mjs")], {
     cwd: rootDir,
     env: process.env,
   });
-  // browser-use runtime 的 tsc 依赖 @zcode/core/dist。远端资产也必须先构建
+  // browser-use runtime 的 tsc 依赖 @zhlbuilder/core/dist。远端资产也必须先构建
   // agent CLI 依赖，避免 CI 干净检出时被开发机缓存掩盖的 TS2307。
   buildRemoteOfficialPluginRuntimes();
-  const cliBundlePath = join(rootDir, "apps/zcode-cli/packages/cli/dist/zcode.cjs");
+  const cliBundlePath = join(rootDir, "apps/zcode-cli/packages/cli/dist/zhlbuilder.cjs");
   if (!existsSync(cliBundlePath)) {
     throw new Error(`[prepare-prebuilds] expected cli bundle missing: ${cliBundlePath}`);
   }
 
   for (const platformKey of remotePlatforms) {
     const glmDir = join(releaseDir, "glm", platformKey);
-    // 干净重建：glm 组件现在只含 zcode.cjs，清掉历史遗留的原生二进制 / 旧 meta，
+    // 干净重建：glm 组件现在只含 zhlbuilder.cjs，清掉历史遗留的原生二进制 / 旧 meta，
     // 避免被打进组件 tar 把远端资源撑大。
     rmSync(glmDir, { recursive: true, force: true });
     mkdirSync(glmDir, { recursive: true });
-    copyFileSync(cliBundlePath, join(glmDir, "zcode.cjs"));
+    copyFileSync(cliBundlePath, join(glmDir, "zhlbuilder.cjs"));
     stageRemoteOfficialPlugins(glmDir);
     await stageRemoteBundledSkillPack(glmDir);
-    console.log(`  [ok] mock-cdn glm/${platformKey}/zcode.cjs`);
+    console.log(`  [ok] mock-cdn glm/${platformKey}/zhlbuilder.cjs`);
   }
 }
 
@@ -637,7 +637,7 @@ function resolveComponentSemanticVersion(componentVersion) {
 }
 
 // glm 承载 zcode-cli app-server 协议 schema。即使 runtime 版本未变化，
-// zcode.cjs 也可能随 app 代码变更；跨 release 复用旧 glm 会让远端 agent 拒绝新协议字段。
+// zhlbuilder.cjs 也可能随 app 代码变更；跨 release 复用旧 glm 会让远端 agent 拒绝新协议字段。
 const nonReusableReleaseAssetIds = new Set(["server-bundle", "glm"]);
 
 function readJsonFile(filePath) {
@@ -798,9 +798,9 @@ function buildReusableComponentRequiredPaths(componentId, platformKey) {
     case "node-pty":
       return platformKey.startsWith("darwin-") ? ["pty.node", "spawn-helper"] : ["pty.node"];
     case "glm":
-      // GLM 现在是编译产物 zcode.cjs（跨平台同一份），远端用已部署的 node 执行它。
+      // GLM 现在是编译产物 zhlbuilder.cjs（跨平台同一份），远端用已部署的 node 执行它。
       // 复用时还要确认官方插件 seed 资源完整，否则旧 release 会继续产出 0 builtin plugin 的远端资源包。
-      return ["zcode.cjs", ...remoteOfficialPluginRequiredPaths];
+      return ["zhlbuilder.cjs", ...remoteOfficialPluginRequiredPaths];
     case "bfs":
       return ["bfs"];
     case "ripgrep":

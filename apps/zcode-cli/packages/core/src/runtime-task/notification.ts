@@ -3,7 +3,7 @@ import type {
   DynamicWorkflowRunLifecycleStatus,
   DynamicWorkflowRunStopReason,
   ModelUsage,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type { RuntimeTaskType } from "./registry.js";
 import { formatWorkflowProviderStopError } from "./workflow-notification-copy.js";
 

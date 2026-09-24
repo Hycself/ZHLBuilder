@@ -15,7 +15,7 @@ import {
   GetWorkflowRunOutputSchema,
   type GetWorkflowRunOutput,
   type ModelMessageContent,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { formatWorkflowProviderStopError } from "../../runtime-task/notification.js";
 import { formatPublishedArtifactLine } from "../executor/workflow-published-artifacts.js";
 import {

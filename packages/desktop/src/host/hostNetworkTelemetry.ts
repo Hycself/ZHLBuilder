@@ -1,5 +1,5 @@
-import { HostResponseTypes } from "@zcode/shared";
-import { setNetworkTelemetrySink, type NetworkObservation } from "@zcode/rpc";
+import { HostResponseTypes } from "@zhlbuilder/shared";
+import { setNetworkTelemetrySink, type NetworkObservation } from "@zhlbuilder/rpc";
 
 interface HostNetworkTelemetryParentPort {
   postMessage(message: unknown): void;

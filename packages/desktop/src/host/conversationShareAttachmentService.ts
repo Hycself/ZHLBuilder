@@ -1,6 +1,6 @@
-import { Event as RpcEvent } from "@zcode/rpc";
-import type { IConversationShareService, IZCodeAgentService } from "@zcode/services";
-import { conversationShareConnectionScopeFactory } from "@zcode/services/node";
+import { Event as RpcEvent } from "@zhlbuilder/rpc";
+import type { IConversationShareService, IZCodeAgentService } from "@zhlbuilder/services";
+import { conversationShareConnectionScopeFactory } from "@zhlbuilder/services/node";
 
 type ConversationShareAgentService = Pick<
   IZCodeAgentService,

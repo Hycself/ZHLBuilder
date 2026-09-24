@@ -1,7 +1,7 @@
 import {
   modelMessageContentToText,
   type ModelInputMessage,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 
 export function normalizeOpenAiCompatibleSystemMessages(
   messages: readonly ModelInputMessage[],

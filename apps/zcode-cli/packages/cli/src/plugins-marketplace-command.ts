@@ -1,5 +1,5 @@
-import { formatJson } from "@zcode/core";
-import type { GlobalOptions, RunContext } from "@zcode/shared-types";
+import { formatJson } from "@zhlbuilder/core";
+import type { GlobalOptions, RunContext } from "@zhlbuilder/shared-types";
 import {
   formatDiagnosticJson,
   formatDiagnosticLines,

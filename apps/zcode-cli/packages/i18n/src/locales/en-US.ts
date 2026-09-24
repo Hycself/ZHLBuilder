@@ -10,12 +10,12 @@ export const enUS: ZCodeCopy = {
     help: (version) => `zcode ${version}
 
 Usage:
-  zcode [command] [options]
+  zhlbuilder [command] [options]
 
 With no command, zcode opens the full-screen TUI.
 
 Commands:
-  app-server Run the ZCode Protocol stdio app server
+  app-server Run the ZHLBuilder Protocol stdio app server
   commands   List custom slash commands (\`commands list\`)
   doctor     Inspect runtime and packaging assumptions
   login [zai|bigmodel]  Sign in through browser authorization
@@ -287,7 +287,7 @@ Slash Commands:
     },
     terminal: {
       requiresInteractive: "TUI requires an interactive terminal.",
-      starting: "Starting ZCode... Ctrl+C to exit",
+      starting: "Starting ZHLBuilder... Ctrl+C to exit",
     },
     transcript: {
       compact: {

@@ -1,4 +1,4 @@
-# @zcode/prompt-trajectory
+# @zhlbuilder/prompt-trajectory
 
 OpenAI protocol trajectory recorder for inspecting zcode-cli prompt assembly.
 
@@ -8,20 +8,20 @@ the production CLI and SEA packaging path.
 ## Commands
 
 ```bash
-pnpm --filter @zcode/bootstrap^... build
-pnpm --filter @zcode/bootstrap build
+pnpm --filter @zhlbuilder/bootstrap^... build
+pnpm --filter @zhlbuilder/bootstrap build
 
-pnpm --filter @zcode/prompt-trajectory record -- \
+pnpm --filter @zhlbuilder/prompt-trajectory record -- \
   --fixture /path/to/recording.json \
   --out /tmp/zcode-prompt-trajectory/basic-live
 
-pnpm --filter @zcode/prompt-trajectory record:prompt -- \
+pnpm --filter @zhlbuilder/prompt-trajectory record:prompt -- \
   --prompt "Say hello in one short sentence."
 
-pnpm --filter @zcode/prompt-trajectory derive -- \
+pnpm --filter @zhlbuilder/prompt-trajectory derive -- \
   --out /tmp/zcode-prompt-trajectory/basic-live
 
-pnpm --filter @zcode/prompt-trajectory model-io -- \
+pnpm --filter @zhlbuilder/prompt-trajectory model-io -- \
   --input ~/.zcode/cli/debug/model-io-<session>.jsonl \
   --out /tmp/zcode-prompt-trajectory/model-io-session
 ```

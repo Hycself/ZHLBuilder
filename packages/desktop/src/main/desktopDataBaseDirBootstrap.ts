@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { setDataBaseDir } from "@zcode/services/node";
+import { setDataBaseDir } from "@zhlbuilder/services/node";
 
 function resolveBootstrapSettingsFile(homePath: string = homedir()): string {
   return join(homePath, ".zcode", "v2", "setting.json");

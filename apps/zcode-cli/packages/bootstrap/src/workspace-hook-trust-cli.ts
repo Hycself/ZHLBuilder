@@ -1,20 +1,20 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { createDefaultFileWorkspaceHookTrustStore } from "@zcode/adapters/storage";
-import { getDefaultConfigPath } from "@zcode/adapters/config";
+import { createDefaultFileWorkspaceHookTrustStore } from "@zhlbuilder/adapters/storage";
+import { getDefaultConfigPath } from "@zhlbuilder/adapters/config";
 import {
   DefaultRuntimeConfig,
   createWorkspaceHookBundleSnapshot,
   type WorkspaceHookBundleSnapshot,
   type WorkspaceHookTrustRecord,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   buildWorkspaceHookBundleSnapshot,
   readWorkspaceHookProjectSources,
   resolveWorkspaceHookRuntimeRoot,
   workspaceHooksConfigSchema,
   type WorkspaceHooksConfig,
-} from "@zcode/shared/workspace-hook-discovery";
+} from "@zhlbuilder/shared/workspace-hook-discovery";
 
 export interface WorkspaceHookTrustCliTarget {
   workspacePath: string;

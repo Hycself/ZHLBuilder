@@ -3,7 +3,7 @@ import type {
   WorkspaceHookBundleSnapshot,
   WorkspaceHookReasonCode,
   WorkspaceHookSecurityRevision,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type { WorkspaceHookTrustCoordinator } from "./workspace-hook-trust-coordinator.js";
 import {
   emitWorkspaceHookTelemetry,

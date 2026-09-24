@@ -2,7 +2,7 @@ import {
   createChildTraceContext,
   type WorkflowGraphNode,
   type WorkflowNodeStatus,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { WorkflowSchedulerEventLog } from "./events.js";
 import { addArtifact, compactWorkflowPayload, updateGraphNode, upsertActivity } from "./graph.js";
 import { buildDefaultNodePrompt, safeArtifactName } from "./prompts.js";

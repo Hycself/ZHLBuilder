@@ -1,10 +1,10 @@
 import { LocalTtftRecorder } from "./local-ttft.js";
-import { localTtftNow, localTtftFactsSchema } from "@zcode/shared/zcode-protocol-v4";
+import { localTtftNow, localTtftFactsSchema } from "@zhlbuilder/shared/zcode-protocol-v4";
 import {
   backgroundBashOutputResultSchema,
   v4BackgroundBashOutputParamsSchema,
   type BackgroundBashOutputResult,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 // V4 conversation 网关（host 通道层 CLI 侧）。
 // 职责：per-session ConversationTopicPublisher 注册表 + flushWindowMs 定时调度
 // + v4/command → CommandInbox → 宿主 executor 的收口。
@@ -27,11 +27,11 @@ import type {
   TargetChangedPayload,
   TurnId,
   FileSystemErrorCode,
-} from "@zcode/contracts";
-import type { ConversationSnapshot } from "@zcode/shared/zcode-protocol-v4";
-import { SessionEventType, isFileSystemPortError } from "@zcode/contracts";
-import type { ZCodeWorkspaceRef } from "@zcode/shared";
-import { extractMarkdownArtifactImageRefs } from "@zcode/shared";
+} from "@zhlbuilder/contracts";
+import type { ConversationSnapshot } from "@zhlbuilder/shared/zcode-protocol-v4";
+import { SessionEventType, isFileSystemPortError } from "@zhlbuilder/contracts";
+import type { ZCodeWorkspaceRef } from "@zhlbuilder/shared";
+import { extractMarkdownArtifactImageRefs } from "@zhlbuilder/shared";
 import type {
   CommandAck,
   AttachmentRef,
@@ -71,7 +71,7 @@ import type {
   ConversationTelemetryFact,
   CuaPermissionObservation,
   ConversationOpenTiming,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 import {
   DELIVERY_PROFILES,
   PROTOCOL_V4_LIMITS,
@@ -121,7 +121,7 @@ import {
   v4ConversationResyncParamsSchema,
   v4ConversationSubscribeParamsSchema,
   v4ConversationUnsubscribeParamsSchema,
-} from "@zcode/shared/zcode-protocol-v4";
+} from "@zhlbuilder/shared/zcode-protocol-v4";
 import { AttachmentUploadRegistry } from "./attachment-upload-registry.js";
 import {
   ColdSessionResumeCoordinator,
@@ -227,7 +227,7 @@ export interface V4GatewayHost {
   emitWireFrame(frame: RoutedTopicWireFrame): void;
   /** 当前进程 live ingest 的无正文事实；不缓存、不进入 topic replay。 */
   emitConversationTelemetryFact?(fact: ConversationTelemetryFact): void;
-  emitLocalTtftFacts?(facts: import("@zcode/shared").LocalTtftFacts): void;
+  emitLocalTtftFacts?(facts: import("@zhlbuilder/shared").LocalTtftFacts): void;
   /** 当前进程 live request_access 权限事实；不缓存、不进入 topic replay。 */
   emitCuaPermissionObservation?(observation: CuaPermissionObservation): void;
   /**
@@ -3372,7 +3372,7 @@ export class ConversationV4Gateway {
         )
         .filter((facts) => facts !== undefined);
       const candidates = related.length ? related : [this.localTtft.forSession(sessionId)];
-      const observations: import("@zcode/shared").LocalTtftFacts[] = [];
+      const observations: import("@zhlbuilder/shared").LocalTtftFacts[] = [];
       for (const facts of candidates) {
         if (!facts || observations.some((item) => item.observationId === facts.observationId))
           continue;

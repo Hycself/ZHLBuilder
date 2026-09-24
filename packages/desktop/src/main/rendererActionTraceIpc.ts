@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from "electron";
-import { PlatformChannels, type RendererActionTraceConfigV1 } from "@zcode/shared";
+import { PlatformChannels, type RendererActionTraceConfigV1 } from "@zhlbuilder/shared";
 import type { RendererActionTraceBroker } from "./rendererActionTraceBroker.js";
 import type { RendererActionTraceRollout } from "./rendererActionTraceRollout.js";
 

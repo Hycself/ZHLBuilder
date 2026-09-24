@@ -1,23 +1,39 @@
-# ZCode
+# ZHLBuilder
 
 <div align="center">
-  <img src="public/logo/icons/1024x1024.png" alt="ZCode" width="128" height="128" />
+  <img src="public/logo/icons/1024x1024.png" alt="ZHLBuilder" width="128" height="128" />
 </div>
-<p align="center">
-  <a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=47ag983c-8fcb-4d6d-814b-5395193a712c&amp;qr_code=true">飞书社群</a> ·
-  <a href="https://discord.gg/z9aBcQXZQ3">Discord</a>
-</p>
 <p align="center">
   简体中文 | <a href="README.en.md">English</a>
 </p>
 
+ZHLBuilder 是 XFlySim-ZHL 的 AI 编程与设备调度 harness，基于开源的
+<a href="https://github.com/zai-org/ZCode">ZCode</a>（Apache-2.0）改造：
+品牌、图标、默认模型接入与设备管理能力按 ZHL 平台需求定制，
+工作流引擎与 Agent 核心沿用上游实现。
 
+> **上游与许可**：本仓库源自 zai-org/ZCode v3.14.3，上游代码按
+> [Apache License 2.0](LICENSE) 授权，版权所有 Copyright 2026 Z.AI Co., Ltd.。
+> 修改与分发声明见 [NOTICE.md](NOTICE.md)；第三方组件声明见
+> [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。
+> ZCode 与 Z.ai 是 Z.AI 的商标，本项目不对其作任何权利主张。
 
-ZCode 是 AI 编程工作台，提供桌面应用、浏览器界面和终端 Agent。本仓库包含客户端、后端服务、共享 UI，以及 Agent CLI 与运行时源码。
+本仓库包含客户端、后端服务、共享 UI，以及 Agent CLI 与运行时源码。
+
+## 本 fork 的修改（相对上游 v3.14.3）
+
+- 品牌：产品名 ZCode → ZHLBuilder，图标/字标替换为 XFSZHL 飞机标，桌面应用身份 appId 改为 `asia.zhl.builder`。
+- CLI 命令名：`zcode` → `zhlbuilder`（bin 与分发产物名）。
+- 数据目录：`~/.zcode` → `~/.zhlbuilder`（避免与上游 ZCode 安装共用数据）。
+- 新增设备中枢对接（手机端扫码配对 + 6 位 PIN，见 apps/zcode-cli 的 device 子命令，随版本推进补充）。
+- 构建：`cpu-features` 原生构建在部分环境禁用（pnpm-workspace.yaml allowBuilds）。
+- 未改动：上游服务端契约（zcode.z.ai / api.z.ai / open.bigmodel.cn 端点）、
+  wire-protocol（"ZCode Protocol"）、内置 provider 配置（config/provider/zcode-builtin.json）、
+  LICENSE 原文与第三方声明——这些属于功能性/合规性边界，改动会破坏与上游模型服务的互通。
 
 ## 更新
 
-- 2026-9-23：更新至 ZCode v3.14.3 版本。
+- 2026-9-25：基于上游 ZCode v3.14.3 建立 ZHLBuilder v0.1.0。
 
 ## 初始化
 
@@ -79,7 +95,7 @@ ZCODE_SERVER_WORKSPACE=/path/to/project pnpm dev:web
 
 该命令同时启动 Web 开发服务器（默认 `http://localhost:5173`）和后端（默认 `http://localhost:3030`）；浏览器访问前者。`/ws` 和一般 `/api` 请求代理到本地后端，`/api/v1/oauth/token` 单独代理到当前配置的产品服务。
 
-Agent 源码修改后，执行 `pnpm --filter @zcode/cli... build` 并重启服务。需要验证完整发行包时，按下方“ZCode 命令行版”打包章节解压运行。
+Agent 源码修改后，执行 `pnpm --filter @zhlbuilder/cli... build` 并重启服务。需要验证完整发行包时，按下方“ZCode 命令行版”打包章节解压运行。
 
 ### ZCode 命令行版
 
@@ -111,11 +127,11 @@ Web 模式默认工作目录为当前目录，监听 `127.0.0.1`，默认不启�
 直接开发 TUI 或 Agent 时，运行源码入口：
 
 ```bash
-pnpm --filter @zcode/cli dev --help
-pnpm --filter @zcode/cli dev
+pnpm --filter @zhlbuilder/cli dev --help
+pnpm --filter @zhlbuilder/cli dev
 
 # 构建 CLI 及其 workspace 依赖
-pnpm --filter @zcode/cli... build
+pnpm --filter @zhlbuilder/cli... build
 node apps/zcode-cli/packages/cli/dist/zcode.cjs --help
 ```
 

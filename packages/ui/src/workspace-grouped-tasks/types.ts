@@ -1,4 +1,4 @@
-import type { ZCodeTaskGroupColor } from "@zcode/services";
+import type { ZCodeTaskGroupColor } from "@zhlbuilder/services";
 
 interface TaskGroupMenuItem {
   id: string;

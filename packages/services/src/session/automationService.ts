@@ -4,8 +4,8 @@ import type {
   ZCodeAutomationRun,
   ZCodeAutomationScheduleRule,
   ZCodeAutomationUpdateParams,
-} from "@zcode/shared";
-import { resolveWorkspaceKey } from "@zcode/shared";
+} from "@zhlbuilder/shared";
+import { resolveWorkspaceKey } from "@zhlbuilder/shared";
 import { AutomationRepo } from "#src/session/automationRepo.js";
 import {
   assertValidAutomationIntervalCarrier,

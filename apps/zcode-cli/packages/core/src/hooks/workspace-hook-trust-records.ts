@@ -1,5 +1,5 @@
-import type { WorkspaceHookBundleSnapshot, WorkspaceHookTrustRecord } from "@zcode/contracts";
-import { workspaceHookTrustRecordSchema } from "@zcode/contracts";
+import type { WorkspaceHookBundleSnapshot, WorkspaceHookTrustRecord } from "@zhlbuilder/contracts";
+import { workspaceHookTrustRecordSchema } from "@zhlbuilder/contracts";
 
 export function createWorkspaceHookTrustRecords(input: {
   snapshot: WorkspaceHookBundleSnapshot;

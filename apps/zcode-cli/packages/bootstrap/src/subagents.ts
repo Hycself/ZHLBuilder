@@ -1,12 +1,12 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { migrateUserSubagentMarkdown, migrateSubagentStateFile } from "@zcode/shared/node";
+import { migrateUserSubagentMarkdown, migrateSubagentStateFile } from "@zhlbuilder/shared/node";
 import {
   parseAgentProfileFromMarkdown,
   type AgentProfile,
   type AgentProfileParseDiagnostic,
-} from "@zcode/core";
-import type { Logger, PluginMetadata } from "@zcode/contracts";
+} from "@zhlbuilder/core";
+import type { Logger, PluginMetadata } from "@zhlbuilder/contracts";
 import {
   createAgentStateId,
   createPluginAgentStateId,
@@ -15,7 +15,7 @@ import {
   type BuiltInSubagentModelSelectionOverrides,
   type BuiltInSubagentName,
   type PluginSubagentModelSelectionOverrides,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 interface LoadZCodeAgentProfilesInput {
   logger?: Logger;

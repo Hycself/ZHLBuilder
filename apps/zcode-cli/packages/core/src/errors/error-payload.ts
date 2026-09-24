@@ -2,7 +2,7 @@ import type {
   ErrorAttribution,
   ModelApiErrorPhase,
   ModelFailureExceptionKind,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 
 interface ExecutionErrorPayloadProjection {
   attribution?: ErrorAttribution;

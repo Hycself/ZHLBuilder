@@ -7,7 +7,7 @@ import {
   type DynamicWorkflowRunRetuneResult,
   type TraceContext,
   type WorkflowSettingsAmendMeta,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   resolveAmendMaxConcurrency,
   resolveAmendSubagentModelChoice,

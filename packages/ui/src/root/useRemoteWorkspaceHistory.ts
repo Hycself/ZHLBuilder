@@ -7,9 +7,9 @@ import type {
   IPlatformService,
   RemoteSessionClosedEvent,
   RemoteWorkspaceSessionEntry,
-} from "@zcode/shared";
-import { buildSshRemoteHostKey, createUuid, stripRemoteTargetSecrets } from "@zcode/shared";
-import type { IServiceAccessor } from "@zcode/services";
+} from "@zhlbuilder/shared";
+import { buildSshRemoteHostKey, createUuid, stripRemoteTargetSecrets } from "@zhlbuilder/shared";
+import type { IServiceAccessor } from "@zhlbuilder/services";
 import {
   bindRemoteWorkspaceIdentity,
   bindRemoteWorkspacePath,

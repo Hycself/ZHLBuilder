@@ -4,7 +4,7 @@ import type {
   BotConfig,
   BotReplyGranularity,
   BotServiceStatus,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { Button } from "@/components/ui/button.js";
 import {
   Select,

@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import type { HttpClientPort, HttpClientRunOptions, TraceContext } from "@zcode/contracts";
+import type { HttpClientPort, HttpClientRunOptions, TraceContext } from "@zhlbuilder/contracts";
 
 const DEFAULT_ZCODE_OAUTH_BASE_URL = "https://zcode.z.ai/api/v1";
 export type CliOAuthProviderId = "zai" | "bigmodel";

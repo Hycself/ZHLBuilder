@@ -5,7 +5,7 @@ import {
   ZCODE_NO_PROXY_ENV_KEY,
   ZCODE_TOOL_ENV_PASSTHROUGH_ENV_KEY,
   readZCodeToolEnvPassthroughEnv,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 
 interface NetworkProxyOptions {
   env?: Record<string, string | undefined>;

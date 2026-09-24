@@ -1,5 +1,5 @@
-import type { TuiSubmitPromptResult } from "@zcode/tui";
-import { parseModelPickerValue, type ModelSelection } from "@zcode/shared/model-selection";
+import type { TuiSubmitPromptResult } from "@zhlbuilder/tui";
+import { parseModelPickerValue, type ModelSelection } from "@zhlbuilder/shared/model-selection";
 import { listAppEffortOptions } from "../effort-options.js";
 import { rememberCurrentModelSelection } from "../model-selection.js";
 import type { CommandCenterDeps, CommandCenterModelOption } from "../types.js";

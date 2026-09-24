@@ -1,4 +1,4 @@
-# @zcode/zcode-cua
+# @zhlbuilder/zcode-cua
 
 API-compatible placeholder package for Computer Use. This build ships without
 Computer Use: every runtime surface (Computer Use runtime, broker RPC, Helper

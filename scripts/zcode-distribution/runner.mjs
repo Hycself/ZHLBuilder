@@ -11,7 +11,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const { version } = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
 const serverEntry = join(root, "server", "entry-http.js");
 const webRoot = join(root, "web");
-const agentEntry = join(root, "agent", "zcode.cjs");
+const agentEntry = join(root, "agent", "zhlbuilder.cjs");
 
 function usage() {
   return `Usage:

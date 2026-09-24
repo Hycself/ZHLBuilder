@@ -4,8 +4,8 @@ import {
   type HookConfig,
   type HookSourceKind,
   type HookMatcherConfig,
-} from "@zcode/contracts";
-import { resolveWorkspaceHookMaxOutputBytes } from "@zcode/shared/workspace-hook-discovery";
+} from "@zhlbuilder/contracts";
+import { resolveWorkspaceHookMaxOutputBytes } from "@zhlbuilder/shared/workspace-hook-discovery";
 import { expandPluginVariables, resolveHookTimeoutMs } from "./configured-runner-input.js";
 import { createHookExecutionDescriptor } from "./display-metadata.js";
 import { InMemoryHookRunner } from "./runner.js";

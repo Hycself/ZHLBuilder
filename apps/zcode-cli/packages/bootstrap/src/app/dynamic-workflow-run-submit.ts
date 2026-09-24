@@ -15,7 +15,7 @@ import type {
   DynamicWorkflowRunSubmitRequest,
   DynamicWorkflowRunSubmitResult,
   TraceContext,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import {
   buildAskSpecs,
   collectDiagnostics,
@@ -30,9 +30,9 @@ import {
   type ImportedRunCache,
   type RunSettlement,
   type WorkflowProgram,
-} from "@zcode/dynamic-workflow";
-import { formatModelPickerValue } from "@zcode/shared/model-selection";
-import type { ModelSelection } from "@zcode/shared/model-selection";
+} from "@zhlbuilder/dynamic-workflow";
+import { formatModelPickerValue } from "@zhlbuilder/shared/model-selection";
+import type { ModelSelection } from "@zhlbuilder/shared/model-selection";
 import {
   buildImportedCache,
   preflightAmendImport,

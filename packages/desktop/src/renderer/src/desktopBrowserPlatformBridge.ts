@@ -1,4 +1,4 @@
-import type { IPlatformService } from "@zcode/shared";
+import type { IPlatformService } from "@zhlbuilder/shared";
 
 type DesktopBrowserPlatformBridge = Pick<
   IPlatformService,

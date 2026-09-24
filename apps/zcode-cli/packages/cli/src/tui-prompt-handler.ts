@@ -1,9 +1,9 @@
-import { getDefaultConfigPath, updateUiLocaleInFileConfig } from "@zcode/adapters/config";
-import type { SessionEvent } from "@zcode/contracts";
-import type { ZCodeAppOptions } from "@zcode/bootstrap";
-import { DEFAULT_LOCALE, type SupportedLocale } from "@zcode/i18n";
-import type { TuiRequestPermission } from "@zcode/tui";
-import type { GlobalOptions } from "@zcode/shared-types";
+import { getDefaultConfigPath, updateUiLocaleInFileConfig } from "@zhlbuilder/adapters/config";
+import type { SessionEvent } from "@zhlbuilder/contracts";
+import type { ZCodeAppOptions } from "@zhlbuilder/bootstrap";
+import { DEFAULT_LOCALE, type SupportedLocale } from "@zhlbuilder/i18n";
+import type { TuiRequestPermission } from "@zhlbuilder/tui";
+import type { GlobalOptions } from "@zhlbuilder/shared-types";
 import { createCommandCenter, parseSlashCommand } from "./command-center.js";
 import type { CommandCenterApp } from "./command-center.js";
 import { resolveDisplayLocale } from "./locale.js";

@@ -27,6 +27,9 @@ export const parseGlobalArgs = (argv: string[]) =>
       "browser-executable": {
         type: "string",
       },
+      server: {
+        type: "string",
+      },
       prompt: {
         short: "p",
         type: "string",

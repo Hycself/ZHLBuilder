@@ -1,11 +1,11 @@
-import { ModelErrorCode, ModelProtocolError } from "@zcode/contracts";
+import { ModelErrorCode, ModelProtocolError } from "@zhlbuilder/contracts";
 import {
   normalizeModelSelection,
   type ModelSelection,
   type Provider,
   type ProviderModel,
-} from "@zcode/provider";
-import type { ZCodeModelOption } from "@zcode/shared";
+} from "@zhlbuilder/provider";
+import type { ZCodeModelOption } from "@zhlbuilder/shared";
 import type { ProviderRegistryModelSource } from "./provider-registry-model-runtime.js";
 
 export interface ResolvedRegistrySelection {

@@ -2,13 +2,13 @@ import { wrapStartupReporterRequest } from "./startupTelemetryDelivery.js";
 import { randomUUID } from "node:crypto";
 import { basename } from "node:path";
 import armsRum from "@arms/rum-electron";
-import { ZCODE_AGENT_LIFECYCLE_LOG_MARKER } from "@zcode/shared/process-diagnostic";
+import { ZCODE_AGENT_LIFECYCLE_LOG_MARKER } from "@zhlbuilder/shared/process-diagnostic";
 import {
   ZCODE_ARMS_RUM_ENDPOINT,
   ZCODE_VERSION,
   ZCODE_TELEMETRY_ENABLED,
   mapZCodeEnvToArmsRumEnv,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { ARMS_BROWSER_COLLECTORS, parseArmsViewName } from "../shared/armsRumShared.js";
 import { redactArmsEventBatch } from "./armsEventRedaction.js";
 import { ensureDesktopDeviceMidSync } from "./desktopDeviceMid.js";

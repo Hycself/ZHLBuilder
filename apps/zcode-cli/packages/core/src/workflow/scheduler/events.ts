@@ -3,7 +3,7 @@ import type {
   WorkflowGraphCollection,
   WorkflowNodeStatus,
   WorkflowRunSnapshot,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import { edgeId } from "./graph.js";
 import type { AppliedPlannerExpansion, WorkflowGraphSchedulerDeps } from "./types.js";
 

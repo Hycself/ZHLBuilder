@@ -9,7 +9,7 @@ import {
   ZCODE_PROTOCOL_NAME,
   ZCODE_PROTOCOL_VERSION,
   zcodeSessionStateSnapshotSchema,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { TaskIndexRepo } from "../src/session/taskIndexRepo.js";
 import { createZCodeTaskServiceAdapter } from "../src/zcode-agent/zcodeTaskServiceAdapter.js";
 import {

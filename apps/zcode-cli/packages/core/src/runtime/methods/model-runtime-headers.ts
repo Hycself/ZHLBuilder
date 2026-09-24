@@ -1,6 +1,6 @@
 import { traceContextToLogContext } from "../deps.js";
-import type { ModelRequestAuth } from "@zcode/contracts";
-import type { ZCodeProviderAccountAccess } from "@zcode/shared";
+import type { ModelRequestAuth } from "@zhlbuilder/contracts";
+import type { ZCodeProviderAccountAccess } from "@zhlbuilder/shared";
 import type { Model, TraceContext } from "../deps.js";
 import type { AgentRuntimeInternal } from "../internal.js";
 

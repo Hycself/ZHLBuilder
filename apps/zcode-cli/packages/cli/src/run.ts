@@ -1,9 +1,9 @@
 import { extractDisallowedToolsArgs, parseGlobalArgs } from "./arguments.js";
-import { createNodeLoggerFactory } from "@zcode/adapters";
-import { getRuntimeInfo, type PresentationSurface } from "@zcode/core";
-import { color, formatJson, supportsColor } from "@zcode/core";
-import { getZCodeCopy, isUiLocale, type UiLocale } from "@zcode/i18n";
-import type { RunContext, GlobalOptions, GlobalOutputFormat } from "@zcode/shared-types";
+import { createNodeLoggerFactory } from "@zhlbuilder/adapters";
+import { getRuntimeInfo, type PresentationSurface } from "@zhlbuilder/core";
+import { color, formatJson, supportsColor } from "@zhlbuilder/core";
+import { getZCodeCopy, isUiLocale, type UiLocale } from "@zhlbuilder/i18n";
+import type { RunContext, GlobalOptions, GlobalOutputFormat } from "@zhlbuilder/shared-types";
 import {
   applyCliRuntimeEnvSanitization,
   loadCliDotenv,
@@ -25,6 +25,7 @@ import { runPrompt } from "./prompt-command.js";
 import { runPluginsCommand, type PluginsCommandFlags } from "./plugins-command.js";
 import { runSkillsCommand } from "./skills-command.js";
 import { runTuiCommand } from "./tui-command.js";
+import { runDeviceCommand } from "./device-command.js";
 import type {
   CliPermissionMode,
   CliResumeRequest,
@@ -217,7 +218,7 @@ const runDoctor = (ctx: RunContext, options: GlobalOptions, workingDirectory: st
   }
 
   const colors = supportsColor(ctx.stdout, options.noColor);
-  ctx.stdout.write(`${color.bold("zcode doctor", colors)}\n`);
+  ctx.stdout.write(`${color.bold("zhlbuilder doctor", colors)}\n`);
   ctx.stdout.write(`version: ${payload.cli.version}\n`);
   ctx.stdout.write(`process: ${payload.runtime.processTitle}\n`);
   ctx.stdout.write(`node: ${payload.runtime.node}\n`);
@@ -579,6 +580,8 @@ export const run = async (ctx: RunContext, deps: RunDependencies = {}): Promise<
         toolDisallowlist,
         forceMcs,
       );
+    case "device":
+      return await runDeviceCommand(ctx, options, parsed.positionals.slice(1));
     default:
       ctx.stderr.write(`Unknown command: ${commandName(parsed.positionals)}\n\n`);
       writeHelp(ctx.stderr, options.locale, options.detectedLocale);

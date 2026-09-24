@@ -1,8 +1,8 @@
-import type { TuiSubmitPromptResult } from "@zcode/tui";
+import type { TuiSubmitPromptResult } from "@zhlbuilder/tui";
 import type {
   DynamicWorkflowRunResumeErrorReason,
   DynamicWorkflowRunSessionSummary,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type { CommandCenterDeps } from "../types.js";
 import { splitArgs } from "../utils.js";
 

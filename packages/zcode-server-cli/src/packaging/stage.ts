@@ -152,7 +152,7 @@ interface StageOptions {
   appVersion: string;
   /** tsup 产物目录（server-cli.js / server-core.js） */
   distDir: string;
-  /** 既有 CLI/Agent bundle（zcode.cjs，自包含 CJS） */
+  /** 既有 CLI/Agent bundle（zhlbuilder.cjs，自包含 CJS） */
   agentBundlePath: string;
   /** 已准备好的目标平台 Node 二进制 */
   nodeBinaryPath: string;
@@ -160,7 +160,7 @@ interface StageOptions {
   notices: { thirdParty: string; node: string; nodeSource: string };
   /** 依赖闭包解析与复制的来源 node_modules */
   workspaceNodeModulesDir: string;
-  /** 未被 pnpm 链接到 node_modules 的 workspace 包（例如 @zcode/tui）。 */
+  /** 未被 pnpm 链接到 node_modules 的 workspace 包（例如 @zhlbuilder/tui）。 */
   workspacePackageDirs?: ReadonlyMap<string, string>;
   /** 发行目录的输出父目录 */
   outputDir: string;
@@ -415,7 +415,7 @@ export async function stageRelease(options: StageOptions): Promise<StagedRelease
     `${JSON.stringify({ name: releaseName, private: true, type: "module" }, null, 2)}\n`,
     "utf8",
   );
-  await cp(options.agentBundlePath, join(runtimeDir, "zcode.cjs"), { dereference: true });
+  await cp(options.agentBundlePath, join(runtimeDir, "zhlbuilder.cjs"), { dereference: true });
   // Agent bundle 是第三个实际运行入口；只扫描 Server bundle 会漏掉外置的 TUI/Playwright。
   bundleSources.push(await readFile(options.agentBundlePath, "utf8"));
 
@@ -506,7 +506,7 @@ export async function stageRelease(options: StageOptions): Promise<StagedRelease
         "runtime/THIRD-PARTY-NOTICES.md",
       ],
     },
-    { id: "agent-runtime", paths: ["runtime/zcode.cjs", "runtime/licenses/agent"] },
+    { id: "agent-runtime", paths: ["runtime/zhlbuilder.cjs", "runtime/licenses/agent"] },
     ...(plugins.length > 0
       ? [
           {

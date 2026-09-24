@@ -6,7 +6,7 @@ import {
   ModelErrorCode,
   ModelProtocolError,
   getCurrentModelInvocationContext,
-} from "@zcode/contracts";
+} from "@zhlbuilder/contracts";
 import type {
   Logger,
   Model,
@@ -17,8 +17,8 @@ import type {
   ModelStatusSink,
   ModelStreamEvent,
   ModelTextResult,
-} from "@zcode/contracts";
-import type { RegistryModelConfig, RegistryProviderConfig } from "@zcode/provider";
+} from "@zhlbuilder/contracts";
+import type { RegistryModelConfig, RegistryProviderConfig } from "@zhlbuilder/provider";
 import {
   AiSdkModelExecution,
   type AiSdkResolvedModel,

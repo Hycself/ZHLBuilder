@@ -3,8 +3,8 @@ import { Buffer } from "node:buffer";
 import { createHash, randomBytes } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import type { IDisposable } from "@zcode/rpc";
-import { completeNewModelSelection } from "@zcode/provider";
+import type { IDisposable } from "@zhlbuilder/rpc";
+import { completeNewModelSelection } from "@zhlbuilder/provider";
 import {
   ALL_BOT_WORKSPACES,
   generateTraceId,
@@ -54,7 +54,7 @@ import {
   type BotsConfigFile,
   type Locale,
   type SelectionPrompt,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import type { IZCodeTaskService } from "../session/zcodeTaskService.js";
 import { resolveProviderModeIdFromConfigOptions } from "#src/session/sessionModeOptions.js";
 import { deriveSessionTitle as deriveTaskTitle } from "#src/session/sessionTitle.js";

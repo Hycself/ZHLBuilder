@@ -1,4 +1,4 @@
-import { ModelRetryBudget } from "@zcode/contracts";
+import { ModelRetryBudget } from "@zhlbuilder/contracts";
 
 /**
  * 重试预算档位的判定。

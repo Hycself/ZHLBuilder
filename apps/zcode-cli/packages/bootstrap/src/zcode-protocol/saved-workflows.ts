@@ -2,13 +2,13 @@
 //
 // 与 skills/referenceCatalog 同一条先例：不带 sessionId，每次调用现扫目录——挂载时快照会漏掉
 // 用户手改 / 模型刚 SaveWorkflow 落盘的文件。
-// 解析器与序列化器只从 @zcode/core 取：这里不解析 frontmatter，也不拼 YAML。
+// 解析器与序列化器只从 @zhlbuilder/core 取：这里不解析 frontmatter，也不拼 YAML。
 //
 // 全局作用域：五个方法的 params 收可选 `scope`（缺省
 // `project`）。`global` 时改按本机全局根（`~/.zcode/workflows/`）操作，`workspace` 只是**载体**——
 // 处理器对全局档不读它的路径。`workflows/move` 把全局档搬回 `workspace` 项目（只此一向）。
 import { unlink, writeFile } from "node:fs/promises";
-import { SavedWorkflowMetaSchema, isValidSavedWorkflowName } from "@zcode/contracts";
+import { SavedWorkflowMetaSchema, isValidSavedWorkflowName } from "@zhlbuilder/contracts";
 import {
   listSavedWorkflows,
   moveSavedWorkflow,
@@ -17,7 +17,7 @@ import {
   savedWorkflowRoot,
   serializeSavedWorkflow,
   type SavedWorkflowResolveFailure,
-} from "@zcode/core";
+} from "@zhlbuilder/core";
 import {
   ZCODE_WORKFLOWS_RUNS_MAX_LIMIT,
   zcodeWorkflowsDeleteParamsSchema,
@@ -34,8 +34,8 @@ import {
   type ZCodeWorkflowsMoveResult,
   type ZCodeWorkflowsRunsResult,
   type ZCodeWorkflowsUpdateMetaResult,
-} from "@zcode/shared";
-import type { JournalStorePort } from "@zcode/dynamic-workflow";
+} from "@zhlbuilder/shared";
+import type { JournalStorePort } from "@zhlbuilder/dynamic-workflow";
 import { artifactsOf } from "../app/dynamic-workflow-run-observation.js";
 import {
   resolveDynamicWorkflowJournalStore,

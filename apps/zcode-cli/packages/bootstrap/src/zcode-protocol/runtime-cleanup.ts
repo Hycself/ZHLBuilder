@@ -1,7 +1,7 @@
-import type { Logger, McpPort } from "@zcode/contracts";
-import type { McpConnectionPool, McpTelemetryTracker } from "@zcode/adapters/mcp";
-import type { SqliteSessionStore } from "@zcode/adapters/storage";
-import { shutdownPreparedModelTelemetry } from "@zcode/telemetry";
+import type { Logger, McpPort } from "@zhlbuilder/contracts";
+import type { McpConnectionPool, McpTelemetryTracker } from "@zhlbuilder/adapters/mcp";
+import type { SqliteSessionStore } from "@zhlbuilder/adapters/storage";
+import { shutdownPreparedModelTelemetry } from "@zhlbuilder/telemetry";
 import { closeSessionStore } from "../app/session-store.js";
 import type { NodeReplBrowserBroker } from "../app/node-repl-browser-broker.js";
 import type { ZCodeProcessResourceSampler } from "../process-resource-sampler.js";

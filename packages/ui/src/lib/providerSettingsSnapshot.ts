@@ -1,4 +1,4 @@
-import type { IProviderSettingsService, ProviderSettingsView } from "@zcode/services";
+import type { IProviderSettingsService, ProviderSettingsView } from "@zhlbuilder/services";
 
 type ProviderSettingsSnapshotListener = () => void;
 

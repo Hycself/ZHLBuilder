@@ -1,4 +1,4 @@
-import { BUILTIN_PROVIDER_TEMPLATE_IDS } from "@zcode/shared";
+import { BUILTIN_PROVIDER_TEMPLATE_IDS } from "@zhlbuilder/shared";
 import {
   ApiKeyAccessConfig,
   ModelConfig,
@@ -8,7 +8,7 @@ import {
   ProviderConfig,
   ProviderConfigMap,
   type ProviderConfigLayerUpdate,
-} from "@zcode/provider";
+} from "@zhlbuilder/provider";
 import {
   isModelProviderModelConfig,
   normalizeModelProviderConfiguredBaseUrl,

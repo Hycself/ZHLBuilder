@@ -1,4 +1,4 @@
-import type { CommandConfig } from "@zcode/shared";
+import type { CommandConfig } from "@zhlbuilder/shared";
 
 export type CommandFileFormat = "markdown";
 

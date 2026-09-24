@@ -1,5 +1,5 @@
-import type { SessionStorePort } from "@zcode/contracts";
-import type { CommandAck } from "@zcode/shared/zcode-protocol-v4";
+import type { SessionStorePort } from "@zhlbuilder/contracts";
+import type { CommandAck } from "@zhlbuilder/shared/zcode-protocol-v4";
 import { queueItemIdForCommand } from "./command-inbox.js";
 
 /**

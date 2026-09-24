@@ -1,4 +1,4 @@
-import type { BuiltinModelProviderId, IPlatformService } from "@zcode/shared";
+import type { BuiltinModelProviderId, IPlatformService } from "@zhlbuilder/shared";
 import {
   reportAppTelemetryEvent,
   resolvePresetModelProviderTelemetryLabel,

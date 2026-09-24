@@ -1,4 +1,4 @@
-import type { ConversationRow, SessionPhase } from "@zcode/shared/zcode-protocol-v4";
+import type { ConversationRow, SessionPhase } from "@zhlbuilder/shared/zcode-protocol-v4";
 
 interface AssistantPreviewPptxCompletedTurn {
   turnId: string;

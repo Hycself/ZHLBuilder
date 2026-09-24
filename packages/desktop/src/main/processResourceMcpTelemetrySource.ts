@@ -4,7 +4,7 @@ import {
   ZCODE_MCP_RESOURCE_SAMPLE_INTERVAL_MS,
   type ZCodeMcpResourceSample,
   type ProcessResourceRuntimeSurface,
-} from "@zcode/shared";
+} from "@zhlbuilder/shared";
 import { logger } from "./logger.js";
 import { recordExternalAppResourceSample } from "./processResourceExternalAppSamples.js";
 import type {
