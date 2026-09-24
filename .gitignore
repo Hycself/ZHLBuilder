@@ -69,3 +69,9 @@ packages/desktop/.e2e-artifacts/
 packages/desktop/.e2e-cache/
 packages/desktop/.e2e-network-capture/
 .zcode-runtime/
+
+# ZHLBuilder 移动端构建产物与本地配置
+app-android/.gradle/
+app-android/.kotlin/
+app-android/app/build/
+app-android/local.properties

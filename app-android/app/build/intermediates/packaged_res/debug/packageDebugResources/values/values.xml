@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">ZHLBuilder</string>
-    <style name="Theme.ZHLBuilder" parent="android:Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">#0C1420</item>
-        <item name="android:windowBackground">#05090F</item>
-    </style>
-</resources>
