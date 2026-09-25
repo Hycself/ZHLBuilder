@@ -152,6 +152,9 @@ async function resolveDesktopForceUpdateRequirement(options: {
   endpointOrigin?: string;
   fetchRemoteConfig?: () => Promise<unknown>;
 }): Promise<ForceUpdateRequirement | null> {
+  // ZHLBuilder fork：版本线独立（0.1.x），上游 zcode.z.ai 的最低版本要求不适用。
+  // 若保留该校验，0.1.0 会被"最低可用版本 v3.5.3"拦住并引导自动升级 = 覆盖成官方版。
+  return null;
   const resolveFromConfig = (config: unknown) =>
     resolveForceUpdateRequirement({
       currentVersion: ZCODE_VERSION,

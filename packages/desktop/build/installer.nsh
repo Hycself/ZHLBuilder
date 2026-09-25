@@ -1,3 +1,6 @@
+!macro ZHLReportInstallerStageDisabled stage
+  ; ZHLBuilder fork: 不向上游上报安装阶段
+!macroend
 !include nsDialogs.nsh
 !include FileFunc.nsh
 
@@ -235,43 +238,43 @@
   !macro customInit
     IfSilent zcodeInstallerInitSilent zcodeInstallerInitInteractive
     zcodeInstallerInitSilent:
-      !insertmacro ZCodeReportInstallerStage "installer-initialized mode=silent"
+      !insertmacro ZHLReportInstallerStageDisabled "installer-initialized mode=silent"
       Goto zcodeInstallerInitDone
     zcodeInstallerInitInteractive:
-      !insertmacro ZCodeReportInstallerStage "installer-initialized mode=interactive"
+      !insertmacro ZHLReportInstallerStageDisabled "installer-initialized mode=interactive"
     zcodeInstallerInitDone:
   !macroend
 
   ; 这些宏由打包时的 electron-builder installSection.nsh 补丁按安装顺序调用。
   ; 只有阶段 marker 写入详情和日志，解压文件明细由 NSIS 的 File 命令在 listonly 模式输出。
   !macro customInstallSectionStarted
-    !insertmacro ZCodeReportInstallerStage "install-started"
+    !insertmacro ZHLReportInstallerStageDisabled "install-started"
   !macroend
 
   !macro customInstallCleanupStarted
     Call ZCodeResetUninstallerLog
-    !insertmacro ZCodeReportInstallerStage "cleanup-started"
+    !insertmacro ZHLReportInstallerStageDisabled "cleanup-started"
   !macroend
 
   !macro customInstallCleanupCompleted
-    !insertmacro ZCodeReportInstallerStage "cleanup-completed"
+    !insertmacro ZHLReportInstallerStageDisabled "cleanup-completed"
     Call ZCodeShowUninstallerCleanupDetails
   !macroend
 
   !macro customInstallExtractStarted
-    !insertmacro ZCodeReportInstallerStage "extract-started"
+    !insertmacro ZHLReportInstallerStageDisabled "extract-started"
   !macroend
 
   !macro customInstallExtractCompleted
-    !insertmacro ZCodeReportInstallerStage "extract-completed"
+    !insertmacro ZHLReportInstallerStageDisabled "extract-completed"
   !macroend
 
   !macro customInstallShortcutsStarted
-    !insertmacro ZCodeReportInstallerStage "shortcuts-started"
+    !insertmacro ZHLReportInstallerStageDisabled "shortcuts-started"
   !macroend
 
   !macro customInstallShortcutsCompleted
-    !insertmacro ZCodeReportInstallerStage "shortcuts-completed"
+    !insertmacro ZHLReportInstallerStageDisabled "shortcuts-completed"
   !macroend
 
   Function ZCodeDetectPreviousUninstallerCapabilities
@@ -342,7 +345,7 @@
           CreateDirectory "$R2"
       ${EndIf}
       zcodeInstallerLogInitialized:
-        !insertmacro ZCodeReportInstallerStage "installer-process-started role=$ZCodeInstallerProcessRole"
+        !insertmacro ZHLReportInstallerStageDisabled "installer-process-started role=$ZCodeInstallerProcessRole"
       Pop $R2
       Pop $R1
       Pop $R0
@@ -414,7 +417,7 @@
 
 !macro customInstall
   !ifndef BUILD_UNINSTALLER
-    !insertmacro ZCodeReportInstallerStage "install-finalization-started"
+    !insertmacro ZHLReportInstallerStageDisabled "install-finalization-started"
   !endif
   ${if} ${isUpdated}
   ${orIf} $keepShortcuts == "true"
@@ -432,7 +435,7 @@
   ; assisted installer 完成页始终直接运行本次安装落盘的 exe。
   StrCpy $launchLink "$appExe"
   !ifndef BUILD_UNINSTALLER
-    !insertmacro ZCodeReportInstallerStage "install-completed"
+    !insertmacro ZHLReportInstallerStageDisabled "install-completed"
   !endif
 !macroend
 

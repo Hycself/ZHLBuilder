@@ -7,19 +7,22 @@ export const ZCODE_PREVIEW_IDENTITY_ENV = "ZCODE_PREVIEW_IDENTITY";
 
 const PRODUCTION_IDENTITY = Object.freeze({
   flavor: "production",
-  appId: "dev.zcode.app",
+  // appId 是 Windows 注册表键（HKCU\Software\<appId>）与安装检测的根 ——
+  // 必须与上游 ZCode（dev.zcode.app，装在 E:\zcode 那个）完全不同，
+  // 否则 NSIS 会把本 fork 当成官方版的升级包，安装时直接覆盖官方安装目录。
+  appId: "asia.zhl.builder",
   productName: "ZHLBuilder",
-  linuxExecutableName: "zcode",
-  linuxPackageName: "zcode",
+  linuxExecutableName: "zhlbuilder",
+  linuxPackageName: "zhlbuilder",
   cuaHelperInstallVariant: null,
 });
 
 const PREVIEW_IDENTITY = Object.freeze({
   flavor: "preview",
-  appId: "dev.zcode.app.preview",
+  appId: "asia.zhl.builder.preview",
   productName: "ZHLBuilder Preview",
-  linuxExecutableName: "zcode-preview",
-  linuxPackageName: "zcode-preview",
+  linuxExecutableName: "zhlbuilder-preview",
+  linuxPackageName: "zhlbuilder-preview",
   cuaHelperInstallVariant: "preview",
 });
 
