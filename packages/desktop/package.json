@@ -1,8 +1,8 @@
 {
   "name": "@zhlbuilder/desktop",
   "private": true,
-  "description": "ZCode Desktop App",
-  "author": "ZCode",
+  "description": "ZHLBuilder Desktop App",
+  "author": "XFlySim-ZHL",
   "type": "module",
   "main": "out/main/index.js",
   "scripts": {
@@ -83,5 +83,5 @@
     "typescript": "^6.0.2",
     "vite": "^8.0.2"
   },
-  "productName": "ZCode"
+  "productName": "ZHLBuilder"
 }

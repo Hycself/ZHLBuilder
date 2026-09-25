@@ -1,0 +1,70 @@
+name: desktop-build
+
+# 三平台桌面安装包自动构建：
+#   - Windows 由开发机本地打包（见 dist/），此处主要覆盖 macOS / Linux
+#   - 手动触发（workflow_dispatch）或推 v* tag 时构建对应 tag，默认当前提交
+# 产物上传到 Actions Artifacts，发布时手动下载后放入 download.zhl.asia
+# zhlbuilder/releases/<版本>/desktop/ 并登记下载中心。
+#
+# 上游与许可：本 fork 基于 zai-org/ZCode (Apache-2.0)，见 NOTICE.md。
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "版本号（如 0.1.0），留空用 package.json"
+        required: false
+        default: ""
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: mac
+            arch: arm64
+          - os: macos-latest
+            target: mac
+            arch: x64
+          - os: ubuntu-latest
+            target: linux
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.14.0"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build desktop bundle (${{ matrix.target }} ${{ matrix.arch }})
+        working-directory: packages/desktop
+        env:
+          # 无签名证书：跳过 macOS 公证/签名，产物为未签名包
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: node scripts/bundle.mjs ${{ matrix.target }} ${{ matrix.arch }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZHLBuilder-desktop-${{ matrix.target }}-${{ matrix.arch }}
+          path: |
+            packages/desktop/dist/*.dmg
+            packages/desktop/dist/*.zip
+            packages/desktop/dist/*.AppImage
+            packages/desktop/dist/*.deb
+          if-no-files-found: error
