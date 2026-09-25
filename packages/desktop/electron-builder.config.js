@@ -750,6 +750,9 @@ export default {
   nsis: {
     oneClick: false,
     allowToChangeInstallationDirectory: true,
+    // fork 改过 installer.nsh（品牌/上报禁用），上游按自家脚本校准的
+    // NSIS 警告即错误（-WX）不再适用；保留会阻断 fork 的每次发版。
+    warningsAsErrors: false,
     // Windows 安装流程使用独立安装图标，和应用运行时图标解耦。
     installerIcon: "build/icon_installer.ico",
     uninstallerIcon: "build/icon_installer.ico",

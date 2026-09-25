@@ -97,6 +97,8 @@ import {
   syncPostUpdateReleaseNotesToWindow,
   syncReadyUpdateToWindow,
 } from "./autoUpdater.js";
+import { ensureZhlLogin, loadZhlIdentity, isZhlLoginSkipped } from "./zhlGate.js";
+import { registerZhlDeviceIpc } from "./zhlDeviceAgent.js";
 import { BroadcastHub } from "./broadcastHub.js";
 import { TaskRealtimeBus } from "./taskRealtimeBus.js";
 import { createAppLaunchGate } from "./appLaunchGate.js";
@@ -1640,6 +1642,25 @@ function openUpdateStatusWindow() {
   });
   win.once("ready-to-show", () => {
     showUpdateStatusWindow();
+    // ZHL 设备代理 IPC（配对二维码 / WS 心跳 / 任务中继）
+    registerZhlDeviceIpc(() => win);
+    // ZHL 登录门：主窗口就绪后立即弹出（签派 OAuth2；可跳过，跳过则标题标记未登录）
+    if (!loadZhlIdentity() && !isZhlLoginSkipped()) {
+      void ensureZhlLogin(win).then((result) => {
+        if (result.kind === "logged-in" && result.identity?.username) {
+          win.setTitle("ZHLBuilder — " + result.identity.username);
+        } else {
+          win.setTitle("ZHLBuilder [未登录]");
+        }
+      });
+    } else {
+      const ident = loadZhlIdentity();
+      if (ident?.username) {
+        win.setTitle("ZHLBuilder — " + ident.username);
+      } else if (isZhlLoginSkipped()) {
+        win.setTitle("ZHLBuilder [未登录]");
+      }
+    }
   });
   win.on("close", (event) => {
     if (forceQuitRef.current || !isUpdateStatusWindowCloseLocked(getAutoUpdaterState())) {

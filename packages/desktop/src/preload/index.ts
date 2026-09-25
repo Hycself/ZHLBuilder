@@ -27,6 +27,18 @@ function parseDeviceIdFromArgs(): string {
 // 在 contextBridge 建立之前就暴露同步值，让 renderer 在 React 渲染前就能读到
 contextBridge.exposeInMainWorld("__ZCODE_DEVICE_ID__", parseDeviceIdFromArgs());
 
+// ZHLBuilder 设备代理桥：配对二维码 / 代理启动 / 状态推送
+contextBridge.exposeInMainWorld("zhlDevice", {
+  pairStart: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:pair-qr"),
+  agentStart: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:agent-start"),
+  state: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:state"),
+  onState: (cb: (state: unknown) => void): (() => void) => {
+    const listener = (_e: unknown, state: unknown): void => cb(state);
+    ipcRenderer.on("zhl:device:state", listener as never);
+    return () => ipcRenderer.removeListener("zhl:device:state", listener as never);
+  },
+});
+
 import type {
   AppSettings,
   ApplicationIconRequest,

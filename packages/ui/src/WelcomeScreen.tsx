@@ -315,31 +315,12 @@ function LoginPanel({ active, onComplete }: LoginPanelProps) {
 
             {!loadingProviders ? (
               <div className="space-y-2">
-                {visibleProviders.map((provider) => (
-                  <Button
-                    key={provider.id}
-                    variant="default"
-                    className="h-10 w-full text-ui-base"
-                    size="lg"
-                    data-testid={
-                      provider.id === BIGMODEL_PROVIDER_ID
-                        ? TID_OAUTH_LOGIN_BUTTON
-                        : testId(TID_OAUTH_LOGIN_BUTTON, provider.id)
-                    }
-                    onClick={() => void startTrackedLogin(provider.id)}
-                  >
-                    {renderOAuthProviderIcon(provider.id, "size-4")}
-                    <span className="min-w-0 truncate">
-                      {intl.formatMessage(
-                        { id: getLoginOAuthButtonMessageId(provider.id) },
-                        { provider: provider.displayName },
-                      )}
-                    </span>
-                    <LoginOAuthRegionTag providerId={provider.id} />
-                  </Button>
-                ))}
+                <div className="rounded-lg border border-border/60 bg-black/20 px-4 py-3 text-center text-ui-sm leading-relaxed text-dim">
+                  ZHLBuilder 不内置模型服务 —— 用你自己的模型提供商 API Key
+                  即可开始，随时可在「设置」中调整。
+                </div>
                 <Button
-                  variant="outline"
+                  variant="default"
                   className="h-10 w-full text-ui-base"
                   size="lg"
                   data-testid={TID_LOGIN_USE_API_KEY_BUTTON}

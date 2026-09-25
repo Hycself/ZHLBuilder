@@ -181,6 +181,8 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
                   </Button>
                 </div>
               </section>
+
+              <ZhlAppPairSection />
             </div>
           </div>
         </DialogContent>
