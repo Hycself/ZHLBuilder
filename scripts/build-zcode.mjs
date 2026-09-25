@@ -103,6 +103,8 @@ function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: root,
     stdio: "inherit",
+    // Windows 上 pnpm/tar 是 .cmd/.exe 经 PATH 解析，spawnSync 无 shell 时找不到（Node CVE-2024-27980 后禁 shellless .cmd）
+    shell: process.platform === "win32",
     ...options,
   });
   if (result.error) {
@@ -199,7 +201,7 @@ async function stageZCodePackage({ packageRoot, version }) {
   await mkdir(resolve(packageRoot, "bin"), {
     recursive: true,
   });
-  const runner = resolve(packageRoot, "bin", "zcode.mjs");
+  const runner = resolve(packageRoot, "bin", "zhlbuilder.mjs");
   await cp(resolve(root, "scripts/zcode-distribution/runner.mjs"), runner);
   await chmod(runner, 0o755);
 

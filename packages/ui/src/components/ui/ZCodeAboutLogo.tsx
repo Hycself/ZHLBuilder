@@ -12,7 +12,6 @@ export function ZCodeAboutLogo({ className }: { className?: string }) {
       alt="ZHLBuilder"
       className={cn("shrink-0", className)}
       aria-hidden="true"
-      focusable="false"
     />
   );
 }
@@ -26,7 +25,6 @@ export function ZCodeWordmarkLogo({ className }: { className?: string }) {
         className,
       )}
       aria-hidden="true"
-      focusable="false"
     >
       ZHLBuilder
     </span>

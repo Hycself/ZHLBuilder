@@ -1,4 +1,4 @@
-const packageDirName = "zcode";
+const packageDirName = "zhlbuilder";
 
 export function installScriptSource(baseUrl) {
   return `#!/usr/bin/env sh
@@ -10,7 +10,7 @@ BIN_DIR="\${ZCODE_DIST_BIN_DIR:-$HOME/.local/bin}"
 
 need_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
-    echo "zcode install requires $1" >&2
+    echo "zhlbuilder install requires $1" >&2
     exit 1
   fi
 }
@@ -44,11 +44,11 @@ ln -sfn "$TARGET" "$INSTALL_DIR/current"
 
 cat > "$BIN_DIR/zhlbuilder" <<SH
 #!/usr/bin/env sh
-exec node "$INSTALL_DIR/current/bin/zcode.mjs" "\\$@"
+exec node "$INSTALL_DIR/current/bin/zhlbuilder.mjs" "\\$@"
 SH
 chmod +x "$BIN_DIR/zhlbuilder"
 
-echo "ZCode $VERSION installed."
+echo "ZHLBuilder $VERSION installed."
 echo "Run: zhlbuilder (TUI) or zhlbuilder --web (Web)"
 case ":$PATH:" in
   *":$BIN_DIR:"*) ;;
