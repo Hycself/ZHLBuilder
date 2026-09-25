@@ -84,6 +84,10 @@ AI 生成的代码、命令、解释、文件和建议可能存在错误、遗�
 4. 工作区包名：`@zhlbuilder/*` → `@zhlbuilder/*`（纯内部标识符变更）。
 5. 构建配置：`pnpm-workspace.yaml` 中禁用 `cpu-features` 原生构建（部分环境失败，走 JS 回退）。
 6. 新增 ZHL 设备中枢对接代码（设备配对/PIN/任务中继，后续版本合入）。
+7. **自动更新已禁用**：桌面端与 CLI 不检查任何更新源（含上游 zcode.z.ai 的
+   默认 feed——否则会提示更新并把本 fork 覆盖成官方 ZCode）。更新获取方式：
+   download.zhl.asia 下载中心 / zhlbuilder/releases 通道；应用名与 userData
+   目录已改为 ZHLBuilder 专属（%APPDATA%\ZHLBuilder），与官方 ZCode 完全隔离。
 
 未修改且明确保留：上游模型服务端点与协议（`zcode.z.ai`、`api.z.ai`、
 `open.bigmodel.cn`、"ZCode Protocol" wire-protocol、`config/provider/zcode-builtin.json`）、

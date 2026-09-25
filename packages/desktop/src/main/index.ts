@@ -2013,7 +2013,10 @@ app.whenReady().then(async () => {
   // Preview 身份无论连接哪个后端都不自动更新：stable feed 上只分发正式 ZCode 安装包，
   // 不向 Preview 渠道提供更新。
   void initAutoUpdater({
-    enabled: ZCODE_PRODUCT_FLAVOR === "production",
+    // ZHLBuilder 手动分发：更新一律走 download.zhl.asia 下载中心，不检查上游
+    // zcode.z.ai feed（否则会弹"发现新版本"并把本 fork 覆盖成官方 ZCode）。
+    // enabled:false 走上游现成的 fail-closed 路径：自动轮询与"检查更新"都内部拦截。
+    enabled: false,
     onBeforeQuitAndInstall: async () => {
       notifyStabilityLifecycle("update_install");
       await prepareAppQuit("auto-update quitAndInstall", "update-install");
