@@ -904,6 +904,8 @@ const enUS: Record<string, string> = {
   // App header
   "app.currentTheme": "Current: {theme}",
   "app.login": "Connect",
+  "app.login.zhl": "Sign in with ZHL",
+  "sidebar.profile.zhlNotLoggedIn": "Not signed in to ZHL",
   "app.logout": "Disconnect",
   "logout.confirm.title": "Disconnect and restart ZHLBuilder?",
   "logout.confirm.descriptionWithRunningSessions":

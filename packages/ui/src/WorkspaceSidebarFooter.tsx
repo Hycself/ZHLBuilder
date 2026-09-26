@@ -39,6 +39,7 @@ import {
   ZoomOut,
 } from "lucide-react";
 import { usePlatform } from "@/hooks/usePlatform.js";
+import { useZhlIdentity } from "@/hooks/useZhlIdentity.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { useShortcutCommandLabel } from "@/shortcuts/useShortcutBindings.js";
 import { useZCodeStore } from "@/store/StoreProvider.js";
@@ -131,10 +132,22 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
   const zoomOutShortcutLabel = useShortcutCommandLabel("zoomOut");
   const resetZoomShortcutLabel = useShortcutCommandLabel("resetZoom");
   const isRestoringOAuthSession = useZCodeStore((state) => state.isRestoringOAuthSession);
-  const profileBadge = getSidebarProfileBadge(user, intl.formatMessage);
-  const avatarFallbackText = getAvatarFallbackText(user);
-  const avatarKey = user?.avatarUrl ?? user?.id ?? "guest";
-  const showAuthRestoreLoading = !user && isRestoringOAuthSession;
+  const zhl = useZhlIdentity();
+  // 上游 user 在本 fork 恒为空，身份以签派 OAuth2 为准；
+  // 没有身份桥（Web）时退回原有展示，避免出现"永远未登录"。
+  const zhlNamed = zhl.available && zhl.loggedIn && Boolean(zhl.username);
+  const profileBadge = user
+    ? getSidebarProfileBadge(user, intl.formatMessage)
+    : zhlNamed
+      ? zhl.username
+      : zhl.available
+        ? intl.formatMessage({ id: "sidebar.profile.zhlNotLoggedIn" })
+        : getSidebarProfileBadge(user, intl.formatMessage);
+  const avatarFallbackText = user
+    ? getAvatarFallbackText(user)
+    : (zhl.username.trim()[0]?.toUpperCase() ?? "");
+  const avatarKey = user?.avatarUrl ?? user?.id ?? (zhl.username || "guest");
+  const showAuthRestoreLoading = !user && !zhl.loggedIn && isRestoringOAuthSession;
   const usageSummaryState = useWorkspaceSidebarFooterUsageSummaryState({
     enabled: true,
     workspaceIdentity,
@@ -145,7 +158,7 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
       <Avatar key={avatarKey} size="default">
         {user?.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={profileBadge} /> : null}
         <AvatarFallback className="bg-background text-foreground">
-          {user ? (
+          {user || zhlNamed ? (
             avatarFallbackText
           ) : showAuthRestoreLoading ? (
             <>
@@ -349,7 +362,22 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
               onUsageClick={usageButtonClick}
               onUpgradeClick={onUpgradeClick}
             />
-            {onLogin && !user ? (
+            {zhl.available && !zhl.loggedIn ? (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  disabled={zhl.busy}
+                  onSelect={() => {
+                    void zhl.login();
+                  }}
+                  data-testid={TID_LOGIN_MENU_ITEM}
+                >
+                  <LogInIcon className="size-4" />
+                  {intl.formatMessage({ id: "app.login.zhl" })}
+                </DropdownMenuItem>
+              </>
+            ) : null}
+            {!zhl.available && onLogin && !user ? (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={onLogin} data-testid={TID_LOGIN_MENU_ITEM}>

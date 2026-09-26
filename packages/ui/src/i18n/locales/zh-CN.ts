@@ -824,6 +824,8 @@ const zhCN: Record<string, string> = {
   // 应用头部
   "app.currentTheme": "当前: {theme}",
   "app.login": "连接使用",
+  "app.login.zhl": "登录 ZHL 账号",
+  "sidebar.profile.zhlNotLoggedIn": "未登录 ZHL",
   "app.logout": "断开连接",
   "logout.confirm.title": "断开连接并重启 ZHLBuilder？",
   "logout.confirm.descriptionWithRunningSessions":
