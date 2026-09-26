@@ -1642,25 +1642,6 @@ function openUpdateStatusWindow() {
   });
   win.once("ready-to-show", () => {
     showUpdateStatusWindow();
-    // ZHL 设备代理 IPC（配对二维码 / WS 心跳 / 任务中继）
-    registerZhlDeviceIpc(() => win);
-    // ZHL 登录门：主窗口就绪后立即弹出（签派 OAuth2；可跳过，跳过则标题标记未登录）
-    if (!loadZhlIdentity() && !isZhlLoginSkipped()) {
-      void ensureZhlLogin(win).then((result) => {
-        if (result.kind === "logged-in" && result.identity?.username) {
-          win.setTitle("ZHLBuilder — " + result.identity.username);
-        } else {
-          win.setTitle("ZHLBuilder [未登录]");
-        }
-      });
-    } else {
-      const ident = loadZhlIdentity();
-      if (ident?.username) {
-        win.setTitle("ZHLBuilder — " + ident.username);
-      } else if (isZhlLoginSkipped()) {
-        win.setTitle("ZHLBuilder [未登录]");
-      }
-    }
   });
   win.on("close", (event) => {
     if (forceQuitRef.current || !isUpdateStatusWindowCloseLocked(getAutoUpdaterState())) {
@@ -1687,6 +1668,80 @@ function openUpdateStatusWindow() {
     supportsSettings: false,
     windowKind: "update-status",
     locale: currentApplicationLocale,
+  });
+}
+
+/**
+ * ZHL 登录门与设备 IPC 只挂一次。
+ * 之前这两件事被放在「更新状态窗口」的 ready-to-show 里，而本 fork 已禁用自动更新，
+ * 那个窗口几乎不会被创建 —— 结果 ZHL 登录门从不弹出、设备配对 IPC 也没注册过。
+ */
+let zhlMainWindowGateAttached = false;
+
+function attachZhlMainWindowGate(win: BrowserWindow): void {
+  if (zhlMainWindowGateAttached) return;
+  zhlMainWindowGateAttached = true;
+
+  let titleSuffix = "";
+  const applyTitle = (identity: { username?: string } | null, skipped: boolean) => {
+    titleSuffix = identity?.username ? ` — ${identity.username}` : skipped ? " [未登录]" : "";
+    if (!win.isDestroyed()) win.setTitle(`ZHLBuilder${titleSuffix}`);
+  };
+
+  // index.html 的 <title> 会在文档加载时以 page-title-updated 覆盖主进程设置的标题，
+  // 「[未登录]」和登录后的用户名就是这么被冲掉的。窗口标题统一由这里拥有。
+  win.on("page-title-updated", (event) => {
+    event.preventDefault();
+    if (!win.isDestroyed()) win.setTitle(`ZHLBuilder${titleSuffix}`);
+  });
+
+  win.once("ready-to-show", () => {
+    if (win.isDestroyed()) return;
+    // ZHL 设备代理 IPC（配对二维码 / WS 心跳 / 任务中继）
+    registerZhlDeviceIpc(() => (win.isDestroyed() ? null : win));
+
+    // 渲染层要能问「当前 ZHL 身份是谁」以及「现在弹一次登录门」。
+    // 没有这座桥时，侧栏「登录」和设置页「连接」只能把用户推进一个
+    // 没有任何登录按钮的 WelcomeScreen。
+    ipcMain.removeHandler("zhl:gate:identity");
+    ipcMain.handle("zhl:gate:identity", () => {
+      const identity = loadZhlIdentity();
+      return {
+        username: identity?.username ?? "",
+        loggedIn: Boolean(identity),
+        skipped: isZhlLoginSkipped(),
+      };
+    });
+    ipcMain.removeHandler("zhl:gate:login");
+    ipcMain.handle("zhl:gate:login", async () => {
+      const existing = loadZhlIdentity();
+      if (existing) {
+        return { ok: true as const, username: existing.username };
+      }
+      if (win.isDestroyed()) {
+        return { ok: false as const, reason: "no-window" as const };
+      }
+      const result = await ensureZhlLogin(win);
+      applyTitle(
+        result.kind === "logged-in" ? (result.identity ?? null) : null,
+        result.kind === "skipped",
+      );
+      return result.kind === "logged-in"
+        ? { ok: true as const, username: result.identity?.username ?? "" }
+        : { ok: false as const, reason: result.kind };
+    });
+
+    const existing = loadZhlIdentity();
+    if (existing || isZhlLoginSkipped()) {
+      applyTitle(existing, isZhlLoginSkipped());
+      return;
+    }
+    void ensureZhlLogin(win).then((result) => {
+      applyTitle(
+        result.kind === "logged-in" ? (result.identity ?? null) : null,
+        result.kind === "skipped",
+      );
+    });
   });
 }
 
@@ -1878,6 +1933,7 @@ function createWindowInstance(startupBootstrap: StartupWindowBootstrap = {}) {
     },
   });
   registerStabilityMainWindow(win);
+  attachZhlMainWindowGate(win);
   return win;
 }
 

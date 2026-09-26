@@ -1,11 +1,10 @@
 import type { IPlatformService } from "@zhlbuilder/shared";
 import type { IntlInstance } from "@/i18n/IntlProvider.js";
-import type { FeedbackSubmitDraft } from "@/feedback/feedbackStore.js";
 import { runExportLogsAction } from "@/lib/exportLogsAction.js";
-import { ZCODE_PRODUCT_DOCS_URL } from "@/lib/productDocs.js";
+import { BUILDER_PRODUCT_DOCS_URL } from "@/lib/productDocs.js";
 
 interface HelpMenuActionHandlers {
-  openIssueReport: () => Promise<void>;
+  openIssueReport: () => void;
   openProductDocs: () => void;
   exportLogs: () => void;
 }
@@ -13,24 +12,22 @@ interface HelpMenuActionHandlers {
 export function createHelpMenuActionHandlers({
   platform,
   intl,
-  openSubmit,
 }: {
-  platform: Pick<IPlatformService, "captureWindowScreenshot" | "exportLogs" | "openExternal">;
+  platform: Pick<
+    IPlatformService,
+    "captureWindowScreenshot" | "exportLogs" | "openExternal" | "openFeedback"
+  >;
   intl: IntlInstance;
-  openSubmit: (draft?: FeedbackSubmitDraft) => void;
 }): HelpMenuActionHandlers {
   return {
-    openIssueReport: async () => {
-      openSubmit({
-        type: "bug",
-        module: "其它",
-        severity: "P2-中",
-        includeLogs: false,
-        screenshots: [],
-      });
+    // 走 platform.openFeedback 而不是渲染层自绘的反馈弹窗：后者会把日志和截图
+    // 上传到上游 feedback API（feedback_api_base 尚未指向 ZHL 侧后端）。
+    // 本 fork 的反馈入口由 config/default.json 的 feedback_url 决定，即 ZHL 论坛。
+    openIssueReport: () => {
+      void platform.openFeedback();
     },
     openProductDocs: () => {
-      platform.openExternal(ZCODE_PRODUCT_DOCS_URL);
+      platform.openExternal(BUILDER_PRODUCT_DOCS_URL);
     },
     exportLogs: () => {
       void runExportLogsAction(platform, intl);

@@ -1,4 +1,4 @@
-import { AnchorIcon, CopyIcon, InfoIcon, SettingsIcon, TriangleAlertIcon } from "lucide-react";
+import { AnchorIcon, CopyIcon, InfoIcon, SettingsIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 /** ChatErrorBanner — 错误提示组件
  *
  * 显示 ZHLBuilder Agent 链路中的错误，带 traceId 方便排查。
@@ -304,7 +304,7 @@ export function ChatErrorBanner({
             title={intl.formatMessage({ id: "chat.error.dismiss" })}
             aria-label={intl.formatMessage({ id: "chat.error.dismiss" })}
           >
-            <X className="size-4" />
+            <XIcon className="size-4" />
           </Button>
         ) : null}
       </div>

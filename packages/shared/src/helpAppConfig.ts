@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { buildZCodeEndpointUrls } from "./zcodeEndpoint.js";
-import { getCommunityUrlFromConfigs, getFeedbackUrlFromConfig } from "./remoteAppConfig.js";
+import {
+  getCommunityUrlsFromConfig,
+  getFeedbackUrlFromConfig,
+  getFeedbackUseExternalFormFromConfig,
+} from "./remoteAppConfig.js";
 
 const helpConfigSchema = z.object({
   community_urls: z
@@ -33,15 +37,16 @@ export function buildHelpAppConfigUrl(
 export function resolveHelpAppConfig(remote: unknown, local: unknown): HelpAppConfig {
   const remoteConfig = helpConfigSchema.safeParse(remote).data;
   const localConfig = helpConfigSchema.safeParse(local).data;
+  // 本 fork 的对外入口由仓库内 config/default.json 唯一决定：上游
+  // /api/v1/client/configs 会把装了 ZHLBuilder 的用户导向 Z.AI 的飞书群、Discord
+  // 和反馈表单。本地文件能解析出来就以它为准——包括"键存在但留空"这种明确表达
+  // 隐藏入口的写法，不能因为值为空又回落到远端。
+  const source = localConfig ?? remoteConfig;
   return {
-    community_urls: {
-      "zh-CN": getCommunityUrlFromConfigs(remoteConfig, localConfig, "zh-CN"),
-      "en-US": getCommunityUrlFromConfigs(remoteConfig, localConfig, "en-US"),
-    },
-    feedback_url: getFeedbackUrlFromConfig(remoteConfig) ?? getFeedbackUrlFromConfig(localConfig),
-    // false 是远端明确配置，不能按 truthy 判断后回退到本地 true。
-    feedback_use_external_form:
-      remoteConfig?.feedback_use_external_form ?? localConfig?.feedback_use_external_form ?? false,
+    community_urls: getCommunityUrlsFromConfig(source),
+    feedback_url: getFeedbackUrlFromConfig(source),
+    // false 是明确配置，不能按 truthy 判断后回退。
+    feedback_use_external_form: getFeedbackUseExternalFormFromConfig(source),
   };
 }
 

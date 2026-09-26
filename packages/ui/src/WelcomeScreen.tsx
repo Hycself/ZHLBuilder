@@ -4,11 +4,20 @@
  * ZHL 账号登录已由启动时的模态门（zhlGate.ts）完成。
  * 这里只做身份确认和引导用户去 Settings 配置模型提供商。
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SettingsIcon, SmartphoneIcon } from "lucide-react";
 import { Button } from "./components/ui/button.js";
 import { ZCodeAboutLogo } from "@/components/ui/ZCodeAboutLogo.js";
 import { ThemeHeroVisual } from "./openWorkspacePageThemeHero.js";
+
+interface ZhlGateBridge {
+  identity: () => Promise<{ username?: string; loggedIn?: boolean; skipped?: boolean }>;
+  login: () => Promise<{ ok?: boolean; username?: string; reason?: string }>;
+}
+
+function getZhlGate(): ZhlGateBridge | null {
+  return (window as unknown as { zhlGate?: ZhlGateBridge }).zhlGate ?? null;
+}
 
 export type LoginCompleteReason = "zhl-oauth" | "skip";
 
@@ -18,6 +27,43 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
   const [showModelHint, setShowModelHint] = useState(false);
+  const [identity, setIdentity] = useState<{ loggedIn: boolean; username: string }>({
+    loggedIn: false,
+    username: "",
+  });
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const gate = getZhlGate();
+
+  useEffect(() => {
+    if (!gate) return;
+    let disposed = false;
+    void gate.identity().then((res) => {
+      if (!disposed) {
+        setIdentity({ loggedIn: Boolean(res?.loggedIn), username: res?.username ?? "" });
+      }
+    }, () => {});
+    return () => {
+      disposed = true;
+    };
+  }, [gate]);
+
+  const handleZhlLogin = () => {
+    if (!gate || loggingIn) return;
+    setLoggingIn(true);
+    setLoginError("");
+    void gate.login().then((res) => {
+      setLoggingIn(false);
+      if (res?.ok) {
+        setIdentity({ loggedIn: true, username: res.username ?? "" });
+      } else if (res?.reason && res.reason !== "skipped") {
+        setLoginError("登录未完成，可稍后在标题栏菜单重试。");
+      }
+    }, () => {
+      setLoggingIn(false);
+      setLoginError("登录门不可用，请跳过进入后重试。");
+    });
+  };
 
   return (
     <main className="relative flex h-full min-h-dvh items-center justify-center overflow-hidden bg-background px-4 py-6 text-foreground sm:px-6">
@@ -33,9 +79,25 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
         <div className="space-y-1 text-center">
           <p className="text-ui-lg font-bold text-foreground">ZHLBuilder</p>
           <p className="text-ui-sm text-foreground-subtle">
-            ZHL 账号已就绪，配置模型后即可开始。
+            {identity.loggedIn
+              ? `已登录 ${identity.username}，配置模型后即可开始。`
+              : "登录 ZHL 账号可解锁设备绑定与远程任务；模型可稍后自行配置。"}
           </p>
         </div>
+
+        {!identity.loggedIn && gate ? (
+          <Button
+            variant="default"
+            className="mt-6 h-11 w-full text-ui-base font-semibold"
+            disabled={loggingIn}
+            onClick={handleZhlLogin}
+          >
+            {loggingIn ? "正在打开授权页…" : "使用 ZHL 账号登录"}
+          </Button>
+        ) : null}
+        {loginError ? (
+          <p className="mt-2 text-center text-ui-xs text-destructive">{loginError}</p>
+        ) : null}
 
         <div className="mt-8 space-y-3">
           <button

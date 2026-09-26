@@ -39,6 +39,12 @@ contextBridge.exposeInMainWorld("zhlDevice", {
   },
 });
 
+// ZHLBuilder 身份桥：读取当前 ZHL 账号 / 主动弹一次签派 OAuth2 登录门
+contextBridge.exposeInMainWorld("zhlGate", {
+  identity: (): Promise<unknown> => ipcRenderer.invoke("zhl:gate:identity"),
+  login: (): Promise<unknown> => ipcRenderer.invoke("zhl:gate:login"),
+});
+
 import type {
   AppSettings,
   ApplicationIconRequest,

@@ -14,7 +14,7 @@ import {
   ZCODE_ENV,
   ZCODE_PRODUCT_FLAVOR,
   buildZCodeEndpointUrls,
-  getCommunityUrlFromConfigs,
+  getCommunityUrlsFromConfig,
   getFeedbackUrlFromConfig,
   resolveHelpAppConfig,
   normalizeZCodeEndpointOrigin,
@@ -240,7 +240,10 @@ export async function resolveCommunityUrl(options: {
     options.logger.warn("[community] failed to read local config:", error);
   }
 
-  return getCommunityUrlFromConfigs(remoteConfig, localConfig, options.locale);
+  // 与 resolveHelpAppConfig 同一口径：本地 config/default.json 是唯一来源，
+  // 上游远端会把装了 ZHLBuilder 的用户导向 Z.AI 的飞书群和 Discord。
+  // 本地读到就用它（含"键存在但留空 = 隐藏入口"），读不到才回落远端。
+  return getCommunityUrlsFromConfig(localConfig ?? remoteConfig)[options.locale];
 }
 
 async function openFeedback(
@@ -360,7 +363,7 @@ function showZCodeEndpointPromptWindow(options: {
       resizable: false,
       minimizable: false,
       maximizable: false,
-      title: "ZCode Endpoint",
+      title: "ZHLBuilder Endpoint",
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,
@@ -657,7 +660,7 @@ export async function executeDesktopCommand(options: {
       } catch (error) {
         await showMessageBoxWithOptionalParent(targetWindow, {
           type: "error",
-          title: "ZCode Endpoint",
+          title: "ZHLBuilder Endpoint",
           message: "Endpoint 无效",
           detail: error instanceof Error ? error.message : String(error),
         });

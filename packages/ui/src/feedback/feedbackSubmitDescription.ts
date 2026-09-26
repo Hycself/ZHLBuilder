@@ -7,7 +7,7 @@ import type {
 } from "@zhlbuilder/shared";
 
 const TITLE_MAX = 80;
-const FEEDBACK_ZCODE_AGENT_LABEL = "ZCode Agent";
+const FEEDBACK_ZCODE_AGENT_LABEL = "ZHLBuilder Agent";
 
 type MessageFormatter = (descriptor: { id: string }, values?: Record<string, string>) => string;
 

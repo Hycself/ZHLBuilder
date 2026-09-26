@@ -59,24 +59,6 @@ export function getCommunityUrlsFromConfig(config: unknown): LocaleUrlMap {
   };
 }
 
-export function getCommunityUrlFromConfig(config: unknown, locale: Locale): string | undefined {
-  const communityUrls = getCommunityUrlsFromConfig(config);
-  return communityUrls[locale];
-}
-
-export function getCommunityUrlFromConfigs(
-  remoteConfig: unknown,
-  localConfig: unknown,
-  locale: Locale,
-): string | undefined {
-  const remoteUrls = getCommunityUrlsFromConfig(remoteConfig);
-  const localUrls = getCommunityUrlsFromConfig(localConfig);
-
-  // 社群渠道具有语言边界。只允许远端覆盖同语言的内置入口，
-  // 对应语言缺失时保持隐藏，避免中文和英文用户被导向错误渠道。
-  return remoteUrls[locale] ?? localUrls[locale];
-}
-
 export function getForceUpdateMinimalVersionFromConfig(config: unknown): string | undefined {
   if (!isRecord(config)) {
     return undefined;

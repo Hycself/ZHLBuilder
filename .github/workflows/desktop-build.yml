@@ -51,6 +51,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
 
+      # 未导入的组件（如曾用 <ZhlAppPairSection /> 却漏 import）只在运行时炸成
+      # ReferenceError，lint 与架构检查都不拦，必须由 tsc 在打包前拦住。
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Build desktop bundle (${{ matrix.target }} ${{ matrix.arch }})
         working-directory: packages/desktop
         env:

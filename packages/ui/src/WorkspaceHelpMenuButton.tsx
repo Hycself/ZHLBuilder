@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   DesktopCommandIds,
   TID_WORKSPACE_HELP_MENU_RESOURCE_MANAGER,
@@ -41,17 +42,32 @@ export function WorkspaceHelpMenuButton({
    */
   isDesktop?: boolean;
 }) {
-  const { intl } = useZCodeIntl();
+  const { intl, locale } = useZCodeIntl();
   const platform = usePlatform();
   const updateMenu = useDesktopUpdateMenu(isDesktop);
-  const openFeedbackSubmit = useFeedbackStore((state) => state.openSubmit);
   const openFeatureRequest = useFeedbackStore((state) => state.openFeatureRequest);
   const helpMenuLabel = intl.formatMessage({ id: "workspaceHeader.help.menu" });
   const helpMenuActions = createHelpMenuActionHandlers({
     platform,
     intl,
-    openSubmit: openFeedbackSubmit,
   });
+  // 社群入口由 config/default.json 的 community_urls 决定；解析不到 URL 时隐藏，
+  // 不留一个点了没反应的菜单项（与命令面板 canOpenCommunity 同一口径）。
+  const [canOpenCommunity, setCanOpenCommunity] = useState(false);
+  useEffect(() => {
+    let disposed = false;
+    void platform.canOpenCommunity(locale).then(
+      (visible) => {
+        if (!disposed) setCanOpenCommunity(visible);
+      },
+      () => {
+        if (!disposed) setCanOpenCommunity(false);
+      },
+    );
+    return () => {
+      disposed = true;
+    };
+  }, [platform, locale]);
   const handleOpenCommunity = () => {
     void platform.openCommunity();
   };
@@ -92,10 +108,12 @@ export function WorkspaceHelpMenuButton({
           <BookOpenIcon className="size-4" />
           {intl.formatMessage({ id: "workspaceHeader.help.docs" })}
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={handleOpenCommunity}>
-          <UsersIcon className="size-4" />
-          {intl.formatMessage({ id: "workspaceHeader.help.community" })}
-        </DropdownMenuItem>
+        {canOpenCommunity ? (
+          <DropdownMenuItem onSelect={handleOpenCommunity}>
+            <UsersIcon className="size-4" />
+            {intl.formatMessage({ id: "workspaceHeader.help.community" })}
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuItem onSelect={helpMenuActions.openIssueReport}>
           <MessageSquareIcon className="size-4" />
           {intl.formatMessage({ id: "workspaceHeader.help.issueReport" })}

@@ -210,38 +210,28 @@ export function ConversationDraftEmptyState({ className }: { className?: string 
 }
 
 function ZCodeEmptyStateLogo({ className }: { className?: string }) {
+  // 这里原本浅色用上游内联的 "Z" 字标线框、深色用一张实心 PNG：
+  // 前者是上游商标（品牌清理只搜字符串时漏掉了矢量图形），后者在深色下是
+  // 一大块实心青色，压在问候语上非常突兀。
+  // 现在两套主题统一用自己的飞机标，并用遮罩渐隐 + 降透明度 + 轻微模糊
+  // 还原原设计"背景水印"的分寸，而不是把 logo 当主视觉。
   return (
-    <>
-      {/* 夜间资源已自带渐变和透明度，公共容器叠加遮罩会让它重复变淡；渐隐效果只属于浅色线框。*/}
-      <svg
-        aria-hidden="true"
-        className={cn(
-          className,
-          "opacity-70 dark:hidden",
-          "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,transparent_70%,transparent_100%)]",
-          "[-webkit-mask-repeat:no-repeat] [-webkit-mask-size:100%_100%]",
-          "[mask-image:linear-gradient(to_bottom,black_0%,transparent_70%,transparent_100%)]",
-          "[mask-repeat:no-repeat] [mask-size:100%_100%]",
-        )}
-        width="400"
-        height="320"
-        viewBox="0 0 400 320"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M398.97 0.5L147.576 319.5H1.03027L37.5996 273.081L120.167 169.603L120.171 169.598L215.342 47.5605L215.343 47.5615L252.424 0.5H398.97ZM264.544 273.271H372.527L336.082 319.498H189.886L202.642 303.307C217.584 284.34 240.398 273.271 264.544 273.271ZM209.164 0.5L202.786 8.58887C183.782 32.6885 154.782 46.752 124.091 46.752H25.9805L62.4268 0.5H209.164Z"
-          stroke="currentColor"
-        />
-      </svg>
-      {/* 深色资源包含专用渐变与模糊效果，不能通过 currentColor 复刻；主题类保证两套 Logo 互斥显示。 */}
-      <img
-        aria-hidden="true"
-        className={cn(className, "hidden dark:block")}
-        data-v4-draft-logo="dark"
-        src={darkEmptyStateLogoUrl}
-        alt=""
-      />
-    </>
+    <img
+      aria-hidden="true"
+      className={cn(
+        className,
+        // 上游原资源是 opacity 0.15 + 高斯模糊，所以水印几乎"看不见但撑住构图"；
+        // 之前直接贴实心 PNG 才会突兀。这里用同样的量级还原。
+        "opacity-[0.22] dark:opacity-[0.18] blur-[1.2px]",
+        "[mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.6)_50%,transparent_82%,transparent_100%)]",
+        "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.6)_50%,transparent_82%,transparent_100%)]",
+        "[mask-repeat:no-repeat] [mask-size:100%_100%]",
+        "[-webkit-mask-repeat:no-repeat] [-webkit-mask-size:100%_100%]",
+      )}
+      data-v4-draft-logo="both"
+      src={darkEmptyStateLogoUrl}
+      alt=""
+      draggable={false}
+    />
   );
 }
