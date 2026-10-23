@@ -140,7 +140,7 @@ export function SkillToolCallBlock(context: ToolCallBlockRenderContext) {
   );
   const renderContent = useCallback(
     () => (
-      <div className="space-y-3 mb-2 rounded-xl border border-border bg-panel px-4 py-3">
+      <div className="space-y-3 mb-2 rounded-lg border border-border bg-panel px-4 py-3">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2 text-ui-base text-foreground">
             <span className="text-foreground-subtle">{skillFallbackLabel}</span>

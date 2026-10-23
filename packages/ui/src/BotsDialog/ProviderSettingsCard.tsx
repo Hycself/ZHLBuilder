@@ -16,7 +16,7 @@ import { isFeishuBotProvider } from "@zhlbuilder/shared";
 import { Button } from "@/components/ui/button.js";
 import { Input } from "@/components/ui/input.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
-import { SettingsGroupCard, SettingsRow } from "@/settings/SettingsPageParts.js";
+import { SettingsRow } from "@/settings/SettingsPageParts.js";
 import { cn } from "@/components/lib/utils.js";
 import { logger } from "@/logger.js";
 import type { BindCodeState, FeishuRegistrationState, WeixinRegistrationState } from "./shared.js";
@@ -441,34 +441,32 @@ export function ProviderSettingsCard({
   }
 
   return (
-    <SettingsGroupCard>
-      <SettingsRow
-        label={intl.formatMessage({ id: "bots.botToken" })}
-        description={descriptionText}
-        control={control}
-        detail={
-          bot.enabled && runtime?.deliveryError ? (
-            <>
-              <DetailPanel>
-                <div role="alert" className="min-w-0 space-y-2 text-ui-base">
-                  <div className="font-medium text-destructive">
-                    {intl.formatMessage({ id: "bots.runtime.deliveryFailed" })}
-                  </div>
-                  <div className="text-foreground-subtle">
-                    {intl.formatMessage({ id: "bots.runtime.deliveryFailedDescription" })}
-                  </div>
-                  <div className="whitespace-pre-wrap break-all text-foreground-subtle">
-                    {runtime.deliveryError}
-                  </div>
+    <SettingsRow
+      label={intl.formatMessage({ id: "bots.botToken" })}
+      description={descriptionText}
+      control={control}
+      detail={
+        bot.enabled && runtime?.deliveryError ? (
+          <>
+            <DetailPanel>
+              <div role="alert" className="min-w-0 space-y-2 text-ui-base">
+                <div className="font-medium text-destructive">
+                  {intl.formatMessage({ id: "bots.runtime.deliveryFailed" })}
                 </div>
-              </DetailPanel>
-              {detail}
-            </>
-          ) : (
-            detail
-          )
-        }
-      />
-    </SettingsGroupCard>
+                <div className="text-foreground-subtle">
+                  {intl.formatMessage({ id: "bots.runtime.deliveryFailedDescription" })}
+                </div>
+                <div className="whitespace-pre-wrap break-all text-foreground-subtle">
+                  {runtime.deliveryError}
+                </div>
+              </div>
+            </DetailPanel>
+            {detail}
+          </>
+        ) : (
+          detail
+        )
+      }
+    />
   );
 }

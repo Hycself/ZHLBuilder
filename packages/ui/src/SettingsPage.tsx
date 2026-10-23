@@ -251,7 +251,7 @@ function SettingsSidebarButton({
           "flex h-8 w-full items-center gap-2 rounded-xl px-2.5 text-left transition-colors",
           "max-lg:mx-auto max-lg:size-10 max-lg:justify-center max-lg:px-0",
           active
-            ? "bg-surface-hover text-foreground"
+            ? "bg-selected font-medium text-foreground"
             : "text-foreground-subtle hover:bg-surface-hover hover:text-foreground",
           className,
         )}
@@ -260,7 +260,16 @@ function SettingsSidebarButton({
           <Icon className="size-4 text-foreground" />
         </span>
         <span className="min-w-0 flex-1 max-lg:sr-only">
-          {children ?? <span className="truncate text-ui-base text-foreground">{label}</span>}
+          {children ?? (
+            <span
+              className={cn(
+                "truncate text-ui-base",
+                active ? "font-medium text-foreground" : "text-foreground-subtle",
+              )}
+            >
+              {label}
+            </span>
+          )}
         </span>
       </button>
     </ControlHintTooltip>
@@ -1385,11 +1394,15 @@ export function SettingsPage({
               <DesktopWindowControls />
             </div>
           ) : null}
-          <aside className="min-w-0">
+          {/* 「纸与墨」P3：设置导航列不再用 background-alt 填色块分区，
+              改为纸面 + 右侧满深发丝线。结构分隔一律靠线，不靠底色差。 */}
+          <aside className="min-w-0 border-r border-border bg-sidebar">
             <div className="flex h-full flex-col">
-              <div className="h-12 [app-region:drag]"></div>
-              <div className="px-2 pb-3 pt-3">
-                {onBack ? (
+              {/* 拖拽带和返回按钮合成一行页头，和主界面侧栏同一套语言；
+                  下面再加一条发丝线，导航列才读得出"页头 / 列表"两段。 */}
+              <div className="flex h-12 shrink-0 items-center px-2 [app-region:drag]">
+                <div className="[app-region:no-drag]">
+                  {onBack ? (
                   <ControlHintTooltip
                     title={intl.formatMessage({
                       id: "workspace.backToWorkspace",
@@ -1432,13 +1445,8 @@ export function SettingsPage({
                       </span>
                     </Button>
                   </ControlHintTooltip>
-                ) : null}
-
-                {/* <div className={onBack ? "mt-5" : "pt-2"}>
-                    <h1 className="flex items-center gap-2 px-2.5 text-ui-lg font-medium text-foreground-subtle">
-                      {intl.formatMessage({ id: "settings.title" })}
-                    </h1>
-                  </div> */}
+                  ) : null}
+                </div>
               </div>
 
               <nav
@@ -1617,21 +1625,21 @@ export function SettingsPage({
                     <div
                       className={cn(
                         SETTINGS_FRAME_CONTENT_CLASSNAME,
-                        "flex flex-col gap-8",
+                        "flex flex-col gap-6",
                         isMacDesktop && "pt-0",
                         // isWindowsDesktop && "pt-12",
                       )}
                     >
-                      <div>
+                      <div className="border-b border-border pb-4">
                         <div className="flex flex-wrap items-center justify-between gap-3">
                           <div className="flex min-w-0 flex-wrap items-center gap-3">
                             {showActiveSectionTitle ? (
-                              <h2 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+                              <h2 className="text-ui-display font-semibold tracking-tight text-foreground">
                                 {activeSectionLabel}
                               </h2>
                             ) : null}
                             {!hasVisibleSettingsBreadcrumb && activeSectionMeta.titleBadgeId ? (
-                              <span className="inline-flex h-6 items-center rounded-full border border-sky-500 px-2 text-ui-xs font-semibold tracking-normal text-sky-500 dark:border-sky-400 dark:text-sky-400">
+                              <span className="inline-flex h-6 items-center rounded-full border border-border px-2 text-ui-xs font-semibold tracking-normal text-foreground-subtle">
                                 {intl.formatMessage({
                                   id: activeSectionMeta.titleBadgeId,
                                 })}

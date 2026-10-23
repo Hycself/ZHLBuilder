@@ -164,7 +164,7 @@ export function CronCreateAutomationCard({
   return (
     <div
       data-testid={TID_CRON_CREATE_CARD}
-      className="my-1 w-full rounded-xl border border-border/70 bg-card/70 px-3 py-3 shadow-sm backdrop-blur-sm"
+      className="my-1 w-full rounded-lg border border-border bg-card/70 px-3 py-3  backdrop-blur-sm"
     >
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface text-foreground-subtle">
@@ -182,7 +182,7 @@ export function CronCreateAutomationCard({
           className={cn(
             // 次级文字色加尾箭头会让明确的导航操作显得像辅助说明。
             // 固定 h-7 会压缩文字热区，导致视觉内边距无法达到上下 6px。
-            "h-auto rounded-lg border-border/70 bg-transparent px-3 py-1.5 text-ui-base text-foreground hover:bg-hover hover:text-foreground",
+            "h-auto rounded-lg border-border bg-transparent px-3 py-1.5 text-ui-base text-foreground hover:bg-hover hover:text-foreground",
             !canOpenAutomations && "opacity-50",
           )}
           disabled={!canOpenAutomations}

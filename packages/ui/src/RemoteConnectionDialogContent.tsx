@@ -83,7 +83,7 @@ export function RemoteConnectionKindStep({
                     : TID_REMOTE_KIND_DOCKER
               }
               className={cn(
-                "flex min-h-32 flex-col items-start gap-4 rounded-2xl border p-4 text-left transition-colors",
+                "flex min-h-32 flex-col items-start gap-4 rounded-lg border p-4 text-left transition-colors",
                 selected
                   ? "border-border-hover bg-selected"
                   : "border-border bg-card hover:border-border-hover hover:bg-surface",
@@ -94,7 +94,7 @@ export function RemoteConnectionKindStep({
                   "flex size-10 items-center justify-center rounded-xl border",
                   selected
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background-alt text-foreground-subtle",
+                    : "border-border bg-sidebar text-foreground-subtle",
                 )}
               >
                 <Icon className="size-5" />
@@ -231,7 +231,7 @@ export function RemoteConnectionSettingsStep({
         className="flex-1 min-h-0 space-y-4 overflow-y-auto pr-1"
       >
         {currentRuntimeOptionsError ? (
-          <div className="flex items-start gap-3 rounded-2xl border border-warning bg-warning px-4 py-3 text-ui-base text-warning-foreground">
+          <div className="flex items-start gap-3 rounded-lg border border-warning bg-warning px-4 py-3 text-ui-base text-warning-foreground">
             <AlertTriangleIcon className="mt-0.5 size-4 shrink-0" />
             <span>{intl.formatMessage({ id: "remote.optionsLoadFailed" })}</span>
           </div>
@@ -383,7 +383,7 @@ export function RemoteConnectionDirectoryStep({
   if (!services) {
     return (
       <div className="flex min-h-0 flex-1 flex-col gap-6 h-full">
-        <div className="flex min-h-[22rem] flex-1 items-center justify-center rounded-2xl border border-border bg-card text-ui-base text-foreground-subtle">
+        <div className="flex min-h-[22rem] flex-1 items-center justify-center rounded-lg border border-border bg-card text-ui-base text-foreground-subtle">
           <LoaderIcon className="mr-2 size-4 animate-spin" />
           {intl.formatMessage({ id: "common.loading" })}
         </div>

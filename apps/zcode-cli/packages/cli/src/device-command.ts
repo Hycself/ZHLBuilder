@@ -3,6 +3,8 @@ import { homedir, hostname, platform as osPlatform } from "node:os";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { randomBytes } from "node:crypto";
+import { ZHL_MODE_CHOICES } from "@zhlbuilder/shared/zhlTaskEvents";
+import { runDeviceTask } from "./deviceTaskRunner.js";
 
 /**
  * ZHLBuilder 设备端 agent（`zhlbuilder device pair|start|status`）。
@@ -21,6 +23,12 @@ interface DeviceState {
   deviceToken?: string;
   name: string;
 }
+
+/** 重连：10 秒一趟，连续 5 次失败就退出，别让代理静默挂着"还在连" */
+const RECONNECT_DELAY_MS = 10_000;
+const MAX_RECONNECT_FAILURES = 5;
+/** 连接活过这么久才算稳定，可以清零重连失败计数（心跳 15s 一次，取一个多周期） */
+const STABLE_CONNECTION_MS = 20_000;
 
 const statePath = (): string =>
   join(homedir(), ".zhlbuilder", "cli", "device.json");
@@ -53,6 +61,83 @@ const deviceName = (): string => `ZHLBuilder@${hostname()}`;
 
 const platformName = (): string =>
   osPlatform() === "win32" ? "win32" : osPlatform() === "darwin" ? "darwin" : "linux";
+
+type LocalModelRule = {
+  providerId?: unknown;
+  modelId?: unknown;
+  config?: { enabled?: unknown };
+};
+
+/**
+ * 本机可用模型目录：读用户在本机「设置 → 模型」写的个人配置
+ * （provider_config.json 的 modelConfigRules），把智能规则与手动规则里声明的
+ * 模型全部枚举出来。中枢无从得知这份目录，只能由 agent 连上后上报快照。
+ *
+ * 只上报 defaultModelSelection 的话列表永远是 0 或 1 项，手机端的选择控件等于
+ * 没有（鸿蒙规格 v3.2 §3 的诚实规则就是据此写的）——这里给完整目录，手机端才有
+ * 真正可选项。解析失败或没配过照样上报空列表：手机端隐藏选择控件，而不是摆一份
+ * 静态假列表。
+ */
+const readLocalModels = (): Array<Record<string, unknown>> => {
+  const p = join(homedir(), ".zhlbuilder", "v2", "provider_config.json");
+  try {
+    const raw = JSON.parse(readFileSync(p, "utf8")) as {
+      config?: {
+        defaultModelSelection?: { providerId?: string; modelId?: string };
+        modelConfigRules?: {
+          providerModelRules?: LocalModelRule[];
+          manualProviderModelRules?: LocalModelRule[];
+        };
+      };
+    };
+    const config = raw.config;
+    if (!config) return [];
+
+    const sel = config.defaultModelSelection;
+    const defaultId = sel?.modelId
+      ? sel.providerId
+        ? `${sel.providerId}/${sel.modelId}`
+        : sel.modelId
+      : undefined;
+
+    const models: Array<Record<string, unknown>> = [];
+    const seen = new Set<string>();
+    for (const rule of [
+      ...(config.modelConfigRules?.providerModelRules ?? []),
+      ...(config.modelConfigRules?.manualProviderModelRules ?? []),
+    ]) {
+      const modelId = typeof rule?.modelId === "string" ? rule.modelId : "";
+      if (!modelId) continue;
+      // enabled:false 是用户在「设置 → 模型」里显式关掉的项，不摆给手机端选
+      if (rule?.config?.enabled === false) continue;
+      const providerId =
+        typeof rule.providerId === "string" && rule.providerId ? rule.providerId : null;
+      const id = providerId ? `${providerId}/${modelId}` : modelId;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      models.push({ id, name: modelId, provider: providerId, default: id === defaultId });
+    }
+
+    // 老配置可能只有 defaultModelSelection 而没有规则列表；此时退回原来的单项上报，
+    // 不要把有默认模型的设备报成"没配过"。
+    if (models.length === 0 && defaultId) {
+      models.push({
+        id: defaultId,
+        name: sel?.modelId,
+        provider: sel?.providerId ?? null,
+        default: true,
+      });
+    }
+
+    // 中枢对 capabilities 快照有长度上限（超限整段丢弃，设备会被误判成从没启动过），
+    // 按序列化长度收敛，保证整包留在安全范围内。
+    while (models.length > 1 && JSON.stringify(models).length > 6000) models.pop();
+    return models;
+  } catch {
+    return [];
+  }
+};
+
 
 async function postJson(server: string, path: string, body: unknown): Promise<Record<string, unknown>> {
   const res = await fetch(`${server}${path}`, {
@@ -195,14 +280,26 @@ const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string
   let stopped = false;
   const tasks = new Map<number, { child: ReturnType<typeof spawn> }>();
 
+  /** 重连上限：够不着的话代理会永远静默重试，用户根本不知道设备已经掉了 */
+  let reconnectFailures = 0;
+  let connectedOnce = false;
+  let openedAt = 0;
+
   const connect = (): Promise<void> =>
     new Promise((resolve, reject) => {
       const ws = new WebSocket(wsUrl);
       let opened = false;
       ws.onopen = () => {
         opened = true;
+        openedAt = Date.now();
+        connectedOnce = true;
         ctx.stdout.write(`[device] 已连接中枢 ${state.server}\n`);
         ws.send(JSON.stringify({ type: "heartbeat" }));
+        // 能力快照：中枢据此区分"代理没启动"与"设备离线"，手机端据此摆模型 chip
+        ws.send(JSON.stringify({
+          type: "agent.hello",
+          capabilities: { modes: ZHL_MODE_CHOICES, models: readLocalModels() },
+        }));
         resolve();
       };
       ws.onmessage = (ev) => {
@@ -213,17 +310,73 @@ const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string
         }
       };
       ws.onclose = () => {
-        if (!opened) reject(new Error("连接失败"));
-        else if (!stopped) {
-          ctx.stdout.write("[device] 连接断开，10 秒后重连…\n");
-          setTimeout(() => void connect().catch(() => undefined), 10_000);
+        if (stopped) return;
+        // 只有活过一个完整心跳周期的连接才算真连上，才清零失败计数；
+        // 在 onopen 里清零的话，"接受握手又立刻关闭"每轮都复位，上限永远够不着。
+        if (opened && Date.now() - openedAt >= STABLE_CONNECTION_MS) reconnectFailures = 0;
+        if (!opened) {
+          // 第一次握手失败交给外层 await 报错退出；重连途中的失败必须自己续一趟，
+          // 之前这里的 reject 被 .catch(() => undefined) 吞掉，一次没连上就再也不重连。
+          if (connectedOnce) scheduleReconnect();
+          else reject(new Error("连接失败"));
+          return;
         }
+        scheduleReconnect();
       };
       ws.onerror = () => {
-        if (!opened) reject(new Error("连接错误"));
+        if (!opened && !connectedOnce) reject(new Error("连接错误"));
       };
       (globalThis as { __zhlbuilderWs?: WebSocket }).__zhlbuilderWs = ws;
     });
+
+  const scheduleReconnect = (): void => {
+    reconnectFailures += 1;
+    if (reconnectFailures > MAX_RECONNECT_FAILURES) {
+      ctx.stderr.write(`[device] 连续 ${MAX_RECONNECT_FAILURES} 次重连失败，代理退出。\n`);
+      terminate("RECONNECT-FAILED");
+      return;
+    }
+    ctx.stdout.write(`[device] 连接断开，10 秒后重连（第 ${reconnectFailures} 次）…\n`);
+    setTimeout(() => {
+      if (stopped) return;
+      void connect().catch(() => scheduleReconnect());
+    }, RECONNECT_DELAY_MS);
+  };
+
+  /**
+   * 停止代理并带走所有任务子进程。
+   *
+   * 之前没有任何信号处理：`device start` 被 SIGTERM（服务停止、kill、注销）打断时，
+   * 子进程不会随父进程消失，代理的 WS 也留在那儿。结果是设备"离线"了但 CLI 还在跑任务、
+   * 还在花 token，而手机端已经没有入口能停它。下面那个 finally 挂在
+   * `await new Promise<never>(() => undefined)` 上，永远走不到，指不上。
+   */
+  const terminate = (reason: string): void => {
+    if (stopped) {
+      process.exit(0);
+      return;
+    }
+    stopped = true;
+    ctx.stdout.write(`[device] ${reason}：正在停止 ${tasks.size} 个任务…\n`);
+    const ws = (globalThis as { __zhlbuilderWs?: WebSocket }).__zhlbuilderWs;
+    try {
+      ws?.close();
+    } catch { /* 已关闭 */ }
+    for (const { child } of tasks.values()) {
+      try {
+        child.kill("SIGTERM");
+      } catch { /* 已退出 */ }
+    }
+    // 再等一秒让子进程自己收，然后强杀退出：CLI 不保证响应 SIGTERM
+    setTimeout(() => {
+      for (const { child } of tasks.values()) {
+        try {
+          child.kill("SIGKILL");
+        } catch { /* 已退出 */ }
+      }
+      process.exit(0);
+    }, 1000);
+  };
 
   const send = (obj: unknown): void => {
     const ws = (globalThis as { __zhlbuilderWs?: WebSocket }).__zhlbuilderWs;
@@ -231,13 +384,19 @@ const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string
   };
 
   const handleCommand = (msg: Record<string, unknown>): void => {
+    // 已经在退出了就不要再起新任务：残留在队列里的一条 task.start 会 spawn 出一个
+    // 没人持有、也没人能 kill 的子进程。
+    if (stopped) return;
     const type = String(msg.type ?? "");
     if (type === "task.start") {
       const taskId = Number(msg.taskId);
       const prompt = String(msg.prompt ?? "");
       const cwd = typeof msg.cwd === "string" && msg.cwd ? msg.cwd : process.cwd();
+      const mode = typeof msg.mode === "string" ? msg.mode : undefined;
+      const model = typeof msg.model === "string" && msg.model ? msg.model : undefined;
+      const resumeSession = typeof msg.resumeSession === "string" ? msg.resumeSession : undefined;
       ctx.stdout.write(`[device] 收到任务 #${taskId}\n`);
-      runTask(taskId, prompt, cwd);
+      runDeviceTask({ taskId, prompt, cwd, mode, model, resumeSession, tasks, send, log: ctx });
     } else if (type === "task.stop") {
       const taskId = Number(msg.taskId);
       const t = tasks.get(taskId);
@@ -248,33 +407,11 @@ const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string
     }
   };
 
-  const out = (taskId: number, line: string): void => {
-    for (const l of line.replace(/\r/g, "").split("\n")) {
-      if (l.length) send({ type: "task.output", taskId, lines: [l] });
-    }
-  };
-
-  const runTask = (taskId: number, prompt: string, cwd: string): void => {
-    send({ type: "task.status", taskId, status: 1 });
-    // v0.1.0 执行器：子进程跑本 CLI 的 --prompt 模式（见文件头说明）
-    const entry = process.argv[1] ?? "dist/zhlbuilder.cjs";
-    const child = spawn(process.execPath, [entry, "--prompt", prompt], { cwd, env: process.env });
-    tasks.set(taskId, { child });
-    child.stdout?.on("data", (chunk: Buffer) => out(taskId, chunk.toString("utf8")));
-    child.stderr?.on("data", (chunk: Buffer) => out(taskId, chunk.toString("utf8")));
-    child.on("close", (code) => {
-      tasks.delete(taskId);
-      send({
-        type: "task.status",
-        taskId,
-        status: code === 0 ? 2 : code === null ? 4 : 3,
-        exitNote: `exit code ${code}`,
-      });
-      ctx.stdout.write(`[device] 任务 #${taskId} 结束（exit ${code}）\n`);
-    });
-  };
-
   const heartbeat = setInterval(() => send({ type: "heartbeat" }), 15_000);
+
+  for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"] as const) {
+    process.on(sig, () => terminate(sig));
+  }
 
   ctx.stdout.write("[device] Ctrl+C 退出（设备将下线，任务缓冲保留在服务器）\n");
   try {

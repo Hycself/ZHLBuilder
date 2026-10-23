@@ -1509,7 +1509,7 @@ export const WorkspaceShellLayout = memo(function WorkspaceShellLayoutComponent(
 
   return (
     <DesktopWindowFrame
-      title={`ZCode / ${getPathLeaf(workspaceAbsPath)}`}
+      title={`ZHLBuilder / ${getPathLeaf(workspaceAbsPath)}`}
       showHeader
       isDesktop={isDesktop}
       isMacDesktop={isMacDesktop}
@@ -1541,7 +1541,9 @@ export const WorkspaceShellLayout = memo(function WorkspaceShellLayoutComponent(
         >
           <aside
             ref={sidebarContainerRef}
-            className="h-full overflow-hidden select-none"
+            // 「纸与墨」P1：侧栏不再靠色块区分，改由右侧一道发丝线切给内容面。
+            // 色块会让界面读起来像「一块块面板拼起来」，发丝线才是印刷品的分栏方式。
+            className="h-full overflow-hidden border-r border-border select-none"
             aria-hidden={!isSidebarPanelVisible}
           >
             <ScopedErrorBoundary
@@ -1669,7 +1671,7 @@ export const WorkspaceShellLayout = memo(function WorkspaceShellLayoutComponent(
                   <section
                     data-workspace-conversation-frame="true"
                     className={cn(
-                      "relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-background",
+                      "relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-background shadow-sm",
                       isSidePaneVisible
                         ? "rounded-[var(--workspace-panel-radius)] border border-border"
                         : resolveWorkspaceShellWindowChromeClass({

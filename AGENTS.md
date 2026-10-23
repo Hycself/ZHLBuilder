@@ -33,7 +33,7 @@
 - `packages/shared`：共享协议与类型；`packages/client`：Agent 客户端 SDK。
 - `apps/zcode-cli`：Agent CLI 与运行时。
 - `CONTEXT.md`：插件商店领域词汇；修改相关 UI 前阅读。
-- `DESIGN.md`：UI 设计规范；修改 UI 前阅读。
+- `DESIGN.md`：UI 结构与交互规范；视觉令牌/排版以 `packages/ui/DESIGN-V3.md` 为准。修改 UI 前两者都要读。
 
 ## 实现与验证
 
@@ -48,7 +48,7 @@
 
 ## UI 与平台边界
 
-- 遵守 `DESIGN.md`，复用已有组件，兼顾桌面与手机 Web 的布局、交互、主题和国际化。
+- 遵守 `DESIGN.md` 与 `packages/ui/DESIGN-V3.md`（色彩/圆角/阴影/排版以 v3 为准），复用已有组件，兼顾桌面与手机 Web 的布局、交互、主题和国际化。
 - 组件通过 `packages/ui/src/hooks/` 访问服务；平台操作通过 `IPlatformService`（`packages/shared/src/platform.ts`），不直接调用 `window.zcode`。
 - 通过依赖注入处理 Desktop、Web、本地和远程环境的差异，并兼顾 Windows、macOS 和 Linux。
 - Zustand 状态位于 `packages/ui/src/store/`。广播同步的主题、语言等字段需要防止回环；UI 局部状态不应被误当作服务端事实。

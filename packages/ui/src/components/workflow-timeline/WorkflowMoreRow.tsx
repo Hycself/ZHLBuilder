@@ -63,7 +63,7 @@ export function WorkflowMoreRow({
       aria-label={title}
       aria-expanded={door?.open}
       className={cn(
-        "wf-pill wf-agent-pill wf-more-row wf-arrive flex h-8 min-w-0 items-center gap-2 rounded-full pl-2 pr-2.5 text-ui-sm",
+        "wf-pill wf-agent-pill wf-more-row wf-arrive flex h-8 min-w-0 items-center gap-2 rounded-md pl-2 pr-2.5 text-ui-sm",
         door?.open === true ? "bg-surface-hover" : "bg-surface",
         onOpen !== undefined &&
           "wf-pill-open cursor-pointer text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40",

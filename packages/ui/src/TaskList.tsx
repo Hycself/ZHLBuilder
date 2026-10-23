@@ -480,7 +480,7 @@ export const TaskList = memo(function TaskList({
       </div>
 
       {showFooter ? (
-        <div className="border-t border-outline/40 p-3">
+        <div className="border-t border-border p-3">
           <Button
             type="button"
             variant="outline"

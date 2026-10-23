@@ -97,8 +97,8 @@ import {
   syncPostUpdateReleaseNotesToWindow,
   syncReadyUpdateToWindow,
 } from "./autoUpdater.js";
-import { ensureZhlLogin, loadZhlIdentity, isZhlLoginSkipped } from "./zhlGate.js";
-import { registerZhlDeviceIpc } from "./zhlDeviceAgent.js";
+import { clearZhlIdentity, ensureZhlLogin, loadZhlIdentity, isZhlLoginSkipped } from "./zhlGate.js";
+import { registerZhlDeviceIpc, setZhlDeviceStateWindow, stopZhlDeviceAgent } from "./zhlDeviceAgent.js";
 import { BroadcastHub } from "./broadcastHub.js";
 import { TaskRealtimeBus } from "./taskRealtimeBus.js";
 import { createAppLaunchGate } from "./appLaunchGate.js";
@@ -1679,6 +1679,9 @@ function openUpdateStatusWindow() {
 let zhlMainWindowGateAttached = false;
 
 function attachZhlMainWindowGate(win: BrowserWindow): void {
+  // 窗口指针每次都要跟着最新的主窗口走：macOS 关窗不退出进程，重开时如果还认第一个
+  // 窗口，设备状态推送就发进一个已销毁的 webContents，界面再也不更新。
+  setZhlDeviceStateWindow(() => (win.isDestroyed() ? null : win));
   if (zhlMainWindowGateAttached) return;
   zhlMainWindowGateAttached = true;
 
@@ -1698,7 +1701,7 @@ function attachZhlMainWindowGate(win: BrowserWindow): void {
   win.once("ready-to-show", () => {
     if (win.isDestroyed()) return;
     // ZHL 设备代理 IPC（配对二维码 / WS 心跳 / 任务中继）
-    registerZhlDeviceIpc(() => (win.isDestroyed() ? null : win));
+    registerZhlDeviceIpc();
 
     // 渲染层要能问「当前 ZHL 身份是谁」以及「现在弹一次登录门」。
     // 没有这座桥时，侧栏「登录」和设置页「连接」只能把用户推进一个
@@ -1729,6 +1732,16 @@ function attachZhlMainWindowGate(win: BrowserWindow): void {
       return result.kind === "logged-in"
         ? { ok: true as const, username: result.identity?.username ?? "" }
         : { ok: false as const, reason: result.kind };
+    });
+
+    // 登出：清本地身份并复位"跳过登录门"，然后把标题改回未登录态。
+    // 只删本地不吊销是有意为之——签派侧没有暴露 OAuth 吊销端点，
+    // 这里不能假装服务端已经失效了。
+    ipcMain.removeHandler("zhl:gate:logout");
+    ipcMain.handle("zhl:gate:logout", () => {
+      clearZhlIdentity();
+      applyTitle(null, false);
+      return { ok: true as const };
     });
 
     const existing = loadZhlIdentity();
@@ -2427,6 +2440,10 @@ app.on("before-quit", (event) => {
   }
 
   if (!hasPreparedAppQuit) {
+    // 真正开始退出时才收设备代理：Electron 退出不会带走子进程，不收的话代理的 WS
+    // 和正在跑的 CLI 任务会活在应用之外继续跑（手机端看着任务还在动，桌面早没了）。
+    // 放在确认框之后，用户取消退出时代理不该被停掉。
+    stopZhlDeviceAgent();
     localMediaPreviewPathRegistry.clear();
     event.preventDefault();
     void prepareAppQuit("app-before-quit").finally(() => {

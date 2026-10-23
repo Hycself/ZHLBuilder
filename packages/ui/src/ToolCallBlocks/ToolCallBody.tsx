@@ -79,7 +79,7 @@ export function ToolCallBody({
             <ToolOutput errorText={toolCall.error} output={toolCall.output} />
           ) : null}
           {displayModel.showKind ? (
-            <p className="text-ui-base text-muted-foreground">{toolCall.kind}</p>
+            <p className="text-ui-base text-foreground-subtle">{toolCall.kind}</p>
           ) : null}
         </>
       )}
@@ -106,7 +106,7 @@ function InlineCodeContent({
 }) {
   if (preview.language === "markdown") {
     return (
-      <div className="max-h-60 overflow-auto rounded-xl border border-border bg-muted/15 px-3 py-3">
+      <div className="max-h-60 overflow-auto rounded-lg border border-border bg-surface/15 px-3 py-3">
         <MessageResponse
           className="min-w-0 break-words"
           workspacePath={workspacePath}
@@ -126,7 +126,7 @@ function InlineCodeContent({
   }
 
   return (
-    <div className="max-h-60 overflow-auto rounded-xl bg-muted/15">
+    <div className="max-h-60 overflow-auto rounded-lg bg-surface/15">
       <CodeBlock code={preview.content} language={preview.language} appTheme={theme} />
     </div>
   );
@@ -179,11 +179,11 @@ function InlinePlanResult({
   const { intl } = useZCodeIntl();
 
   return (
-    <div className="space-y-3 rounded-xl border border-outline/60 bg-muted/15 p-3">
+    <div className="space-y-3 rounded-lg border border-border bg-surface/15 p-3">
       {planFilePath ? (
-        <div className="flex flex-wrap items-center gap-2 text-ui-base text-on-surface-muted">
+        <div className="flex flex-wrap items-center gap-2 text-ui-base text-foreground-subtle">
           <span>{intl.formatMessage({ id: "chat.toolCall.planFile" })}</span>
-          <span className="cursor-default rounded-md bg-muted/70 px-2 py-1 font-mono text-on-surface">
+          <span className="cursor-default rounded-md bg-surface/70 px-2 py-1 font-mono text-foreground">
             {planFilePath}
           </span>
         </div>

@@ -1,8 +1,10 @@
-# ZCode Design System
+# ZHLBuilder Design System
 
 Portable design system for AI-assisted UI work in this repository.
 
 This file is meant for coding agents. When generating or editing UI in this repo, follow this file before inventing new visual rules.
+
+> **Visual authority update (2026-10-18):** Colors, radii, shadows, gradients, and the type scale are now defined by `packages/ui/DESIGN-V3.md`. This file remains authoritative for structure, interaction, platform, and accessibility rules. Where the two conflict, DESIGN-V3 wins for visual values.
 
 ## Highest-priority UI constraint
 
@@ -19,7 +21,7 @@ Treat violations of this section as design-system defects, not stylistic prefere
 
 ## Product Character
 
-ZCode is a desktop-first and web-compatible AI workspace. The interface should feel calm, dense, and operational rather than decorative.
+ZHLBuilder is a desktop-first and web-compatible AI workspace. The interface should feel calm, dense, and operational rather than decorative.
 
 Design for:
 
@@ -47,6 +49,8 @@ User-facing theme choices are:
 - Light Theme, backed by Zai Light
 - Dark Theme, backed by Zai Dark
 
+默认主题：Light（Zai Light）。界面重塑（2026-10）后浅色为第一公民，深色为其同语言镜像。
+
 Default light and dark CSS variables still exist as fallback foundations, but new UI should be validated against Zai Light and Zai Dark as the active light/dark experiences.
 
 ## Color Palette
@@ -54,6 +58,7 @@ Default light and dark CSS variables still exist as fallback foundations, but ne
 ### Core semantic colors
 
 - **Brand**: `--color-brand`
+  品牌深青：浅色 `#0B7285`、深色 `#22D3EE`（界面重塑 2026-10）。主按钮由 `--color-primary` 承载、与品牌同值；焦点描边 `--color-ring` 跟随品牌。
   Use for key emphasis, important links, active indicators, and brand-accented actions. Never use as a full-page background.
 - **Icon Blue**: `--color-icon-blue`
   Use for browser-style links and blue icon emphasis that follows the Figma `icon/blue` role. Keep file-type icons on their own descriptor colors.
@@ -199,6 +204,20 @@ All interface typography must use the dedicated `text-ui-*` scale. The Appearanc
 | `text-ui-xs`      | `--ui-font-size - 4px` |    10px |
 | `text-ui-2xs`     | `--ui-font-size - 5px` |     9px |
 
+### Display tier
+
+页面级大标题、欢迎页 hero 与指标数字这类「一屏只出现一次」的字，用展示层 token，不再直接写
+`text-2xl/3xl/4xl`，也不再用 `lg:` 断点跳字号（断点跳档会让同一角色在不同宽度下变成两种层级）：
+
+| Token                  | Formula                 | Default | 角色                                                       |
+| ---------------------- | ----------------------- | ------: | ---------------------------------------------------------- |
+| `text-ui-display-lg`   | `--ui-font-size + 18px` |    32px | 欢迎页 hero、品牌字标                                      |
+| `text-ui-display`      | `--ui-font-size + 12px` |    26px | 页面级 h1/h2、定价与指标大数字                             |
+| `text-ui-display-sm`   | `--ui-font-size + 8px`  |    22px | 展示层与 `text-ui-xl` 之间的过渡档，供卡片主标题等次级展示 |
+
+展示层同样只随 `--ui-font-size` 缩放；一屏内最多用两档，且必须仍是「标题/指标」角色，
+不得拿来给正文或控件加大字号。
+
 `text-ui-2xs` is a restricted exception below the `text-ui-xs` floor: it is permitted
 only for graph **axis furniture** — timebase tick labels, channel codes, and unit
 suffixes in the workflow timeline — never for content, labels, or metadata.
@@ -287,7 +306,7 @@ Radius follows the nesting of visible rounded containers, not component importan
 ### Container hierarchy
 
 - Layout regions, ordinary wrappers, groups, and separators do not count as radius levels.
-- The first rounded container starts at `rounded-xl`, whether inside or outside a layout region.
+- The first rounded container starts at `rounded-xl`（全站基准 14px，由 `@theme --radius-xl` 覆写；界面重塑 2026-10）, whether inside or outside a layout region.
 - Nested rounded containers step down through `rounded-lg` → `rounded-md` → `rounded-sm`; `rounded-sm` is the minimum.
 - Count the nearest actual rounded container, not intermediate DOM wrappers. Peer containers at the same level use the same radius.
 - Cards, chat bubbles, tool blocks, and ordinary composite input shells follow this hierarchy; size or importance alone does not justify `rounded-2xl`.
@@ -481,6 +500,30 @@ Depth rules:
 - Favor subtle fade, zoom, and directional slide for overlays.
 - Motion should clarify state change, not decorate the screen.
 - Avoid long, springy, or playful animations in the main workspace.
+
+## 渐进披露（Progressive disclosure，界面重塑 2026-10）
+
+面向 Workflow、Agent 调用、电脑控制等重交互面：
+
+- 首屏只呈现 ≤3 个信息块；其余分区默认折叠、按需展开。
+- 表单的高级字段（模型选择、作用域、插件归属等）收进「高级」折叠区。
+- 并列分区优先合并为分组 + 摘要；重图形（工作流时间线五层叠图）默认折叠为摘要列表。
+- 折叠/合并只改变视图；不改数据模型、提交载荷与接口调用。
+
+### 折叠摘要行（实现惯例）
+
+所有"默认折叠"的区块共用同一套节头，避免各面各写一套：
+
+- 节头按钮：`flex h-9 w-full items-center gap-2 px-3 text-left` + `aria-expanded` + `hover:bg-surface` + `focus-visible:ring-2 focus-visible:ring-ring/40`。
+- 标题 `text-ui-base font-medium text-foreground`；其后的摘要提示 `text-ui-sm text-foreground-subtle`（**收起时也可见**，如件数、当前模式、时间与作用域）。
+- chevron：`ChevronRightIcon ml-auto size-3.5 shrink-0 text-foreground-subtlest`，展开时 `rotate-90`。
+- 折叠状态用本地 `useState`，默认收起，不持久化；容器沿用 `SettingsGroupCard` 或 `rounded-xl border border-border overflow-hidden`。
+- 常显区只留最高频入口（主开关、标题、计数）；错误与状态类信息（失败面板、警示）不得藏进折叠区。
+- 参考实现：`WorkflowRunArtifactsSection`、`WorkflowRunProvenance`、`SubagentsSection`（高级设置）、`BotsDialog/BotSection`、`ComputerUseSection`（次级块）。
+
+## 自研重写 v2（界面层全自研，2026-10）
+
+Workflow / Agent 提示词 / 电脑控制等核心面的界面层转为**全自研重写**：功能与协议沿用 ZCode 上游契约，UI 组件、信息架构与交互由本项目自研；令牌与 `text-ui-*` 排版仍以本文件为唯一权威。细则（应用级 IA、模块设计概念、组件清单与落位、可访问性与双语口径）见 `packages/ui/REDESIGN-V2.md`（已冻结）。落位采用 `next-*` 并置 + 旧入口 re-export，testid 与双语规范不变。
 
 ## Workspace layout
 

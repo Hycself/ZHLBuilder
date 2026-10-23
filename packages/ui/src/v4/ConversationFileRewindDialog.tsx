@@ -161,7 +161,7 @@ export function ConversationFileRewindDialog({
               {intl.formatMessage({ id: "chat.changeSummary.rewindDialog.noPreview" })}
             </p>
           )}
-          {error ? <p className="text-ui-base text-danger">{error}</p> : null}
+          {error ? <p className="text-ui-base text-destructive">{error}</p> : null}
           {variant === "fileRewind" && preview && !preview.canApply ? (
             <p className="text-ui-base text-foreground-subtle">
               {intl.formatMessage({ id: "chat.changeSummary.rewindDialog.cannotApply" })}

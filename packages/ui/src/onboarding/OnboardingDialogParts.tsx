@@ -70,7 +70,7 @@ export function OnboardingWizardSidebar(props: { currentStep: OnboardingWizardSt
                   isCurrent
                     ? "border-border-hover bg-card"
                     : isCompleted
-                      ? "border-transparent bg-background-alt"
+                      ? "border-transparent bg-sidebar"
                       : "border-transparent bg-transparent",
                 )}
               >
@@ -108,7 +108,7 @@ export function OnboardingWizardSidebar(props: { currentStep: OnboardingWizardSt
 export function OnboardingWizardHeader(props: { title: string; description: string }) {
   return (
     <div className="space-y-2">
-      <div className="text-lg font-medium text-foreground">{props.title}</div>
+      <div className="text-ui-xl font-medium text-foreground">{props.title}</div>
       {props.description.trim().length > 0 ? (
         <div className="text-ui-base leading-6 text-foreground-subtle">{props.description}</div>
       ) : null}

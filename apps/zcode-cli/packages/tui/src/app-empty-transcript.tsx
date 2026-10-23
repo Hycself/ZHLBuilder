@@ -8,16 +8,18 @@ const h = React.createElement as (
   ...children: React.ReactNode[]
 ) => React.ReactElement;
 
-const ZCODE_LOGO_LINES = [
-  "███████╗ ██████╗ ██████╗ ██████╗ ███████╗",
-  "   ███╔╝██╔════╝██╔═══██╗██╔══██╗██╔════╝",
-  "  ███╔╝ ██║     ██║   ██║██║  ██║█████╗  ",
-  " ███╔╝  ██║     ██║   ██║██║  ██║██╔══╝  ",
-  "███████╗╚██████╗╚██████╔╝██████╔╝███████╗",
-  "╚══════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝",
+// 字标 = 产品名 ZHLBuilder 的 ANSI Shadow 艺术字（10 字母恰好 76 列，80 列终端也放得下）。
+// 上游 splash 用的是 ZCODE；品牌替换后这一屏是产品第一印象，不能只改侧栏标题。
+const ZHLBUILDER_LOGO_LINES = [
+  "███████╗██╗  ██╗██╗     ██████╗ ██╗   ██╗██╗██╗     ██████╗ ███████╗██████╗ ",
+  "╚══███╔╝██║  ██║██║     ██╔══██╗██║   ██║██║██║     ██╔══██╗██╔════╝██╔══██╗",
+  "  ███╔╝ ███████║██║     ██████╔╝██║   ██║██║██║     ██║  ██║█████╗  ██████╔╝",
+  " ███╔╝  ██╔══██║██║     ██╔══██╗██║   ██║██║██║     ██║  ██║██╔══╝  ██╔══██╗",
+  "███████╗██║  ██║███████╗██████╔╝╚██████╔╝██║███████╗██████╔╝███████╗██║  ██║",
+  "╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝  ╚═╝",
 ] as const;
 
-const EMPTY_TRANSCRIPT_LOGO_MIN_HEIGHT = ZCODE_LOGO_LINES.length;
+const EMPTY_TRANSCRIPT_LOGO_MIN_HEIGHT = ZHLBUILDER_LOGO_LINES.length;
 
 export function EmptyTranscriptLogo({
   animated = false,
@@ -48,12 +50,12 @@ function renderLogoContent(input: { animated: boolean; frameMs?: number }): Reac
         width: "100%",
       },
     },
-    ...ZCODE_LOGO_LINES.map((line, index) =>
+    ...ZHLBUILDER_LOGO_LINES.map((line, index) =>
       renderLogoText({
         animated: input.animated,
         baseColor: palette.accent,
         frameMs: input.frameMs,
-        key: `zcode-logo-${index}`,
+        key: `zhlbuilder-logo-${index}`,
         text: line,
       }),
     ),

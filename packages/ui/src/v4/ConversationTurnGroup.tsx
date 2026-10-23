@@ -22,7 +22,7 @@ import { ChatLoading } from "@/components/ai-elements/chat-loading.js";
 import { ChatApiRetryStatus } from "@/chat-input-toolbar/display.js";
 import { cn } from "@/components/lib/utils.js";
 import { Checkbox } from "@/components/ui/checkbox.js";
-import { MessageActions } from "@/components/ai-elements/message.js";
+import { MessageRowActions } from "@/next-message/messageRowActions.js";
 import {
   Collapsible,
   CollapsibleContent,
@@ -375,10 +375,12 @@ function ConversationAssistantWorkItems({
     return null;
   }
 
-  // 连续工作项（工具/explore/reasoning）统一 gap-4 组容器（对齐旧版 tool-call-group），
+  // 连续工作项（工具/explore/reasoning）统一组容器（对齐旧版 tool-call-group），
   // 取代继承父级 gap-5/gap-2 + 每行 py-2 的双重且不一致的间距。
+  // 左侧一条发丝轨把「这一轮干了什么」从正文里摘出来：展开后工具行是一串同级散行，
+  // 没有归属边界，八条工具调用读起来就是一墙字；轨 + 收紧一档间距让它读成一个工作区。
   const content = (
-    <div className="flex flex-col gap-4">
+    <div className="ml-1 flex flex-col gap-3 border-l border-border pl-3">
       {items.map((item) =>
         item.kind === "row" ? (
           <ConversationTurnRow
@@ -591,7 +593,7 @@ function AssistantHistoryStatus({
           type="button"
           data-testid={testId(TID_CHAT_ASSISTANT_HISTORY_TRIGGER, segment.key)}
           data-history-open={String(open)}
-          className="group/history-message inline-flex max-w-full items-center gap-2 text-left text-ui-base text-foreground-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-input-border-focused)]"
+          className="group/history-message inline-flex max-w-full items-center gap-2 text-left text-ui-sm tabular-nums text-foreground-subtlest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-input-border-focused)]"
         >
           <span className="truncate">{label}</span>
           {!segment.assistantHistoryDefaultOpen ? (
@@ -1426,12 +1428,12 @@ function ConversationTurnGroupImpl({
               onFeedbackChange={onFeedbackChange}
               hookInvocations={unit.hookInvocations}
               turnId={unit.turnId}
-              className="opacity-0 transition-opacity group-hover/assistant-turn:opacity-100 focus-within:opacity-100"
+              actionsScope="assistant-turn"
             />
           ) : hasHookActions ? (
-            <MessageActions className="opacity-0 transition-opacity group-hover/assistant-turn:opacity-100 focus-within:opacity-100">
+            <MessageRowActions scope="assistant-turn">
               <ConversationHookDetailsAction rows={unit.hookInvocations} turnId={unit.turnId} />
-            </MessageActions>
+            </MessageRowActions>
           ) : null}
           {unit.assistantTailRows.length > 0 ? (
             // turnTailBoundary 之前虽然从工作历史中拆出，却仍在 flow 内渲染，

@@ -245,7 +245,7 @@ export const ContextContentFooter = ({
     >
       {children ?? (
         <>
-          <span className="text-muted-foreground">Total cost</span>
+          <span className="text-foreground-subtle">Total cost</span>
           <span>{totalCost}</span>
         </>
       )}
@@ -256,7 +256,7 @@ export const ContextContentFooter = ({
 const TokensWithCost = ({ tokens, costText }: { tokens?: number; costText?: string }) => (
   <span>
     {tokens === undefined ? "—" : formatCompactTokenNumber("", tokens)}
-    {costText ? <span className="ml-2 text-muted-foreground">• {costText}</span> : null}
+    {costText ? <span className="ml-2 text-foreground-subtle">• {costText}</span> : null}
   </span>
 );
 

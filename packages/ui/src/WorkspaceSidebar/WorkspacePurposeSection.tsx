@@ -56,11 +56,12 @@ export function WorkspacePurposeSection({
       <Collapsible open={open} onOpenChange={onOpenChange}>
         <div className="flex h-7 min-w-0 items-center">
           <CollapsibleTrigger asChild>
-            {/* purpose 分组标题之前使用 13px，比同级“已置顶”更小。
-                这里统一为 section title 的 text-ui-base，避免可折叠能力改变标题层级。 */}
+            {/* 分区标题和它下面的行同字号时，标题就变成"另一行"而不是"这一区的名字"，
+                整列读起来只有一堆平级条目。这里降到 section label 一档（ui-sm + 最次级前景），
+                让标题退到行之下，行的权重才立得住；折叠态与展开态用同一档，不改层级。 */}
             <button
               type="button"
-              className="flex h-7 min-w-0 flex-1 items-center gap-1 px-2.5 text-left text-ui-base font-medium text-foreground-subtlest outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/30"
+              className="flex h-7 min-w-0 flex-1 items-center gap-1 px-3 text-left text-ui-sm font-medium text-foreground-subtlest outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/30"
             >
               <span className="min-w-0 truncate">{title}</span>
               {open ? (

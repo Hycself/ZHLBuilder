@@ -1,7 +1,7 @@
 import { useIsOfficeMode } from "@/hooks/useInterfaceMode.js";
 /* eslint-disable max-lines -- 商店列表页把标题/搜索/已安装条/公开-个人分段/Featured/分类折叠聚合成一个连贯浏览面，拆散反而难以维持 1:1 布局。 */
 import { useMemo, useState } from "react";
-import { Download, Loader2, Settings2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Download, Loader2, Settings2 } from "lucide-react";
 import type { PluginStoreOrder, ZCodePluginMarketplaceSummary } from "@zhlbuilder/shared";
 import { ZCODE_OFFICIAL_PLUGIN_MARKETPLACE_ID } from "@zhlbuilder/shared";
 import { Button } from "@/components/ui/button.js";
@@ -10,6 +10,7 @@ import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { ControlHintTooltip } from "@/ControlHintTooltip.js";
 import { PluginStoreAvatar } from "@/settings/PluginStoreAvatar.js";
 import { PluginStoreCard, type PluginStoreActions } from "@/settings/PluginStoreCard.js";
+import { ContentPageToolbar } from "@/next-shell/ContentPageScaffold.js";
 import { SettingsSearchInput } from "@/settings/SettingsSearchInput.js";
 import {
   FALLBACK_CATEGORY,
@@ -144,20 +145,24 @@ export function PluginStoreListView({
     <div className="space-y-8" data-testid="plugin-store-list">
       {/* 大标题由设置页头部渲染（settings.plugins.title），此处从搜索框开始，避免双标题。 */}
       {/* 搜索：横跨公开+个人；输入时下方分段布局让位于统一结果流。 */}
-      <SettingsSearchInput
-        data-testid="plugin-store-search"
-        value={query}
-        onChange={(event) => onQueryChange(event.target.value)}
-        placeholder={intl.formatMessage({
-          id: "settings.plugins.store.searchPlaceholder",
-        })}
+      <ContentPageToolbar
+        search={
+          <SettingsSearchInput
+            data-testid="plugin-store-search"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            placeholder={intl.formatMessage({
+              id: "settings.plugins.store.searchPlaceholder",
+            })}
+          />
+        }
       />
 
       {/* 已安装条：图标点击进详情，齿轮进「管理已安装」视图。 */}
       {installedItems.length > 0 ? (
         <section data-testid="plugin-store-installed-strip">
           <div className="flex items-center justify-between border-b border-border pb-2">
-            <h2 className="text-ui-lg font-semibold text-foreground">
+            <h2 className="text-ui-lg tracking-ink font-semibold text-foreground">
               {intl.formatMessage({
                 id: "settings.plugins.store.installedStrip",
               })}
@@ -195,11 +200,16 @@ export function PluginStoreListView({
                       data-testid="plugin-store-installed-item"
                       data-plugin-id={item.id}
                       aria-label={displayName}
-                      className="shrink-0 rounded-xl transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+                      className="flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card py-1.5 pr-3 pl-1.5 text-left transition-colors hover:border-input-border-hover hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
                       onClick={() => actions.onOpenDetail(item.id)}
                     >
                       {/* Installed Strip 只表达已安装集合，启用态统一在管理视图展示，避免用透明度误伤品牌图标。 */}
-                      <PluginStoreAvatar item={item} className="size-10" />
+                      <PluginStoreAvatar item={item} className="size-6 shrink-0" />
+                      {/* 名字直接摆在图标右边：只有图标时四枚 tile 彼此无法分辨，
+                          悬停 tooltip 又只在桌面存在、触屏拿不到。 */}
+                      <span className="max-w-40 truncate text-ui-base text-foreground">
+                        {displayName}
+                      </span>
                     </button>
                     {canUpdatePluginItem(item) ? (
                       <button
@@ -258,7 +268,7 @@ export function PluginStoreListView({
           )}
         >
           {searchResults.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
+            <p className="rounded-lg border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
               {intl.formatMessage({ id: "settings.plugins.store.searchEmpty" })}
             </p>
           ) : (
@@ -306,7 +316,7 @@ export function SegmentPill({
       data-testid={testId}
       aria-pressed={active}
       className={cn(
-        "rounded-full px-3 py-1 text-ui-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
+        "rounded-md px-3 py-1 text-ui-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
         active
           ? "bg-selected text-foreground"
           : "text-foreground-subtle hover:bg-hover hover:text-foreground",
@@ -330,7 +340,7 @@ function StoreSection({
   return (
     <section className={className}>
       <div className="pb-2">
-        <h2 className="text-ui-lg font-semibold text-foreground">{title}</h2>
+        <h2 className="text-ui-lg tracking-ink font-semibold text-foreground">{title}</h2>
       </div>
       <div aria-hidden="true" className="h-px bg-surface" />
       <div className="mt-2">{children}</div>
@@ -384,7 +394,7 @@ function CollapsibleCardGroup({
           type="button"
           data-testid="plugin-store-group-toggle"
           data-group-key={groupKey}
-          className="mt-2 flex w-full min-w-0 items-center gap-2 rounded-xl px-2 py-2 text-left text-ui-base text-foreground-subtle transition-colors hover:bg-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+          className="mt-2 flex w-full min-w-0 items-center gap-2 rounded-lg px-2 py-2 text-left text-ui-base text-foreground-subtle transition-colors hover:bg-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
           onClick={() => onToggle(groupKey)}
         >
           <span className="flex shrink-0 items-center gap-1.5" aria-hidden="true">
@@ -397,6 +407,7 @@ function CollapsibleCardGroup({
               />
             ))}
           </span>
+          <ChevronDown aria-hidden="true" className="size-3.5 shrink-0" />
           <span className="min-w-0 truncate">
             {hidden.length > hiddenNames.length
               ? intl.formatMessage(
@@ -419,9 +430,10 @@ function CollapsibleCardGroup({
           type="button"
           data-testid="plugin-store-group-toggle"
           data-group-key={groupKey}
-          className="mt-2 rounded-xl px-2 py-2 text-ui-base text-foreground-subtle transition-colors hover:bg-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+          className="mt-2 rounded-lg px-2 py-2 text-ui-base text-foreground-subtle transition-colors hover:bg-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
           onClick={() => onToggle(groupKey)}
         >
+          <ChevronUp aria-hidden="true" className="mr-1 inline-block size-3.5 align-[-2px]" />
           {intl.formatMessage({ id: "settings.plugins.store.showLess" })}
         </button>
       ) : null}
@@ -452,7 +464,7 @@ function PublicSegment({
   const isEmpty = featuredItems.length === 0 && categoryGroups.length === 0;
   if (isEmpty) {
     return (
-      <p className="rounded-xl border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
+      <p className="rounded-lg border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
         {loading
           ? intl.formatMessage({
               id: "settings.plugins.marketplace.catalogLoading",
@@ -515,7 +527,7 @@ function PersonalSegment({
   const { intl } = useZCodeIntl();
   if (groups.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
+      <p className="rounded-lg border border-dashed border-border px-4 py-3 text-ui-base text-foreground-subtle">
         {intl.formatMessage({ id: "settings.plugins.store.personalEmpty" })}
       </p>
     );

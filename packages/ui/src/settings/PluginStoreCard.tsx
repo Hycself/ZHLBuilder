@@ -307,7 +307,7 @@ export function PluginStoreCard({
       tabIndex={0}
       data-testid="plugin-store-card"
       data-plugin-id={item.id}
-      className="group/card flex min-w-0 cursor-pointer items-center gap-3 rounded-xl px-2 py-2.5 transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+      className="group/card flex min-w-0 cursor-pointer items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
       onClick={() => actions.onOpenDetail(item.id)}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -338,7 +338,9 @@ export function PluginStoreCard({
           </div>
         ) : null}
         {description ? (
-          <div className="mt-0.5 truncate text-ui-sm text-foreground-subtle">{description}</div>
+          // 描述原本单行 truncate，中文常在词中被切（"覆盖提交、Pull R…"）；
+          // 改成两行 line-clamp，网格行高由 grid 对齐，不补最小高度。
+          <div className="mt-0.5 line-clamp-2 text-ui-sm text-foreground-subtle">{description}</div>
         ) : null}
       </div>
       <div className="flex shrink-0 items-center gap-1.5">

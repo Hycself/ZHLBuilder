@@ -191,7 +191,7 @@ export function ConversationFileSummaryPanel({
       <Collapsible
         open={open}
         onOpenChange={setOpen}
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-none"
+        className="overflow-hidden border-b border-border"
       >
         <div className="flex h-10 items-center justify-between gap-3 px-2 transition-colors hover:bg-hover">
           <CollapsibleTrigger asChild>

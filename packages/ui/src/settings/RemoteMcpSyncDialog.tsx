@@ -319,7 +319,7 @@ function RemoteMcpSyncResultList({ result }: { result: McpSyncImportResult | nul
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
       <div className="divide-y divide-border">
         {items.map((item) => (
           <div

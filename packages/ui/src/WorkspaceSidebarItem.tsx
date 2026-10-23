@@ -743,14 +743,19 @@ export const WorkspaceSidebarItem = memo(function WorkspaceSidebarItem({
       <span className="relative flex size-4 shrink-0 items-center justify-center">
         {renderWorkspaceIcon()}
       </span>
-      <div className="min-w-0 truncate text-ui-base text-foreground-subtle">
+      <div
+        className={cn(
+          "min-w-0 truncate text-ui-base",
+          isActiveWorkspace ? "font-medium text-foreground" : "text-foreground-subtle",
+        )}
+      >
         {workspaceSidebarLabel}
       </div>
       {!isExpanded && taskListHasUnread ? (
         <span
           aria-hidden="true"
           data-workspace-unread-indicator="true"
-          className="h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 dark:bg-sky-400"
+          className="h-1.5 w-1.5 shrink-0 rounded-full bg-foreground"
         />
       ) : null}
       {!isExpanded && taskListLiveWorkflowCount > 0 ? (
@@ -802,10 +807,12 @@ export const WorkspaceSidebarItem = memo(function WorkspaceSidebarItem({
             className={cn(
               "group flex items-center gap-2 rounded-lg transition-[background-color,box-shadow]",
               isReconnectPending
-                ? "bg-brand/10 workspace-remote-connecting-breathe"
+                ? "bg-hover workspace-remote-connecting-breathe"
                 : isDisconnectedRemoteWorkspace
                   ? "bg-warning/8"
-                  : null,
+                  : // 当前所在的工作区之前没有任何视觉标记，一列项目名读不出"我在哪"；
+                    // 用选中面 token 给激活行一个明确的落点。
+                    isActiveWorkspace && "bg-selected",
               // "sticky top-0 z-10", // TODO: 拖拽时让 workspace 项悬浮 不要抹掉
               isDragging && "bg-selected shadow-xl",
             )}
@@ -1126,6 +1133,10 @@ export const WorkspaceSidebarItem = memo(function WorkspaceSidebarItem({
             showCreateButton={false}
             showFooter={false}
             loading={taskListLoading}
+            // 空态文案只在「当前正在用的那个项目」里说一次。
+            // 之前每个项目行下面都跟一句「暂无任务」，四五个项目叠在一起时
+            // 这句说明既占位又同义反复——空列表本身已经说明没有任务了。
+            showEmptyState={isActiveWorkspace}
             hasMore={taskListHasMore}
             onShowMore={onShowMoreTasks}
             onRenameTask={handleRenameTask}

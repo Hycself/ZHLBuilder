@@ -198,7 +198,7 @@ export function ReadSessionContextToolCallBlock(context: ToolCallBlockRenderCont
   );
   const renderContent = useCallback(
     () => (
-      <div className="space-y-3 rounded-xl border border-border bg-panel px-4 py-3">
+      <div className="space-y-3 rounded-lg border border-border bg-panel px-4 py-3">
         {query ? (
           <section className="space-y-1.5">
             <h4 className="text-ui-base font-medium uppercase text-foreground-subtle">

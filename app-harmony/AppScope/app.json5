@@ -1,7 +1,7 @@
 {
   "app": {
     "bundleName": "com.zhl.builder",
-    "vendor": "XFlySim-ZHL",
+    "vendor": "ZHL",
     "versionCode": 1,
     "versionName": "0.1.0",
     "icon": "$media:app_icon",

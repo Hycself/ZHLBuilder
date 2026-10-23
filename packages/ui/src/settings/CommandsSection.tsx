@@ -388,7 +388,7 @@ export function CommandsSection({
         />
         <div className="space-y-4">
           <div className="space-y-1">
-            <h3 className="text-ui-xl font-semibold text-foreground">
+            <h3 className="text-ui-xl tracking-ink font-semibold text-foreground">
               {editingCommand
                 ? intl.formatMessage({ id: "settings.commands.edit" })
                 : intl.formatMessage({ id: "settings.commands.addNew" })}

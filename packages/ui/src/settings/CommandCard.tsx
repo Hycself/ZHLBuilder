@@ -43,7 +43,7 @@ export function CommandCard({
         />
       ) : (
         <div
-          className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-background text-foreground-subtle"
+          className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-background text-foreground-subtle"
           aria-hidden="true"
         >
           <Terminal className="size-4" />

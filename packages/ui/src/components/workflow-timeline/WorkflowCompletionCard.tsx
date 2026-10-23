@@ -195,7 +195,7 @@ export function WorkflowCompletionCard({
   return (
     <section
       aria-label={format({ id: WORKFLOW_RUN_KIND_ID.completed })}
-      className="wf-motion wf-arrive flex w-full min-w-0 flex-col gap-2.5 rounded-xl border border-border/70 bg-card/70 px-3.5 pb-3 pt-1.5"
+      className="wf-motion wf-arrive flex w-full min-w-0 flex-col gap-2.5 rounded-lg border border-border bg-card/70 px-3.5 pb-3 pt-1.5"
       data-testid={`workflow-completion-card-${testIdKey}`}
       data-workflow-completion-card="true"
     >

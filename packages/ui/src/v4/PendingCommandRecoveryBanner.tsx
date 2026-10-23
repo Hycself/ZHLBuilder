@@ -29,7 +29,7 @@ export const PendingCommandRecoveryBanner = memo(function PendingCommandRecovery
       {hasReplayPayload && onResend ? (
         <button
           type="button"
-          className="shrink-0 rounded-md bg-primary px-2.5 py-1 text-primary-foreground hover:bg-primary/80"
+          className="shrink-0 rounded-md border border-border bg-surface px-2.5 py-1 text-foreground hover:bg-surface-hover"
           onClick={onResend}
         >
           {intl.formatMessage({ id: "chat.pendingCommand.resend" })}

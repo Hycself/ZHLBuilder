@@ -158,7 +158,7 @@ function ConversationShareConfirmationDockImpl({
     <section
       data-conversation-share-keep-open="confirmation-dock"
       data-testid="conversation-share-confirmation-dock"
-      className="@container/share flex max-h-[70dvh] w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-input-border bg-input text-foreground"
+      className="@container/share flex max-h-[70dvh] w-full min-w-0 flex-col overflow-hidden rounded-lg border border-input-border bg-input text-foreground"
     >
       {/* 窄面板下表单会增高；正文独立滚动，避免把发布操作挤出视口。 */}
       <div
@@ -216,7 +216,7 @@ function ConversationShareConfirmationDockImpl({
                 {error ? intl.formatMessage({ id: failedProgressMessageId }) : progressLabel}
               </p>
               <div
-                className="h-1.5 overflow-hidden rounded-full bg-background-subtle"
+                className="h-1.5 overflow-hidden rounded-full bg-surface"
                 role="progressbar"
                 aria-label={intl.formatMessage({ id: "conversationShare.generatingLink" })}
                 aria-valuenow={progressPercent}

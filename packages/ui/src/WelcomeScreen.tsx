@@ -5,8 +5,10 @@
  * 这里只做身份确认和引导用户去 Settings 配置模型提供商。
  */
 import { useEffect, useState } from "react";
-import { SettingsIcon, SmartphoneIcon } from "lucide-react";
+import { ChevronRight, SettingsIcon, SmartphoneIcon } from "lucide-react";
 import { Button } from "./components/ui/button.js";
+import { cn } from "@/components/lib/utils.js";
+import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { ZCodeAboutLogo } from "@/components/ui/ZCodeAboutLogo.js";
 import { ThemeHeroVisual } from "./openWorkspacePageThemeHero.js";
 
@@ -25,8 +27,12 @@ interface WelcomeScreenProps {
   onComplete: (reason: LoginCompleteReason) => void | Promise<void>;
 }
 
+/** 两条指引各自展开自己的说明；之前两条都指向模型说明，点「绑定手机客户端」会读到模型文案。 */
+type GuideKey = "model" | "device";
+
 export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
-  const [showModelHint, setShowModelHint] = useState(false);
+  const { intl } = useZCodeIntl();
+  const [openGuide, setOpenGuide] = useState<GuideKey | null>(null);
   const [identity, setIdentity] = useState<{ loggedIn: boolean; username: string }>({
     loggedIn: false,
     username: "",
@@ -57,31 +63,54 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
       if (res?.ok) {
         setIdentity({ loggedIn: true, username: res.username ?? "" });
       } else if (res?.reason && res.reason !== "skipped") {
-        setLoginError("登录未完成，可稍后在标题栏菜单重试。");
+        setLoginError(intl.formatMessage({ id: "welcome.login.error.retry" }));
       }
     }, () => {
       setLoggingIn(false);
-      setLoginError("登录门不可用，请跳过进入后重试。");
+      setLoginError(intl.formatMessage({ id: "welcome.login.error.unavailable" }));
     });
   };
+
+  const guideRows: Array<{
+    key: GuideKey;
+    icon: typeof SettingsIcon;
+    titleId: string;
+    descId: string;
+    hintId: string;
+  }> = [
+    {
+      key: "model",
+      icon: SettingsIcon,
+      titleId: "welcome.guide.model.title",
+      descId: "welcome.guide.model.desc",
+      hintId: "welcome.guide.model.hint",
+    },
+    {
+      key: "device",
+      icon: SmartphoneIcon,
+      titleId: "welcome.guide.device.title",
+      descId: "welcome.guide.device.desc",
+      hintId: "welcome.guide.device.hint",
+    },
+  ];
 
   return (
     <main className="relative flex h-full min-h-dvh items-center justify-center overflow-hidden bg-background px-4 py-6 text-foreground sm:px-6">
       <ThemeHeroVisual className="absolute inset-0" />
       <div className="pointer-events-none absolute left-0 top-0 right-0 z-10 flex h-12 w-full items-center [app-region:drag]" />
-      <section className="relative z-10 w-full max-w-sm rounded-2xl border border-popover-border bg-background p-8 text-ui-base/relaxed shadow-md sm:p-10">
+      <section className="relative z-10 w-full max-w-sm rounded-lg border border-popover-border bg-background p-8 text-ui-base/relaxed shadow-md sm:p-10">
         <div className="mb-6 flex justify-center">
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-[linear-gradient(180deg,#000000_0%,#151718_100%)] shadow-lg/20">
+          <div className="flex size-16 items-center justify-center rounded-lg bg-background shadow-lg/20">
             <ZCodeAboutLogo className="h-auto w-10" />
           </div>
         </div>
 
         <div className="space-y-1 text-center">
-          <p className="text-ui-lg font-bold text-foreground">ZHLBuilder</p>
+          <h1 className="text-ui-lg font-bold text-foreground">ZHLBuilder</h1>
           <p className="text-ui-sm text-foreground-subtle">
             {identity.loggedIn
-              ? `已登录 ${identity.username}，配置模型后即可开始。`
-              : "登录 ZHL 账号可解锁设备绑定与远程任务；模型可稍后自行配置。"}
+              ? intl.formatMessage({ id: "welcome.identity.loggedIn" }, { username: identity.username })
+              : intl.formatMessage({ id: "welcome.identity.guest" })}
           </p>
         </div>
 
@@ -92,57 +121,68 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
             disabled={loggingIn}
             onClick={handleZhlLogin}
           >
-            {loggingIn ? "正在打开授权页…" : "使用 ZHL 账号登录"}
+            {loggingIn
+              ? intl.formatMessage({ id: "welcome.login.pending" })
+              : intl.formatMessage({ id: "welcome.login.action" })}
           </Button>
         ) : null}
         {loginError ? (
-          <p className="mt-2 text-center text-ui-xs text-destructive">{loginError}</p>
+          <p role="alert" className="mt-2 text-center text-ui-xs text-destructive">
+            {loginError}
+          </p>
         ) : null}
 
+        {/* 两条指引：卡片行是「了解怎么做」，不是动作按钮，所以用 list 语义包起来，
+            展开的说明挂在被点开的那一行下面，而不是共用一块固定位置的提示。 */}
         <div className="mt-8 space-y-3">
-          <button
-            type="button"
-            onClick={() => setShowModelHint(true)}
-            className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left transition-colors hover:border-input-border-focused hover:bg-surface-hover"
-          >
-            <SettingsIcon className="size-5 shrink-0 text-[#22D3EE]" />
-            <span className="min-w-0 flex-1">
-              <span className="block text-ui-base font-medium text-foreground">配置模型提供商</span>
-              <span className="block text-ui-xs text-foreground-subtle">
-                填入你自己的 API Key，支持 OpenAI / DeepSeek / 通义等
-              </span>
-            </span>
-            <span className="text-foreground-subtle">›</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowModelHint(true)}
-            className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left transition-colors hover:border-input-border-focused hover:bg-surface-hover"
-          >
-            <SmartphoneIcon className="size-5 shrink-0 text-[#22D3EE]" />
-            <span className="min-w-0 flex-1">
-              <span className="block text-ui-base font-medium text-foreground">绑定手机客户端</span>
-              <span className="block text-ui-xs text-foreground-subtle">
-                在远控面板生成二维码，手机扫码即管本机
-              </span>
-            </span>
-            <span className="text-foreground-subtle">›</span>
-          </button>
+          {guideRows.map((row) => {
+            const Icon = row.icon;
+            const expanded = openGuide === row.key;
+            return (
+              <div key={row.key}>
+                <button
+                  type="button"
+                  onClick={() => setOpenGuide(expanded ? null : row.key)}
+                  aria-expanded={expanded}
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left transition-colors hover:border-input-border-focused hover:bg-surface-hover focus-visible:ring-2 focus-visible:ring-ring/40"
+                >
+                  <Icon className="size-5 shrink-0 text-foreground-subtle" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-ui-base font-medium text-foreground">
+                      {intl.formatMessage({ id: row.titleId })}
+                    </span>
+                    <span className="block text-ui-xs text-foreground-subtle">
+                      {intl.formatMessage({ id: row.descId })}
+                    </span>
+                  </span>
+                  <ChevronRight
+                    aria-hidden="true"
+                    className={cn(
+                      "size-4 shrink-0 text-foreground-subtle transition-transform duration-200",
+                      expanded && "rotate-90",
+                    )}
+                  />
+                </button>
+                {expanded ? (
+                  <div className="mt-2 rounded-lg border border-brand/30 bg-card/80 p-3 text-ui-xs leading-relaxed text-foreground-subtle">
+                    {intl.formatMessage({ id: row.hintId })}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
 
-        {showModelHint ? (
-          <div className="mt-4 rounded-lg border border-[#22D3EE]/30 bg-[#0C1420]/80 p-3 text-ui-xs leading-relaxed text-dim">
-            点击下方「跳过，进入 ZHLBuilder」→ 打开「设置 → 模型」→ 选择你的提供商并填入
-            API Key。配置完成后即可开始对话和执行任务。
-          </div>
-        ) : null}
-
+        {/* 主按钮只有一个：登录是这一屏的主张，「跳过进入」是退路，
+            两枚都做实心主按钮会互相抢焦点。 */}
         <Button
-          variant="default"
-          className="mt-6 h-11 w-full text-ui-base font-semibold"
-          onClick={() => void onComplete("zhl-oauth")}
+          variant="outline"
+          className="mt-6 h-11 w-full text-ui-base font-medium"
+          // 同一个按钮承担两种收尾：刚登录成功就是 zhl-oauth，没登录直接进来就是 skip。
+          // 之前恒报 "zhl-oauth"，Root 的失败日志里归因是错的。
+          onClick={() => void onComplete(identity.loggedIn ? "zhl-oauth" : "skip")}
         >
-          跳过，进入 ZHLBuilder
+          {intl.formatMessage({ id: "welcome.enter.action" })}
         </Button>
       </section>
     </main>

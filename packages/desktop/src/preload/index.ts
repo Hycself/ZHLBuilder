@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld("__ZCODE_DEVICE_ID__", parseDeviceIdFromArgs());
 contextBridge.exposeInMainWorld("zhlDevice", {
   pairStart: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:pair-qr"),
   agentStart: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:agent-start"),
+  unpair: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:unpair"),
   state: (): Promise<unknown> => ipcRenderer.invoke("zhl:device:state"),
   onState: (cb: (state: unknown) => void): (() => void) => {
     const listener = (_e: unknown, state: unknown): void => cb(state);
@@ -43,6 +44,7 @@ contextBridge.exposeInMainWorld("zhlDevice", {
 contextBridge.exposeInMainWorld("zhlGate", {
   identity: (): Promise<unknown> => ipcRenderer.invoke("zhl:gate:identity"),
   login: (): Promise<unknown> => ipcRenderer.invoke("zhl:gate:login"),
+  logout: (): Promise<unknown> => ipcRenderer.invoke("zhl:gate:logout"),
 });
 
 import type {

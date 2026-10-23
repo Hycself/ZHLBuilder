@@ -232,7 +232,7 @@ function UserInputPresentation({
       ) : null}
       <div
         data-v4-user-input-bubble="true"
-        className="flex max-w-xl flex-col gap-2 rounded-xl rounded-tr-xs border border-border bg-surface px-4 py-3 text-ui-base text-foreground"
+        className="flex max-w-xl flex-col gap-2 rounded-md border border-border bg-surface px-4 py-3 text-ui-base text-foreground"
       >
         <ConversationUserInputBody contentText={row.text} rowId={row.rowId}>
           <ConversationUserInputContent
@@ -799,7 +799,7 @@ function ReadonlyHistoryStatus({
           ? intl.formatMessage({ id: "chat.history.workedFor" }, { duration })
           : labels.history;
   return (
-    <div className="flex w-full border-b border-border/50 pb-2">
+    <div className="flex w-full border-b border-border pb-2">
       <CollapsibleTrigger asChild>
         <button
           type="button"
@@ -1156,7 +1156,7 @@ export function ConversationShareReadonlyTimeline({
                 // 中性信息语义，不用黄色 warning：分享本身没出错，只是这个 build 认不出其中几行。
                 <div
                   data-conversation-share-unsupported-notice="true"
-                  className="mx-4 mb-2 flex items-center gap-2 rounded-md border border-border/60 px-3 py-2 text-ui-xs text-foreground-subtle"
+                  className="mx-4 mb-2 flex items-center gap-2 rounded-md border border-border px-3 py-2 text-ui-xs text-foreground-subtle"
                 >
                   <InfoIcon aria-hidden="true" className="size-3.5 shrink-0" />
                   <span className="min-w-0 break-words">{labels.unsupportedRows}</span>

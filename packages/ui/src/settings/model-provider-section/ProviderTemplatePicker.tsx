@@ -70,7 +70,10 @@ export function ProviderTemplatePicker({
   };
   return (
     <section className="space-y-5" data-testid={TID_MODEL_PROVIDER_TEMPLATE_PICKER}>
-      <div className="flex items-center gap-3">
+      {/* 「纸与墨」P3 试点：带返回按钮的页头也要成「页头带」——
+          与 ContentPageHeader 同一套语言（标题行 + 底部一道发丝线），
+          这样从列表页进到模板选择页时上沿不会跳。 */}
+      <div className="flex items-center gap-3 border-b border-border pb-3">
         <Button
           type="button"
           variant="ghost"
@@ -81,7 +84,7 @@ export function ProviderTemplatePicker({
         >
           <ArrowLeftIcon className="size-4" aria-hidden="true" />
         </Button>
-        <h2 className="text-ui-lg font-semibold text-foreground">
+        <h2 className="text-ui-lg tracking-ink font-semibold text-foreground">
           {intl.formatMessage({ id: "settings.modelProvider.templatePickerTitle" })}
         </h2>
       </div>

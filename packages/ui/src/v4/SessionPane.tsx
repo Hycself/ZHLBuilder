@@ -1032,7 +1032,9 @@ export function SessionPane({
     useState<ChatViewSummaryPanelVariant | null>(null);
   const [terminalSectionOpen, setTerminalSectionOpen] = useState(false);
   const [agentSectionOpen, setAgentSectionOpen] = useState(false);
-  const [workflowSectionOpen, setWorkflowSectionOpen] = useState(false);
+  // 渐进披露：状态面板里工作流是主状态区，默认展开；终端与代理保持折叠，
+  // 首屏只多一块内容，其余按需展开。
+  const [workflowSectionOpen, setWorkflowSectionOpen] = useState(true);
   const [dropTargetController, setDropTargetController] =
     useState<ConversationDropTargetController | null>(null);
   const handleDropTargetControllerChange = useCallback(
@@ -4598,7 +4600,7 @@ export function SessionPane({
     >
       {effectiveDropTargetController?.active ? (
         <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-accent/55 backdrop-blur-sm">
-          <div className="flex items-center gap-2 rounded-full border border-border bg-accent px-4 py-2 text-ui-base text-foreground shadow-sm">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-accent px-4 py-2 text-ui-base text-foreground">
             <Hand className="size-4 text-foreground" />
             <span>
               {intl.formatMessage({
@@ -4711,7 +4713,7 @@ export function SessionPane({
           <div
             role="alert"
             data-testid="v4-subagent-readonly-error"
-            className="mx-4 mt-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-3 py-2 text-ui-base text-[var(--color-danger)]"
+            className="mx-4 mt-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-3 py-2 text-ui-base text-destructive"
           >
             {controlLastError.message}
           </div>

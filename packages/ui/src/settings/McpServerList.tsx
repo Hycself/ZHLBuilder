@@ -111,7 +111,7 @@ function McpServerItem({
       data-testid={testId(TID_MCP_SERVER_ROW, server.name)}
     >
       <div
-        className="relative flex size-9 shrink-0 items-center justify-center rounded-xl bg-background text-foreground-subtle"
+        className="relative flex size-9 shrink-0 items-center justify-center rounded-lg bg-background text-foreground-subtle"
         data-mcp-status-dot-placement="icon-corner"
       >
         <Cable className="size-4" aria-hidden="true" />
@@ -142,7 +142,7 @@ function McpServerItem({
           <Button
             variant="link"
             size="sm"
-            className="text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300"
+            className="text-foreground-subtle underline underline-offset-2 hover:text-foreground dark:text-foreground-subtle dark:hover:text-foreground"
             aria-label={openAuthorizationLabel}
             data-testid={testId(TID_MCP_OPEN_AUTHORIZATION_BUTTON, server.name)}
             title={openAuthorizationLabel}
@@ -188,7 +188,7 @@ export function McpServerList({
 
   if (servers.length === 0) {
     return (
-      <div className="overflow-hidden rounded-xl border border-dashed border-border">
+      <div className="overflow-hidden rounded-lg border border-dashed border-border">
         <div className="flex flex-col items-center justify-center gap-3 px-4 py-10 text-center">
           <div className="space-y-1">
             <div className="text-ui-base font-medium text-foreground">{emptyTitle}</div>

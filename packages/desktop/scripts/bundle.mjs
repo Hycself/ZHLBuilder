@@ -117,6 +117,19 @@ const requiredRuntimeModules = [
   "asn1",
   "bcrypt-pbkdf",
   "tweetnacl",
+  // 与 electron-builder.config.js 的注入名单保持同一口径（注入即校验）：
+  // qrcode 是 main 启动图顶层 require 的运行时依赖（Windows 曾因漏拷启动即崩）；
+  // 其余为同类硬化项，防止坏包流出。
+  "qrcode",
+  "dijkstrajs",
+  "yaml",
+  "semver",
+  "ws",
+  "@arms/rum-electron",
+  "@opentelemetry/api",
+  "@opentelemetry/resources",
+  "electron-updater",
+  "ssh2",
 ];
 const electronBuilderRetryCount = 3;
 const electronBuilderRetryDelayMs = 5_000;

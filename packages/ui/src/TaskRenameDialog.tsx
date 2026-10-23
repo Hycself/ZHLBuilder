@@ -37,7 +37,7 @@ export function TaskRenameDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl overflow-hidden rounded-2xl p-0">
+      <DialogContent className="max-w-xl overflow-hidden rounded-lg p-0">
         <div className="flex min-w-0 flex-col gap-6 p-6">
           <DialogHeader className="space-y-2">
             <DialogTitle>{intl.formatMessage({ id: "taskList.rename" })}</DialogTitle>

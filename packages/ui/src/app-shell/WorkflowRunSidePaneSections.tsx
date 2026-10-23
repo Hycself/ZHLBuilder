@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- 状态头与终态区同属一个展示域；终态区新增「完成结果」折叠摘要行后贴近 400 行门，拆分会打散同域分支，先收口。 */
 // ============================================================
 // WorkflowRunSidePane 的分区子组件（状态头 / 终态结果区）
 // ============================================================
@@ -6,9 +7,10 @@
 // 投影、lease 或命令通道。
 
 import { workflowRunStopReasonMessageId } from "@/components/workflow-graph/run-status-presentation.js";
-import { memo, type ReactNode } from "react";
+import { memo, useState, type ReactNode } from "react";
 import {
   ArrowUpRightIcon,
+  ChevronRightIcon,
   ListIcon,
   RotateCcwIcon,
   SlidersHorizontalIcon,
@@ -16,6 +18,7 @@ import {
 } from "lucide-react";
 import type { WorkflowRunState, WorkflowRunUsage } from "@zhlbuilder/shared/zcode-protocol-v4";
 import { Button } from "@/components/ui/button.js";
+import { cn } from "@/components/lib/utils.js";
 import { ControlHintTooltip } from "@/ControlHintTooltip.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import type { workflowRunResultView } from "@/app-shell/workflowRunPanel.js";
@@ -360,6 +363,8 @@ export const WorkflowRunResultSections = memo(function WorkflowRunResultSections
   result: ReturnType<typeof workflowRunResultView>;
 }) {
   const { intl } = useZCodeIntl();
+  // 渐进披露：完成结果（脚本顶层返回值的长文本）默认折叠成标题摘要行。
+  const [resultExpanded, setResultExpanded] = useState(false);
 
   return (
     <>
@@ -384,18 +389,32 @@ export const WorkflowRunResultSections = memo(function WorkflowRunResultSections
           className="shrink-0 border-b border-border px-4 py-3"
           data-testid="workflow-run-result"
         >
-          <div className="text-ui-xs font-medium text-foreground-subtle">
+          <button
+            aria-expanded={resultExpanded}
+            className="flex w-full items-center gap-2 rounded-sm text-left text-ui-xs font-medium text-foreground-subtle outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
+            onClick={() => setResultExpanded((value) => !value)}
+            type="button"
+          >
             {intl.formatMessage({ id: "chat.toolCall.workflow.run.result.title" })}
-          </div>
-          {result.preview === undefined ? (
-            <p className="mt-1 text-ui-base text-foreground-subtle">
-              {intl.formatMessage({ id: "chat.toolCall.workflow.run.result.completedHint" })}
-            </p>
-          ) : (
-            <pre className="mt-1 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-ui-xs text-foreground">
-              {result.preview}
-            </pre>
-          )}
+            <ChevronRightIcon
+              aria-hidden
+              className={cn(
+                "ml-auto size-3.5 shrink-0 text-foreground-subtlest transition-transform",
+                resultExpanded && "rotate-90",
+              )}
+            />
+          </button>
+          {resultExpanded ? (
+            result.preview === undefined ? (
+              <p className="mt-1 text-ui-base text-foreground-subtle">
+                {intl.formatMessage({ id: "chat.toolCall.workflow.run.result.completedHint" })}
+              </p>
+            ) : (
+              <pre className="mt-1 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-ui-xs text-foreground">
+                {result.preview}
+              </pre>
+            )
+          ) : null}
         </div>
       ) : null}
 

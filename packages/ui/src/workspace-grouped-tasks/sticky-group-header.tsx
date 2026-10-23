@@ -99,7 +99,7 @@ export function StickyGroupHeader({
             tabIndex={0}
             aria-expanded={!collapsed}
             className={cn(
-              "flex h-8 items-center gap-1 rounded-lg border border-border bg-background pl-1.5 pr-1 text-ui-base text-foreground shadow-sm",
+              "flex h-8 items-center gap-1 rounded-lg border border-border bg-background pl-1.5 pr-1 text-ui-base text-foreground",
               "cursor-pointer transition-[border-color,box-shadow] hover:border-border-hover",
             )}
             onClick={handleToggle}
@@ -166,7 +166,7 @@ export function StickyGroupHeader({
                 />
               )}
             </div>
-            <span className="inline-flex min-w-5 shrink-0 items-center justify-center rounded-full bg-tag/50 px-1.5 py-0.5 text-ui-sm font-medium leading-none text-foreground-subtle">
+            <span className="inline-flex min-w-5 shrink-0 items-center justify-center rounded-md bg-tag/50 px-1.5 py-0.5 text-ui-sm font-medium leading-none text-foreground-subtle">
               {taskCount}
             </span>
             {newTaskAction}

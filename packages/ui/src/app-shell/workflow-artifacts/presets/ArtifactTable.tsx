@@ -109,7 +109,7 @@ export const ArtifactTable = memo(function ArtifactTable({
               // 于是只有**新行**会播揭示动画，既有行原地更新不闪。
               <tr
                 className={cn(
-                  "border-b border-border/60 last:border-b-0 hover:bg-hover",
+                  "border-b border-border last:border-b-0 hover:bg-hover",
                   REVEAL_ANIMATION_CLASS,
                 )}
                 data-testid="artifact-table-row"

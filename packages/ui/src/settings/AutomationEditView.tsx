@@ -294,7 +294,7 @@ function TimeOfDayPicker({
         <button
           type="button"
           aria-label={ariaLabel}
-          className="inline-flex h-auto items-center gap-1 rounded-full bg-hover py-px pl-2 pr-1.5 text-ui-base leading-5 tabular-nums text-foreground transition-colors hover:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
+          className="inline-flex h-auto items-center gap-1 rounded-md bg-hover py-px pl-2 pr-1.5 text-ui-base leading-5 tabular-nums text-foreground transition-colors hover:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
         >
           {pad2(hour)}:{pad2(minute)}
           <span className="shrink-0 text-foreground-subtle">
@@ -390,7 +390,7 @@ function MonthDayPicker({
           aria-label={intl.formatMessage({
             id: "automations.form.schedule.yearDateLabel",
           })}
-          className="inline-flex h-auto items-center gap-1 rounded-full bg-hover py-px pl-2 pr-1.5 text-ui-base leading-5 tabular-nums text-foreground transition-colors hover:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
+          className="inline-flex h-auto items-center gap-1 rounded-md bg-hover py-px pl-2 pr-1.5 text-ui-base leading-5 tabular-nums text-foreground transition-colors hover:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
         >
           {intl.formatMessage(
             { id: "automations.form.schedule.monthDayValue" },
@@ -449,7 +449,7 @@ function WeekdayPicker({
             id: "automations.form.schedule.weekdaysLabel",
           })}
           // 星期多选 trigger 与同层频率、时间 tag 使用相同高亮，避免亮度不一致。
-          className="inline-flex h-auto max-w-full items-center gap-0.5 rounded-full bg-hover py-px pl-2 pr-0.5 text-ui-base leading-5 text-foreground transition-colors hover:bg-selected data-[state=open]:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
+          className="inline-flex h-auto max-w-full items-center gap-0.5 rounded-md bg-hover py-px pl-2 pr-0.5 text-ui-base leading-5 text-foreground transition-colors hover:bg-selected data-[state=open]:bg-selected focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-input-border-focused"
         >
           <span className="truncate">{label}</span>
           <AutomationChevronDownIcon />
@@ -981,10 +981,10 @@ function CustomRepeatDialog({
                   <span
                     className={cn(
                       "flex size-4 items-center justify-center rounded-full border-[1.33px]",
-                      !ends ? "border-[#4099FF] bg-[#4099FF]" : "border-border",
+                      !ends ? "border-primary bg-primary" : "border-border",
                     )}
                   >
-                    {!ends ? <span className="size-1.5 rounded-full bg-white" /> : null}
+                    {!ends ? <span className="size-1.5 rounded-full bg-primary-foreground" /> : null}
                   </span>
                 </span>
                 {intl.formatMessage({
@@ -1000,10 +1000,10 @@ function CustomRepeatDialog({
                   <span
                     className={cn(
                       "flex size-4 items-center justify-center rounded-full border-[1.33px]",
-                      ends ? "border-[#4099FF] bg-[#4099FF]" : "border-border",
+                      ends ? "border-primary bg-primary" : "border-border",
                     )}
                   >
-                    {ends ? <span className="size-1.5 rounded-full bg-white" /> : null}
+                    {ends ? <span className="size-1.5 rounded-full bg-primary-foreground" /> : null}
                   </span>
                 </span>
                 {intl.formatMessage({
@@ -2135,7 +2135,7 @@ export function AutomationEditView({
                 aria-invalid={validationErrors.has("title") && !title.trim()}
                 maxLength={200}
                 className={cn(
-                  "h-9 rounded-xl bg-input px-3 text-foreground",
+                  "h-9 rounded-lg bg-input px-3 text-foreground",
                   AUTOMATION_FORM_INPUT_TYPOGRAPHY_CLASSNAME,
                 )}
               />
@@ -2151,7 +2151,7 @@ export function AutomationEditView({
                 </label>
                 <div
                   data-testid={TID_AUTOMATION_SCHEDULE_PREVIEW}
-                  className="relative flex h-9 items-center overflow-hidden rounded-xl border border-input-border bg-input px-2 pr-9 text-ui-base leading-5 text-foreground-subtle transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused"
+                  className="relative flex h-9 items-center overflow-hidden rounded-lg border border-input-border bg-input px-2 pr-9 text-ui-base leading-5 text-foreground-subtle transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused"
                 >
                   <span className="min-w-0 truncate">
                     {intl.formatMessage({ id: "automations.frequency.custom" })}
@@ -2182,7 +2182,7 @@ export function AutomationEditView({
                         data-testid={TID_AUTOMATION_SCHEDULE_ADD}
                         aria-invalid={scheduleRemoved && validationErrors.has("schedule")}
                         className={cn(
-                          "flex h-9 w-full items-center gap-1 rounded-xl border bg-input px-2 text-ui-base font-normal leading-5 text-foreground-subtle transition-colors hover:border-input-border-hover hover:text-foreground focus-visible:border-input-border-focused focus-visible:bg-input-focused data-[state=open]:border-input-border-focused data-[state=open]:bg-input-focused data-[state=open]:text-foreground",
+                          "flex h-9 w-full items-center gap-1 rounded-lg border bg-input px-2 text-ui-base font-normal leading-5 text-foreground-subtle transition-colors hover:border-input-border-hover hover:text-foreground focus-visible:border-input-border-focused focus-visible:bg-input-focused data-[state=open]:border-input-border-focused data-[state=open]:bg-input-focused data-[state=open]:text-foreground",
                           validationErrors.has("schedule")
                             ? "!border-destructive !ring-2 !ring-destructive/20"
                             : "border-input-border",
@@ -2230,7 +2230,7 @@ export function AutomationEditView({
                     {/* 调度栏不用 min-height、换行布局和全行摘要——那些会在新增 tag 后被第二行撑高。
                         恢复全局 Input 的 1px 描边后，用 7px 左内边距抵消边框占位，保持首个 tag
                         距外边缘仍为 8px；tag 增加上下各 1px padding 后仍在 36px input 内垂直居中。 */}
-                    <div className="relative flex h-9 flex-nowrap items-center gap-1 overflow-hidden rounded-xl border border-input-border bg-input py-1 pl-[7px] pr-9 text-ui-base leading-5 text-foreground transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused">
+                    <div className="relative flex h-9 flex-nowrap items-center gap-1 overflow-hidden rounded-lg border border-input-border bg-input py-1 pl-[7px] pr-9 text-ui-base leading-5 text-foreground transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused">
                       <Select
                         value={builder.frequency}
                         onValueChange={(value) => {

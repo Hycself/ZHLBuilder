@@ -232,7 +232,7 @@ export function ShortcutSettingsSection({ isDesktop = false }: { isDesktop?: boo
         }
       />
 
-      <div className="overflow-hidden rounded-xl border border-border">
+      <div className="overflow-hidden rounded-lg border border-border">
         <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_80px_72px] bg-surface px-4 py-3 text-ui-sm text-foreground-subtle">
           <span>{intl.formatMessage({ id: "settings.shortcuts.columnHeaderCommand" })}</span>
           <span>{intl.formatMessage({ id: "settings.shortcuts.columnHeaderBinding" })}</span>

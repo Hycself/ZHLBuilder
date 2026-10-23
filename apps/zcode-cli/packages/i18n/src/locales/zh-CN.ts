@@ -7,16 +7,17 @@ export const zhCN: ZCodeCopy = {
       localeUnsupported: (value) =>
         `不支持的 --locale 值：${value}。支持的语言：en-US、zh-CN、auto。`,
     },
-    help: (version) => `zcode ${version}
+    help: (version) => `zhlbuilder ${version}
 
 用法:
   zhlbuilder [command] [options]
 
-不传 command 时，zcode 会打开全屏 TUI。
+不传 command 时，zhlbuilder 会打开全屏 TUI。
 
 命令:
   app-server 运行 ZHLBuilder Protocol stdio app server
   commands   列出自定义 slash commands（\`commands list\`）
+  device     作为受控设备连到 ZHL 中枢（\`device pair|start|status\`），手机端据此远程下发任务
   doctor     检查运行时和打包假设
   login [zai|bigmodel]  通过浏览器授权登录
   logout     删除共享的 Z.AI 登录凭据
@@ -43,6 +44,7 @@ export const zhCN: ZCodeCopy = {
   --force-mcs      对 Anthropic provider 强制启用 mid-conversation system 投影
   --locale <locale>  UI 语言：en-US、zh-CN 或 auto
   --mode <mode>    prompt 权限模式：build、edit、plan 或 yolo（--prompt 默认 yolo）
+  --model <provider/model>  本次运行改用指定模型，可带 $reasoningLevel；不写回默认模型配置（仅限 --prompt/--target）
   --resume <sessionId>  按 sessionId 恢复持久化 session（sess_...）
   --target <text>  在 headless 模式运行或设置 session goal
   --target-replace 替换 --target 已存在的 goal

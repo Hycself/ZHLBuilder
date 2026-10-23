@@ -89,7 +89,7 @@ export function resolveModelLabel(
 
 export function UsageEmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-border px-4 py-10 text-center">
+    <div className="rounded-lg border border-dashed border-border px-4 py-10 text-center">
       <div className="text-ui-base font-medium text-foreground">{title}</div>
       <div className="mt-2 text-ui-base text-foreground-subtle">{description}</div>
     </div>

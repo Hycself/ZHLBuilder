@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "@/components/ui/toast.js";
 
 /**
  * ZHL 账号身份（桌面端）。
@@ -14,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 interface ZhlGateBridge {
   identity: () => Promise<{ username?: string; loggedIn?: boolean; skipped?: boolean }>;
   login: () => Promise<{ ok?: boolean; username?: string; reason?: string }>;
+  logout?: () => Promise<{ ok?: boolean }>;
 }
 
 function getBridge(): ZhlGateBridge | null {
@@ -26,8 +28,12 @@ export interface ZhlIdentityState {
   loggedIn: boolean;
   username: string;
   busy: boolean;
+  /** 宿主是否真的挂了登出入口；只有 available 是不够的 */
+  canLogout: boolean;
   refresh: () => Promise<void>;
   login: () => Promise<boolean>;
+  /** 宿主未提供登出桥时返回 false，调用方据此隐藏菜单项 */
+  logout: () => Promise<boolean>;
 }
 
 export function useZhlIdentity(): ZhlIdentityState {
@@ -35,14 +41,17 @@ export function useZhlIdentity(): ZhlIdentityState {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
+  const [canLogout, setCanLogout] = useState(false);
 
   const refresh = useCallback(async () => {
     const bridge = getBridge();
     if (!bridge) {
       setAvailable(false);
+      setCanLogout(false);
       return;
     }
     setAvailable(true);
+    setCanLogout(typeof bridge.logout === "function");
     try {
       const res = await bridge.identity();
       setLoggedIn(Boolean(res?.loggedIn));
@@ -71,10 +80,31 @@ export function useZhlIdentity(): ZhlIdentityState {
       const res = await bridge.login();
       await refresh();
       return Boolean(res?.ok);
+    } catch {
+      // IPC 失败和用户跳过不是一回事。之前只有 try/finally 没有 catch，reject 直接
+      // 变成未处理拒绝，调用方拿的还是 undefined——用户点了登录，界面无任何反馈。
+      toast("登录失败，请稍后重试");
+      return false;
     } finally {
       setBusy(false);
     }
   }, [refresh]);
 
-  return { available, loggedIn, username, busy, refresh, login };
+  const logout = useCallback(async () => {
+    const bridge = getBridge();
+    if (!bridge?.logout) return false;
+    setBusy(true);
+    try {
+      await bridge.logout();
+      await refresh();
+      return true;
+    } catch {
+      toast("登出失败，请稍后重试");
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }, [refresh]);
+
+  return { available, loggedIn, username, busy, canLogout, refresh, login, logout };
 }

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines -- 插件商店容器统一编排列表/详情、市场源对话框、卸载确认、试用跳转与技能刷新收尾，集中维护保证交互一致。 */
+import { ContentPageHeader, ContentPageShell } from "@/next-shell/ContentPageScaffold.js";
 import { PluginAddMenu } from "@/settings/PluginAddMenu.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw, Settings } from "lucide-react";
@@ -384,7 +385,12 @@ export function PluginStorePage({
   const detailUpdatePending = canUpdatePluginItem(detailItem);
 
   return (
-    <div ref={rootRef} className="space-y-5" data-testid="plugin-store-root" data-view={view}>
+    <ContentPageShell
+      testId="plugin-store-root"
+      dataAttrs={{ "data-view": view }}
+      className="gap-5"
+    >
+      <div ref={rootRef} className="contents">
       <SettingsBreadcrumbReporter
         items={
           view === "detail" && detailItem
@@ -394,70 +400,64 @@ export function PluginStorePage({
         onSectionSelect={backToStore}
       />
       {view === "store" ? (
-        <h1
-          data-testid="plugin-store-title"
-          className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl"
-        >
-          {intl.formatMessage({ id: "workspace.openPluginsSettings" })}
-        </h1>
-      ) : null}
-      {view === "store" ? (
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <p className="min-w-0 flex-1 text-ui-base leading-6 text-foreground-subtle">
-            {intl.formatMessage({ id: "settings.plugins.store.subtitle" })}
-          </p>
-          {/* 顶栏动作：刷新 / 市场源管理（齿轮）/ 新建市场源。 */}
-          <div className="flex shrink-0 items-center gap-2">
-            <ControlHintTooltip
-              title={
-                refreshing
-                  ? intl.formatMessage({ id: "settings.plugins.refreshing" })
-                  : intl.formatMessage({ id: "settings.plugins.refresh" })
-              }
-            >
-              <Button
-                type="button"
-                data-testid="plugin-store-refresh"
-                variant="outline"
-                size="icon-lg"
-                aria-label={
+        <ContentPageHeader
+          titleTestId="plugin-store-title"
+          title={intl.formatMessage({ id: "workspace.openPluginsSettings" })}
+          description={intl.formatMessage({ id: "settings.plugins.store.subtitle" })}
+          actions={
+            /* 顶栏动作：刷新 / 市场源管理（齿轮）/ 新建市场源。只有「添加」是主按钮。 */
+            <>
+              <ControlHintTooltip
+                title={
                   refreshing
                     ? intl.formatMessage({ id: "settings.plugins.refreshing" })
                     : intl.formatMessage({ id: "settings.plugins.refresh" })
                 }
-                onClick={() => void handleRefresh()}
-                disabled={refreshing}
               >
-                <RefreshCw
-                  className={refreshing ? "size-3.5 animate-spin" : "size-3.5"}
-                  aria-hidden="true"
-                />
-              </Button>
-            </ControlHintTooltip>
-            <ControlHintTooltip
-              title={intl.formatMessage({ id: "settings.plugins.store.sources.title" })}
-            >
-              <Button
-                type="button"
-                data-testid="plugin-store-sources-open"
-                variant="outline"
-                size="icon-lg"
-                aria-label={intl.formatMessage({ id: "settings.plugins.store.sources.title" })}
-                onClick={() => setSourcesOpen(true)}
+                <Button
+                  type="button"
+                  data-testid="plugin-store-refresh"
+                  variant="ghost"
+                  size="icon-lg"
+                  aria-label={
+                    refreshing
+                      ? intl.formatMessage({ id: "settings.plugins.refreshing" })
+                      : intl.formatMessage({ id: "settings.plugins.refresh" })
+                  }
+                  onClick={() => void handleRefresh()}
+                  disabled={refreshing}
+                >
+                  <RefreshCw
+                    className={refreshing ? "size-3.5 animate-spin" : "size-3.5"}
+                    aria-hidden="true"
+                  />
+                </Button>
+              </ControlHintTooltip>
+              <ControlHintTooltip
+                title={intl.formatMessage({ id: "settings.plugins.store.sources.title" })}
               >
-                <Settings className="size-3.5" aria-hidden="true" />
-              </Button>
-            </ControlHintTooltip>
-            <PluginAddMenu
-              testId="plugin-store-create"
-              onCreateTask={onCreateTask}
-              onAddMarketplace={() => {
-                setAddMarketplaceError(null);
-                setAddSourceOpen(true);
-              }}
-            />
-          </div>
-        </div>
+                <Button
+                  type="button"
+                  data-testid="plugin-store-sources-open"
+                  variant="ghost"
+                  size="icon-lg"
+                  aria-label={intl.formatMessage({ id: "settings.plugins.store.sources.title" })}
+                  onClick={() => setSourcesOpen(true)}
+                >
+                  <Settings className="size-3.5" aria-hidden="true" />
+                </Button>
+              </ControlHintTooltip>
+              <PluginAddMenu
+                testId="plugin-store-create"
+                onCreateTask={onCreateTask}
+                onAddMarketplace={() => {
+                  setAddMarketplaceError(null);
+                  setAddSourceOpen(true);
+                }}
+              />
+            </>
+          }
+        />
       ) : null}
 
       {error && !addSourceOpen ? (
@@ -488,7 +488,7 @@ export function PluginStorePage({
             detailItem.info ? (
               <div className="space-y-4">
                 {detailUpdatePending ? (
-                  <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2">
+                  <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2">
                     <div className="min-w-0">
                       <p className="text-ui-base font-medium text-foreground">
                         {detailItem.installedMeta?.updateStatus === "update-available"
@@ -587,6 +587,7 @@ export function PluginStorePage({
         operationId={operationId}
         error={addMarketplaceError}
       />
-    </div>
+      </div>
+    </ContentPageShell>
   );
 }

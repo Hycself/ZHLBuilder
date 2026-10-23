@@ -35,9 +35,16 @@ export type GlobalOptions = {
   force: boolean;
   json: boolean;
   locale?: GlobalLocale;
+  /**
+   * 本次运行的模型选择，字符串边界为 "providerId/modelId[$reasoningLevel]"。
+   * 只影响本次运行（runtimeConfig.modelSelection），不写回配置文件的默认值。
+   */
+  model?: string;
   memoryBench?: boolean;
   noColor: boolean;
   outputFormat?: GlobalOutputFormat;
+  /** 中枢地址覆盖（device 子命令用）。之前 arguments.ts 认识 --server，但这里没有对应字段，globalOptions 也不填，于是 device 的 --server 恒为 undefined，帮助里承诺的参数是假的。 */
+  server?: string;
   verbose: boolean;
 };
 

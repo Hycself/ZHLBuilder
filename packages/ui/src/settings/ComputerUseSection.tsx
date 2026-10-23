@@ -1,12 +1,13 @@
 /* eslint-disable max-lines -- CUA 设置页同时编排插件总开关、双权限状态与授权返回恢复链；后续单独拆分组件。 */
 // 设置页「电脑控制 (Computer Use)」分区：
 //  - 顶部一个总开关：开/关 zcode-cua 插件（连带其 MCP server 与 skill 一起启用/禁用）。
-//  - macOS 下再展示 Accessibility / Screen Recording 两个权限行（含授权引导与 stale 恢复链）。
-// UI 复用 SettingsGroupCard / SettingsRow / SettingsBadge / Switch，与其它设置分区保持一致。
+//  - 就绪检查表（自研重写 v2 · C1，见 next-cua/CuaReadinessChecklist）：总状态一行 + 检查项
+//    （系统版本 / 辅助功能 / 录屏，macOS 本机），一键直达与重启回执的门控都与旧行相同。
+//  - 次级的输入框常驻入口开关默认折叠。
 //
 // Helper 权限状态走 useCuaPermissionStatus：事件驱动（进入页面 / 窗口重获焦点 / 显式 refresh）
 // 各查一次，不再定时轮询；状态存在共享缓存里，与输入框常驻入口读同一份。
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSettings } from "@/hooks/useSettingService.js";
 import type { CuaOsSupport, CuaPermissionKind, RemoteTarget } from "@zhlbuilder/shared";
 import {
@@ -15,9 +16,9 @@ import {
   ZCODE_CUA_OFFICIAL_PLUGIN_ID,
 } from "@zhlbuilder/shared";
 import { isCuaPermissionStatusAvailable, type CuaPermissionRestartOptions } from "@zhlbuilder/services";
-import { Button } from "@/components/ui/button.js";
 import { toast } from "@/components/ui/toast.js";
 import { Switch } from "@/components/ui/switch.js";
+import { cn } from "@/components/lib/utils.js";
 import { usePlatform } from "@/hooks/usePlatform.js";
 import { useServices } from "@/hooks/useServices.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
@@ -33,18 +34,19 @@ import {
   type CuaPermissionReturnRecoveryClaim,
 } from "@/lib/cuaPermissionAction.js";
 import { usePluginManagementStore } from "@/store/pluginManagementStore.js";
-import { SettingsBadge, SettingsGroupCard, SettingsRow } from "@/settings/SettingsPageParts.js";
-import { StatusDot, type StatusDotTone } from "@/settings/StatusDot.js";
+import { SettingsGroupCard, SettingsRow } from "@/settings/SettingsPageParts.js";
 import { supportsLocalMacCuaPermissionOnboarding } from "@/lib/cuaPlatform.js";
 import { runAfterSuccessfulPluginEnabledChange } from "@/settings/pluginEnabledChange.js";
 import { createCuaPermissionOnboardingOperationId } from "@/lib/cuaPermissionOnboardingOperation.js";
 import { waitForAccessibilityNotStale } from "@/settings/cuaPermissionRestartVerify.js";
 import { requiredCuaPermissionsForFreshStatus } from "@/settings/cuaPermissionPreparation.js";
-import { ExternalLink } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
+import { resolveComputerUseAvailability } from "@/settings/computerUseAvailability.js";
 import {
-  isComputerUseRemoteOrLinux,
-  resolveComputerUseAvailability,
-} from "@/settings/computerUseAvailability.js";
+  CuaReadinessChecklist,
+  type CuaReadinessPermissionItem,
+  type CuaSupportKind,
+} from "@/next-cua/CuaReadinessChecklist.js";
 
 interface ComputerUseSectionProps {
   isDesktop?: boolean;
@@ -521,93 +523,68 @@ export function ComputerUseSection({
     if (availableStatus?.accessibility === "granted") setVerifyTimedOut(false);
   }, [availableStatus?.accessibility]);
 
-  const renderGrantDetail = (kind: CuaPermissionKind, labelId: string): ReactNode => {
-    if (typeof platform.openCuaPermissionOnboarding !== "function") return null;
+  // 检查表的两项系统授权（macOS 本机）：状态、一键直达、重启回执的门控与旧行逐条相同
+  // （直达要 openCuaPermissionOnboarding；重启要有 workspace 路径 —— 没有它 Helper 无从重启）。
+  const restartPathAvailable = typeof path === "string" && path.length > 0;
+  const permissionItems: CuaReadinessPermissionItem[] =
+    supportsLocalMacWorkspace && !macOsBelowCuaFloor
+      ? [
+          {
+            kind: "accessibility",
+            labelId: "cuaPermission.perm.accessibility",
+            purposeId: "cuaPermission.perm.accessibility.purpose",
+            state: availableStatus?.accessibility,
+            grantLabelId: "chat.cuaPermission.openAccessibility",
+            ...(typeof platform.openCuaPermissionOnboarding === "function"
+              ? { onGrant: () => void openPermissionSettings("accessibility") }
+              : {}),
+            onRestart: onManualRestart,
+            restarting,
+            restartDisabled: !restartPathAvailable,
+            onRelaunchApp: () => void onRelaunchApp(),
+            verifyTimedOut,
+          },
+          {
+            kind: "screen_recording",
+            labelId: "cuaPermission.perm.screenRecording",
+            purposeId: "cuaPermission.perm.screenRecording.purpose",
+            state: availableStatus?.screenRecording,
+            grantLabelId: "chat.cuaPermission.openScreenRecording",
+            ...(typeof platform.openCuaPermissionOnboarding === "function"
+              ? { onGrant: () => void openPermissionSettings("screen_recording") }
+              : {}),
+          },
+        ]
+      : [];
+  const supportKind: CuaSupportKind = supportsLocalMacWorkspace
+    ? "local-macos"
+    : supportsLocalWindowsWorkspace
+      ? "local-windows"
+      : availability.kind === "local-linux"
+        ? "local-linux"
+        : availability.kind === "web"
+          ? "web"
+          : "remote";
+  const osFloor =
+    macOsBelowCuaFloor === true
+      ? {
+          minimum: osSupport?.minimumMacOs ?? "12.0",
+          current: osSupport?.currentMacOs ?? "12 以下",
+        }
+      : undefined;
+
+  if (!supportsComputerUseSettings) {
+    // 远端 / Linux / Web 环境若直接 return null，设置页只剩标题，会让用户误以为页面加载失败。
+    // 检查表退成总状态一行（不可用 + 一句为什么），且不渲染任何会触发本地 CUA 写操作的控件。
     return (
-      <Button
-        type="button"
-        variant="link"
-        size="sm"
-        className="text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300"
-        aria-label={intl.formatMessage({ id: labelId })}
-        title={intl.formatMessage({ id: labelId })}
-        disabled={!settled}
-        onClick={() => void openPermissionSettings(kind)}
-      >
-        <ExternalLink className="size-4" aria-hidden="true" />
-        <span className="hidden sm:inline">
-          {intl.formatMessage({
-            id: settled ? labelId : "cuaPermission.status.verifying",
-          })}
-        </span>
-      </Button>
+      <CuaReadinessChecklist
+        enabled={false}
+        permissions={[]}
+        settled={settled}
+        supportKind={supportKind}
+      />
     );
-  };
-
-  // 权限状态 → { 圆点颜色 tone, 文案 text }，保证圆点与文案同源（granted 绿/stale 黄/denied 红/unknown 灰）。
-  // TCC=granted 即稳定显示 granted（绿）；功能探针（functionalProbeOk）只用于 runtime 就绪判断，
-  // 不再让它在每次轮询时把显示态翻成 "verifying"（否则会 granted↔verifying 反复横跳）。
-  const statusView = (
-    state: "granted" | "stale" | "denied" | "unknown" | undefined,
-  ): { tone: StatusDotTone; text: string } => {
-    if (state === "granted") {
-      return {
-        tone: "green",
-        text: intl.formatMessage({ id: "cuaPermission.status.granted" }),
-      };
-    }
-    if (state === "stale") {
-      // 仅兼容旧 Helper：可能是进程 lag，也可能是旧 ad-hoc CDHash 行，UI 同时提供重启与重新授权。
-      return {
-        tone: "amber",
-        text: intl.formatMessage({ id: "cuaPermission.status.stale" }),
-      };
-    }
-    if (state === "denied") {
-      return {
-        tone: "red",
-        text: intl.formatMessage({ id: "cuaPermission.status.missing" }),
-      };
-    }
-    return {
-      tone: "muted",
-      text: intl.formatMessage({ id: "cuaPermission.status.unknown" }),
-    };
-  };
-
-  // 旧 Helper 的 stale 可能来自进程缓存，也可能来自旧 ad-hoc CDHash；先重启并验证，仍失败时同时
-  // 保留重新授权入口与“重启 ZCode”兜底，避免把不可由单次 Helper 重启修复的状态误导成已解决。
-  const renderRestartDetail = (): ReactNode => (
-    <div className="flex flex-col items-start gap-2">
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        disabled={restarting || !path}
-        onClick={onManualRestart}
-      >
-        {restarting
-          ? intl.formatMessage({ id: "cuaPermission.modal.restarting" })
-          : intl.formatMessage({ id: "cuaPermission.modal.restartButton" })}
-      </Button>
-      {verifyTimedOut && !restarting ? (
-        <div className="flex flex-col items-start gap-1">
-          <span className="text-xs text-foreground-subtlest">
-            {intl.formatMessage({ id: "cuaPermission.modal.relaunchAppHint" })}
-          </span>
-          <Button type="button" variant="ghost" size="sm" onClick={() => void onRelaunchApp()}>
-            {intl.formatMessage({
-              id: "cuaPermission.modal.relaunchAppButton",
-            })}
-          </Button>
-        </div>
-      ) : null}
-    </div>
-  );
-
-  // 两项权限的状态视图（圆点 tone + 文案），与圆点同源，避免文案/颜色不同步。
-  const acc = statusView(availableStatus?.accessibility);
-  const screenPerm = statusView(availableStatus?.screenRecording);
+  }
 
   // 输入框常驻入口的显隐。隐藏开关用 useSettings().update 写入
   // （直连 settingService 只落盘不刷新共享 snapshot，输入框按钮读不到新值）。
@@ -617,6 +594,8 @@ export function ComputerUseSection({
     null,
   );
   const [composerEntrySaving, setComposerEntrySaving] = useState(false);
+  // 次级块（输入框入口 + macOS 系统授权）默认折叠为摘要行，降低设置页信息密度。
+  const [advancedExpanded, setAdvancedExpanded] = useState(false);
   // 默认隐藏，与 useCuaComposerEntry 同口径：只有显式存过 false 才算展示。
   // 两处必须一致，否则设置页开关的显示状态会和输入框按钮的实际显隐对不上。
   const persistedComposerEntryHidden = appSettings?.computerUseComposerEntryHidden !== false;
@@ -651,59 +630,9 @@ export function ComputerUseSection({
     [intl, updateAppSettings],
   );
 
-  // 产品需求：denied（未授权）时右侧状态徽章本身可点击，
-  // 效果同「打开系统设置」授权按钮；granted/stale/unknown 保持纯展示。
-  const renderPermissionBadge = (
-    kind: CuaPermissionKind,
-    view: { tone: StatusDotTone; text: string },
-    state: "granted" | "stale" | "denied" | "unknown" | undefined,
-  ): ReactNode => {
-    const clickable = state === "denied";
-    const badge = (
-      <SettingsBadge>
-        <span className="inline-flex items-center gap-1.5">
-          <StatusDot tone={view.tone} />
-          {view.text}
-        </span>
-      </SettingsBadge>
-    );
-    if (!clickable) return badge;
-    return (
-      <button
-        type="button"
-        className="cursor-pointer rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label={view.text}
-        onClick={() => void openPermissionSettings(kind)}
-      >
-        {badge}
-      </button>
-    );
-  };
-
-  if (!supportsComputerUseSettings) {
-    // 远端 / Linux 环境若直接 return null，设置页只剩标题，会让用户误以为页面加载失败。
-    // 保留入口并明确能力边界，且不渲染任何会触发本地 CUA 写操作的控件。
-    return (
-      <div className="rounded-lg border border-warning/40 bg-warning/10 p-4 text-ui-base text-warning">
-        <p className="font-medium">
-          {intl.formatMessage({ id: "settings.computerUse.unsupported.title" })}
-        </p>
-        <p className="mt-1 text-ui-sm text-foreground-subtle">
-          {intl.formatMessage({
-            id: isComputerUseRemoteOrLinux(availability)
-              ? availability.kind === "local-linux"
-                ? "settings.computerUse.unsupported.linuxDescription"
-                : "settings.computerUse.unsupported.remoteDescription"
-              : "settings.computerUse.unsupported.remoteDescription",
-          })}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
-      {/* 总开关：开/关 zcode-cua 插件（同步其 MCP + skill） */}
+      {/* 总开关：开/关 zcode-cua 插件（同步其 MCP + skill）。常显，承载最高频信息。 */}
       <SettingsGroupCard>
         <SettingsRow
           label={intl.formatMessage({ id: "settings.computerUse.toggleLabel" })}
@@ -721,99 +650,69 @@ export function ComputerUseSection({
             />
           }
         />
-        {/* 输入框常驻入口的显隐开关：关闭是持久化 hidden 标记，
-            重启与版本更新都不会自愈。只管按钮渲不渲染，不影响插件启用态与进行中任务。
-            电脑控制关闭时按钮无论如何都不渲染（cuaComposerEntryState 的插件门），
-            此时把开关置灰并改文案说明前置条件——留一个可点却看不到效果的开关会被当成坏了。 */}
-        <SettingsRow
-          label={intl.formatMessage({ id: "settings.computerUse.composerEntry.label" })}
-          description={intl.formatMessage({
-            id: cuaEnabled
-              ? "settings.computerUse.composerEntry.description"
-              : "settings.computerUse.composerEntry.requiresEnabled",
-          })}
-          control={
-            <Switch
-              aria-label={intl.formatMessage({
-                id: "settings.computerUse.composerEntry.label",
-              })}
-              checked={composerEntryVisible}
-              disabled={composerEntrySaving || !cuaEnabled}
-              onCheckedChange={(checked) => void onToggleComposerEntry(checked)}
-            />
-          }
-        />
       </SettingsGroupCard>
 
-      {/* CUA 未启用时隐藏下方权限配置，只留总开关，避免一堆禁用项。 */}
-      {cuaEnabled && supportsLocalMacWorkspace ? (
-        <>
-          {/* macOS 版本低于 CUA Helper 承诺地板时，授权在低版本系统上无法完成
-              （Helper 被 LaunchServices -10825 拒启），整卡替换为升级提示。 */}
-          {macOsBelowCuaFloor ? (
-            <div className="rounded-lg border border-warning/40 bg-warning/10 p-3 text-sm text-warning">
-              <p className="font-medium">
-                {intl.formatMessage(
-                  { id: "cuaPermission.osFloorTitle" },
-                  {
-                    minimum: osSupport?.minimumMacOs ?? "12.0",
-                    current: osSupport?.currentMacOs ?? "12 以下",
-                  },
-                )}
-              </p>
-              <p>{intl.formatMessage({ id: "cuaPermission.osFloorDescription" })}</p>
-            </div>
-          ) : null}
-          {/* macOS 权限引导只保留在 Settings 内，CUA 操作与工具审批流不再自动弹权限 modal。 */}
-          {!macOsBelowCuaFloor ? (
-            <SettingsGroupCard>
-              <SettingsRow
-                controlLayout="wide"
-                label={intl.formatMessage({
-                  id: "cuaPermission.perm.accessibility",
+      {/* 就绪检查表（自研重写 v2 · C1）：总状态一行（可用 / 待授权 / 不可用）常显，
+          下挂检查项（系统版本 / 辅助功能 / 录屏）——每项 = 状态徽标 + 一键直达 + 重启回执，
+          说明展开显示。权限配置不再藏进折叠块：检查表本身就是密度控制。 */}
+      <CuaReadinessChecklist
+        enabled={cuaEnabled}
+        {...(osFloor === undefined ? {} : { osFloor })}
+        permissions={permissionItems}
+        settled={settled}
+        supportKind={supportKind}
+      />
+
+      {/* 次级块（输入框常驻入口）默认折叠为摘要行，点击展开后按需查看与操作；主开关保持常显。 */}
+      <SettingsGroupCard>
+        <button
+          aria-expanded={advancedExpanded}
+          aria-label={intl.formatMessage({
+            id: "settings.computerUse.advancedLabel",
+          })}
+          className="flex h-9 w-full items-center gap-2 px-3 text-left outline-none transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring/40"
+          onClick={() => setAdvancedExpanded((value) => !value)}
+          type="button"
+        >
+          <span className="min-w-0 shrink-0 truncate text-ui-base font-medium text-foreground">
+            {intl.formatMessage({ id: "settings.computerUse.advancedLabel" })}
+          </span>
+          <span className="min-w-0 truncate text-ui-sm text-foreground-subtle">
+            {intl.formatMessage({ id: "settings.computerUse.advancedHint" })}
+          </span>
+          <ChevronRightIcon
+            aria-hidden
+            className={cn(
+              "ml-auto size-3.5 shrink-0 text-foreground-subtlest transition-transform",
+              advancedExpanded && "rotate-90",
+            )}
+          />
+        </button>
+        {advancedExpanded ? (
+          // 输入框常驻入口的显隐开关：关闭是持久化 hidden 标记，重启与版本更新都不会自愈。只管
+          // 按钮渲不渲染，不影响插件启用态与进行中任务。电脑控制关闭时按钮无论如何都不渲染
+          // （cuaComposerEntryState 的插件门），此时把开关置灰并改文案说明前置条件——留一个可点却
+          // 看不到效果的开关会被当成坏了。
+          <SettingsRow
+            label={intl.formatMessage({ id: "settings.computerUse.composerEntry.label" })}
+            description={intl.formatMessage({
+              id: cuaEnabled
+                ? "settings.computerUse.composerEntry.description"
+                : "settings.computerUse.composerEntry.requiresEnabled",
+            })}
+            control={
+              <Switch
+                aria-label={intl.formatMessage({
+                  id: "settings.computerUse.composerEntry.label",
                 })}
-                description={intl.formatMessage({
-                  id: "cuaPermission.perm.accessibility.purpose",
-                })}
-                control={renderPermissionBadge(
-                  "accessibility",
-                  acc,
-                  availableStatus?.accessibility,
-                )}
-                detail={
-                  availableStatus?.accessibility === "granted"
-                    ? undefined
-                    : availableStatus?.accessibility === "stale"
-                      ? renderRestartDetail()
-                      : renderGrantDetail("accessibility", "chat.cuaPermission.openAccessibility")
-                }
+                checked={composerEntryVisible}
+                disabled={composerEntrySaving || !cuaEnabled}
+                onCheckedChange={(checked) => void onToggleComposerEntry(checked)}
               />
-              <SettingsRow
-                controlLayout="wide"
-                label={intl.formatMessage({
-                  id: "cuaPermission.perm.screenRecording",
-                })}
-                description={intl.formatMessage({
-                  id: "cuaPermission.perm.screenRecording.purpose",
-                })}
-                control={renderPermissionBadge(
-                  "screen_recording",
-                  screenPerm,
-                  availableStatus?.screenRecording,
-                )}
-                detail={
-                  availableStatus?.screenRecording === "granted"
-                    ? undefined
-                    : renderGrantDetail(
-                        "screen_recording",
-                        "chat.cuaPermission.openScreenRecording",
-                      )
-                }
-              />
-            </SettingsGroupCard>
-          ) : null}
-        </>
-      ) : null}
+            }
+          />
+        ) : null}
+      </SettingsGroupCard>
     </div>
   );
 }

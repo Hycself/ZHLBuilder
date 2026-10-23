@@ -1,5 +1,6 @@
 import { extname } from "node:path";
 import { formatJson, type PresentationSurface } from "@zhlbuilder/core";
+import { parseModelPickerValue, type ModelSelection } from "@zhlbuilder/shared/model-selection";
 import type { RunContext, GlobalOptions } from "@zhlbuilder/shared-types";
 import { loadBootstrapModule } from "./bootstrap-loader.js";
 import {
@@ -74,6 +75,21 @@ export const runPrompt = async (
   if (prompt.trim().length === 0) {
     ctx.stderr.write(`${EMPTY_PROMPT_ERROR}\n`);
     return 1;
+  }
+
+  // --model 是"本次运行的覆盖"，不写回 provider 配置：runtimeConfig.modelSelection 的
+  // 优先级高于 configuredDefaultModelSelection（bootstrap/app/runtime-config.ts 里那条
+  // if），而且 --resume 分支只有它能保住本轮的选择。放在任何运行时创建之前解析，
+  // 写错值的调用者要立刻拿到可用的错误，而不是事后静默用了另一个模型。
+  let modelSelection: ModelSelection | undefined;
+  if (options.model !== undefined) {
+    try {
+      modelSelection = parseModelPickerValue(options.model);
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      ctx.stderr.write(`--model 无法解析：${options.model}（${reason}）\n格式：providerId/modelId[$reasoningLevel]\n`);
+      return 1;
+    }
   }
 
   const slashCommand = parseSlashCommand(prompt);
@@ -227,6 +243,7 @@ export const runPrompt = async (
       resume: sessionId !== undefined,
       runtimeConfig: {
         ...(mode ? { mode } : {}),
+        ...(modelSelection ? { modelSelection } : {}),
         ...(toolDisallowlist ? { toolDisallowlist } : {}),
         ...(forceMcs ? { midConversationSystem: { mode: "force" as const } } : {}),
         // headless 按本次调用显式开关；不改 core 缺省值，保持 TUI 与 stdio 的既有策略。

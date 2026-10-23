@@ -152,6 +152,24 @@ const REQUIRED_ASAR_RUNTIME_MODULES = [
   // 已在线上触发安装包启动即报 Cannot find module 'ms'（Require stack: debug/src/common.js），
   // 自动更新链路直接崩。ms 是叶子包，显式注入即可让 debug 在 app.asar 内稳定解析。
   "ms",
+  // Bugfix(Windows 启动崩溃)：main 启动图顶层 import qrcode（zhlDeviceAgent.ts 的配对二维码），
+  // tsup 外置为运行时 require；electron-builder 的 pnpm 收集在部分机器上漏拷，用户装完启动即报
+  // Cannot find module 'qrcode'（本机 win 产物则漏了它的子依赖 dijkstrajs）。以 qrcode 为闭包根注入，
+  // 让递归依赖收集把 dijkstrajs 等一起带进 app.asar。
+  "qrcode",
+  "dijkstrajs",
+  // 同类硬化：out/main 外置但此前两名单皆无的运行时外部依赖，一次纳入注入，
+  // 不再以"用户装完才崩"的方式逐个暴露。
+  "yaml",
+  "semver",
+  "ws",
+  "@arms/rum-electron",
+  "@opentelemetry/api",
+  "@opentelemetry/resources",
+  "electron-updater",
+  "ssh2",
+  // 校验名单此前已要求本包、注入名单却缺席——补对称，避免两侧口径漂移。
+  "@babel/runtime",
 ];
 // pacman 依赖必须使用 Arch 官方仓库中的包名。electron-builder 的历史默认集合包含
 // 已移除的 libappindicator-gtk3/http-parser，且缺少 Electron 实际需要的运行库；显式

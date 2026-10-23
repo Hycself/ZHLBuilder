@@ -155,7 +155,7 @@ export function SubmitResultToolCallBlock(context: ToolCallBlockRenderContext) {
               </p>
             ) : (
               // 结构化载荷走 CodeBlock（尊重用户的代码字号设置），容器逐字照 mcp.tsx。
-              <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
+              <div className="max-h-72 overflow-auto rounded-lg border border-border bg-card">
                 <CodeBlock
                   appTheme={theme}
                   code={stringifyResult(normalizedResult)}

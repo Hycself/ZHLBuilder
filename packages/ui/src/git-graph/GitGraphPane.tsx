@@ -162,7 +162,7 @@ export function GitGraphPane({
               </div>
 
               <div
-                className="relative border-r border-border bg-background-alt/35"
+                className="relative border-r border-border bg-sidebar/35"
                 style={{ height: layout.height + layout.rowHeight }}
               >
                 <svg

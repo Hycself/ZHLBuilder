@@ -1,7 +1,7 @@
 import { BrowserWindow, app, safeStorage } from "electron";
 import { createHash, randomBytes } from "node:crypto";
 import { join } from "node:path";
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { net } from "electron";
 
 /**
@@ -19,8 +19,12 @@ const AUTHORIZE_URL = "https://dis.zhl.asia/#/oauth2/authorize";
 const TOKEN_URL = "https://dis.zhl.asia/api/oauth2/token";
 const USERINFO_URL = "https://dis.zhl.asia/api/oauth2/userinfo";
 const CLIENT_ID = "zhlbuilder-desktop";
+// 单独具名而不是取 LOOPBACK_PREFIXES[0]：base 开了 noUncheckedIndexedAccess，
+// 下标读出来是 string | undefined，而这三处都当 string 用（redirect_uri 必须与
+// 授权时完全一致），具名常量既没有类型噪音也不会让人误以为这里可能为空。
+const LOOPBACK_REDIRECT_URI = "http://127.0.0.1:8540/callback";
 const LOOPBACK_PREFIXES = [
-  "http://127.0.0.1:8540/callback",
+  LOOPBACK_REDIRECT_URI,
   "http://127.0.0.1:8541/callback",
   "http://127.0.0.1:8542/callback",
 ];
@@ -65,15 +69,44 @@ export function isZhlLoginSkipped(): boolean {
 }
 
 function persistIdentity(identity: ZhlIdentity): void {
-  const enc = safeStorage.isEncryptionAvailable()
-    ? safeStorage.encryptString(identity.accessToken).toString("base64")
-    : Buffer.from(identity.accessToken, "utf8").toString("base64");
+  // safeStorage 不可用时绝不退化成 base64 落盘：那不是加密，只是把访问令牌和
+  // refresh token 换成一种看起来像密文的写法留在 %APPDATA% 里。
+  // 之前正是这条退化路径让 loadZhlIdentity 下一次启动必然 decryptString 抛错，
+  // 令牌既没保护也没能用上，还白留在磁盘上。现在只在内存里持有，下次启动重新登录。
+  if (!safeStorage.isEncryptionAvailable()) {
+    cachedIdentity = identity;
+    console.warn("[zhl-gate] 系统安全存储不可用，令牌仅保留在本次进程内存中，不写盘");
+    return;
+  }
+  const enc = safeStorage.encryptString(identity.accessToken).toString("base64");
   writeFileSync(AUTH_FILE(), JSON.stringify({ username: identity.username, accessTokenEnc: enc, refreshToken: identity.refreshToken }, null, 2), "utf8");
   cachedIdentity = identity;
 }
 
 function persistSkipped(): void {
   writeFileSync(join(app.getPath("userData"), "zhl-gate.json"), JSON.stringify({ skipped: true }), "utf8");
+}
+
+/**
+ * 登出：清掉本地身份，并把"跳过登录门"的标记一起复位。
+ *
+ * 复位 skipped 是必须的——之前有人点过"跳过"，只删 token 的话下次启动仍然不进
+ * 登录门，用户会以为登出没生效。refreshToken 只在本地删除；服务端令牌的自然过期
+ * 由签派侧 OAuth 生命周期负责，本 fork 没有接吊销端点，这里不假装调用了它。
+ */
+export function clearZhlIdentity(): void {
+  try {
+    if (existsSync(AUTH_FILE())) rmSync(AUTH_FILE());
+  } catch (e) {
+    console.warn("[zhl-gate] 删除身份文件失败", e);
+  }
+  try {
+    const gate = join(app.getPath("userData"), "zhl-gate.json");
+    if (existsSync(gate)) rmSync(gate);
+  } catch (e) {
+    console.warn("[zhl-gate] 复位跳过标记失败", e);
+  }
+  cachedIdentity = null;
 }
 
 function pkce(): { verifier: string; challenge: string } {
@@ -121,23 +154,12 @@ const GATE_HTML = `<!DOCTYPE html>
 </div>
 <script>
   const st = document.getElementById('status');
-  document.getElementById('go').onclick = () => {
-    st.textContent = '正在打开授权页…';
-    window.zhlGate.startAuth();
-  };
-  document.getElementById('skip').onclick = () => {
-    document.getElementById('retention').style.display = 'block';
-  };
-  document.getElementById('back').onclick = () => {
-    document.getElementById('retention').style.display = 'none';
-  };
-  document.getElementById('skip2').onclick = () => {
-    window.zhlGate.skip();
-  };
-  window.zhlGate.onStatus((msg, isErr) => {
+  // 状态通道：门窗口没有 preload，原先这里调 window.zhlGate.onStatus(...) 是不存在的桥，
+  // 一行就抛错，于是 state 校验失败/令牌交换失败永远看不见。改由主进程 executeJavaScript 调用。
+  window.__setStatus = (msg, isErr) => {
     st.textContent = msg;
     st.className = 'status' + (isErr ? ' err' : '');
-  });
+  };
 </script></body></html>`;
 
 export interface ZhlGateResult {
@@ -149,9 +171,14 @@ export interface ZhlGateResult {
 export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
   return new Promise((resolveGate) => {
     let settled = false;
+    let detachLoopback: () => void = () => undefined;
     const finish = (result: ZhlGateResult) => {
       if (settled) return;
       settled = true;
+      // 回调装在 session 上，而门窗口用的就是主窗口的默认 session：不摘掉的话
+      // 整个应用生命周期内 127.0.0.1:8540-8542/callback* 都会被取消，并且每走一次
+      // 登录门就叠一层——旧那层持着上一次的 state，会先把新回调判成"state 校验失败"。
+      detachLoopback();
       try { gate.close(); } catch { /* 已关闭 */ }
       resolveGate(result);
     };
@@ -176,18 +203,33 @@ export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
     // 授权页重定向到 loopback 回调时拦截 code（不真正出站）
     const { verifier, challenge } = pkce();
     const state = randomBytes(16).toString("hex");
-    gate.webContents.session.webRequest.onBeforeRequest(
-      { urls: LOOPBACK_PREFIXES.map((p) => p + "*") },
+    const gateSession = gate.webContents.session;
+    const loopbackFilter = { urls: LOOPBACK_PREFIXES.map((p) => p + "*") };
+    detachLoopback = () => {
+      try {
+        gateSession.webRequest.onBeforeRequest(loopbackFilter, null);
+      } catch { /* session 已销毁 */ }
+    };
+
+    const pushStatus = (msg: string, isErr: boolean): void => {
+      if (gate.isDestroyed() || gate.webContents.isDestroyed()) return;
+      gate.webContents
+        .executeJavaScript(`window.__setStatus && window.__setStatus(${JSON.stringify(msg)}, ${String(isErr)})`)
+        .catch(() => undefined);
+    };
+
+    gateSession.webRequest.onBeforeRequest(
+      loopbackFilter,
       (details, callback) => {
         callback({ cancel: true });
         const url = new URL(details.url);
         if (url.searchParams.get("state") !== state) {
-          gate.webContents.send("zhl-gate:status", "state 校验失败，请重试", true);
+          pushStatus("state 校验失败，请重试", true);
           return;
         }
         const code = url.searchParams.get("code");
         if (!code) {
-          gate.webContents.send("zhl-gate:status", "授权失败：未收到授权码", true);
+          pushStatus("授权失败：未收到授权码", true);
           return;
         }
         exchangeCode(code, verifier)
@@ -196,7 +238,7 @@ export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
             finish({ kind: "logged-in", identity });
           })
           .catch((e) => {
-            gate.webContents.send("zhl-gate:status", "令牌交换失败：" + String(e).slice(0, 80), true);
+            pushStatus("令牌交换失败：" + String(e).slice(0, 80), true);
           });
       },
     );
@@ -204,7 +246,7 @@ export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
     const authorize = [
       AUTHORIZE_URL,
       "?client_id=" + CLIENT_ID,
-      "&redirect_uri=" + encodeURIComponent(LOOPBACK_PREFIXES[0]),
+      "&redirect_uri=" + encodeURIComponent(LOOPBACK_REDIRECT_URI),
       "&response_type=code",
       "&scope=" + encodeURIComponent("openid profile"),
       "&state=" + state,
@@ -221,12 +263,10 @@ export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
           return;
         }
         gate.webContents.executeJavaScript(`
-          window.zhlGate = {
-            startAuth: () => location.href = ${JSON.stringify(authorize)},
-            skip: () => undefined,
-            onStatus: (cb) => undefined,
+          document.getElementById('go').onclick = () => {
+            window.__setStatus('正在打开授权页…', false);
+            location.href = ${JSON.stringify(authorize)};
           };
-          document.getElementById('go').onclick = () => { location.href = ${JSON.stringify(authorize)}; };
           document.getElementById('skip').onclick = () => { document.getElementById('retention').style.display='block'; };
           document.getElementById('back').onclick = () => { document.getElementById('retention').style.display='none'; };
           document.getElementById('skip2').onclick = () => { window.__SKIPPED__ = true; };
@@ -235,7 +275,7 @@ export function ensureZhlLogin(parent: BrowserWindow): Promise<ZhlGateResult> {
 
     // 跳过 + 状态通道：通过 will-navigate 与轮询 __SKIPPED__ 简化实现
     gate.webContents.on("will-navigate", (event, url) => {
-      if (url.startsWith(LOOPBACK_PREFIXES[0])) return; // 已由 webRequest 拦截
+      if (url.startsWith(LOOPBACK_REDIRECT_URI)) return; // 已由 webRequest 拦截
     });
     const poll = setInterval(() => {
       if (settled || gate.isDestroyed()) {
@@ -257,7 +297,7 @@ async function exchangeCode(code: string, verifier: string): Promise<ZhlIdentity
   const body = new URLSearchParams({
     grant_type: "authorization_code",
     code,
-    redirect_uri: LOOPBACK_PREFIXES[0],
+    redirect_uri: LOOPBACK_REDIRECT_URI,
     client_id: CLIENT_ID,
     code_verifier: verifier,
   });

@@ -51,10 +51,13 @@ import { WorkflowActorSessionSidePane } from "@/app-shell/WorkflowActorSessionSi
 import { WorkflowWorkspaceSidePane } from "@/app-shell/WorkflowWorkspaceSidePane.js";
 import { WorkflowArtifactSidePane } from "@/app-shell/WorkflowArtifactSidePane.js";
 import {
-  getSidePaneTabTitle,
   SidePaneTabDragOverlay,
   SortableSidePaneTabTrigger,
 } from "@/app-shell/SidePaneTabTrigger.js";
+import {
+  getLocalizedSidePaneTabTitle,
+  type SidePaneTabPresentationLabels,
+} from "@/app-shell/sidePaneTabPresentation.js";
 import {
   resolveSidePaneTabsOverflow,
   SIDE_PANE_DEFAULT_EXPANDED_RATIO,
@@ -800,6 +803,30 @@ export function AnimatedSidePanePanel({
   })
     .filter((itemId) => !isOfficeMode || (itemId !== "terminal" && itemId !== "review"))
     .map((itemId) => openTabLauncherItemById[itemId]);
+  // tab 标题映射层统一收口：总览、tab 条与拖拽浮层共用同一份标签表，
+  // 避免每个入口各自 intl.formatMessage 造成标题分叉；键集覆盖全部 tab 类型。
+  const sidePaneTabPresentationLabels = useMemo<SidePaneTabPresentationLabels>(
+    () => ({
+      browserTitle: intl.formatMessage({ id: "browser.title" }),
+      reviewTitle: intl.formatMessage({ id: "sidePane.review" }),
+      codeViewerTitle: intl.formatMessage({ id: "codeViewer.title" }),
+      treemappingTitle: intl.formatMessage({ id: "treemapping.title" }),
+      whiteboardTitle: intl.formatMessage({ id: "whiteboard.title" }),
+      modelTrajectoryTitle: intl.formatMessage({ id: "modelTrajectory.title" }),
+      developerToolsTitle: intl.formatMessage({ id: "developerTools.title" }),
+      terminalTitle: intl.formatMessage({ id: "terminal.title" }),
+      subagentTypeLabel: intl.formatMessage({ id: "sidePane.subagent" }),
+      subagentDirectoryTitle: intl.formatMessage({ id: "sidePane.subagentDirectory" }),
+      selectionChatTitle: intl.formatMessage({ id: "sidePane.selectionChat" }),
+      planTitle: intl.formatMessage({ id: "planTool.panel.planTab" }),
+      workflowRunTitle: intl.formatMessage({ id: "sidePane.workflowRun" }),
+      workflowDirectoryTitle: intl.formatMessage({ id: "sidePane.workflowDirectory" }),
+      workflowActorTitle: intl.formatMessage({ id: "sidePane.workflowActor" }),
+      workflowScriptTitle: intl.formatMessage({ id: "sidePane.workflowScript" }),
+      workflowArtifactTitle: intl.formatMessage({ id: "sidePane.workflowArtifact" }),
+    }),
+    [intl],
+  );
   const closeSidePaneButton =
     isVisible && onCloseSidePane ? (
       <div className="flex shrink-0 items-center gap-0.5 [app-region:no-drag]">
@@ -827,7 +854,7 @@ export function AnimatedSidePanePanel({
       <div className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto px-5 py-10">
         <div className="side-pane-open-tab-content flex w-full max-w-[20rem] flex-col gap-5">
           <div className="flex flex-col gap-2 text-center">
-            <h2 className="text-xl font-semibold leading-7 text-foreground">
+            <h2 className="text-ui-lg font-semibold leading-7 text-foreground">
               {intl.formatMessage({ id: "sidePane.openTab" })}
             </h2>
             <p className="text-ui-base leading-5 text-foreground-subtle">
@@ -874,31 +901,7 @@ export function AnimatedSidePanePanel({
         noResults: intl.formatMessage({ id: "sidePane.noTabsFound" }),
         closeTab: (title) => intl.formatMessage({ id: "sidePane.closeTab" }, { title }),
         relativeTime: (timestamp) => formatTaskRelativeTime(timestamp, intl),
-        browserTitle: intl.formatMessage({ id: "browser.title" }),
-        reviewTitle: intl.formatMessage({ id: "sidePane.review" }),
-        codeViewerTitle: intl.formatMessage({ id: "codeViewer.title" }),
-        treemappingTitle: intl.formatMessage({ id: "treemapping.title" }),
-        whiteboardTitle: intl.formatMessage({ id: "whiteboard.title" }),
-        modelTrajectoryTitle: intl.formatMessage({
-          id: "modelTrajectory.title",
-        }),
-        developerToolsTitle: intl.formatMessage({
-          id: "developerTools.title",
-        }),
-        terminalTitle: intl.formatMessage({ id: "terminal.title" }),
-        subagentTypeLabel: intl.formatMessage({ id: "sidePane.subagent" }),
-        subagentDirectoryTitle: intl.formatMessage({
-          id: "sidePane.subagentDirectory",
-        }),
-        selectionChatTitle: intl.formatMessage({
-          id: "sidePane.selectionChat",
-        }),
-        planTitle: intl.formatMessage({ id: "planTool.panel.planTab" }),
-        workflowRunTitle: intl.formatMessage({ id: "sidePane.workflowRun" }),
-        workflowDirectoryTitle: intl.formatMessage({ id: "sidePane.workflowDirectory" }),
-        workflowActorTitle: intl.formatMessage({ id: "sidePane.workflowActor" }),
-        workflowScriptTitle: intl.formatMessage({ id: "sidePane.workflowScript" }),
-        workflowArtifactTitle: intl.formatMessage({ id: "sidePane.workflowArtifact" }),
+        ...sidePaneTabPresentationLabels,
       }}
       onActivateTab={onActivateTab}
       onCloseTab={onCloseTab}
@@ -947,7 +950,7 @@ export function AnimatedSidePanePanel({
                 <TabsList
                   style={captionControlsStyle}
                   className={cn(
-                    "flex justify-start w-full rounded-none p-0 border-0 border-b border-border/50 bg-transparent shadow-none !h-12 overflow-hidden",
+                    "flex justify-start w-full rounded-none p-0 border-0 border-b border-border bg-transparent shadow-none !h-12 overflow-hidden",
                     // 独立面板将标签栏移至窗口顶部，需补充窗口拖拽区域；标签和按钮仍处理自身交互。
                     isDesktop &&
                       "[app-region:drag] [&_button]:[app-region:no-drag] [&_[data-side-pane-tab-id]]:[app-region:no-drag]",
@@ -993,7 +996,10 @@ export function AnimatedSidePanePanel({
                             strategy={horizontalListSortingStrategy}
                           >
                             {visibleTabs.map((tab) => {
-                              const title = getSidePaneTabTitle(tab, intl.formatMessage);
+                              const title = getLocalizedSidePaneTabTitle(
+                                tab,
+                                sidePaneTabPresentationLabels,
+                              );
                               return (
                                 <SortableSidePaneTabTrigger
                                   key={tab.id}
@@ -1032,7 +1038,10 @@ export function AnimatedSidePanePanel({
                         {draggingTab ? (
                           <SidePaneTabDragOverlay
                             tab={draggingTab}
-                            title={getSidePaneTabTitle(draggingTab, intl.formatMessage)}
+                            title={getLocalizedSidePaneTabTitle(
+                              draggingTab,
+                              sidePaneTabPresentationLabels,
+                            )}
                             diffBadgeLabel={intl.formatMessage({
                               id: "diff.title",
                             })}

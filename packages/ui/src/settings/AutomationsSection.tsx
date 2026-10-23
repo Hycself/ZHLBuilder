@@ -1496,7 +1496,7 @@ export function AutomationsSection({
       {/* Tab：Scheduled 常驻；Idle 仅在灰度命中或有闲时存量时出现，不再提供 All 混排视图。
          有任务时右上对齐创建（4866-1735）；空态创建入口在大卡内（4889-2013），不重复顶栏按钮。 */}
       {visibleTabs.length > 0 ? (
-        <div className="mt-8 flex items-center justify-between">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           {/* tab 曾与右侧操作组共用 12px 间距，未体现最新设计要求的 8px 紧凑节奏。*/}
           <div className="flex items-center gap-2" data-testid={TID_OFFPEAK_TAB}>
             {/* 未选中态不强制显示 surface 背景，以便与 hover、选中态形成层级。*/}
@@ -1505,7 +1505,7 @@ export function AutomationsSection({
                 key={key}
                 type="button"
                 className={cn(
-                  "rounded-full px-3 py-1 text-ui-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
+                  "rounded-md px-3 py-1 text-ui-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
                   tab === key
                     ? "bg-selected text-foreground"
                     : "text-foreground-subtle hover:bg-hover hover:text-foreground",
@@ -1516,7 +1516,32 @@ export function AutomationsSection({
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-3">
+          {/* 状态筛选与 tab 同属「看哪个列表、看哪种状态」这一件事，拆成两行会让人
+              以为下面那排胶囊是列表内容的一部分。合并到同一行，用一条发丝线分隔。 */}
+          {hasVisibleTaskCards ? (
+            <div
+              className="flex flex-wrap items-center gap-1.5 border-l border-border pl-3"
+              data-testid={TID_AUTOMATIONS_STATUS_FILTER}
+            >
+              {AUTOMATION_STATUS_FILTERS.map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={statusFilter === key}
+                  className={cn(
+                    "rounded-md px-2.5 py-0.5 text-ui-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
+                    statusFilter === key
+                      ? "bg-selected text-foreground"
+                      : "text-foreground-subtle hover:bg-hover hover:text-foreground",
+                  )}
+                  onClick={() => setStatusFilter(key)}
+                >
+                  {intl.formatMessage({ id: `automations.statusFilter.${key}` })}
+                </button>
+              ))}
+            </div>
+          ) : null}
+          <div className="ml-auto flex items-center gap-3">
             <ControlHintTooltip
               title={intl.formatMessage({
                 id: refreshing ? "automations.refreshing" : "automations.refresh",
@@ -1550,32 +1575,6 @@ export function AutomationsSection({
               />
             ) : null}
           </div>
-        </div>
-      ) : null}
-
-      {/* 状态筛选：定时 / 闲时共用一组（全部 / 进行中 / 已完成 / 失败），只在当前 tab 有任务时出现。
-         样式沿用顶栏 tab 的胶囊，但字号与内边距更小以体现层级。 */}
-      {visibleTabs.length > 0 && hasVisibleTaskCards ? (
-        <div
-          className="mt-3 flex flex-wrap items-center gap-1.5"
-          data-testid={TID_AUTOMATIONS_STATUS_FILTER}
-        >
-          {AUTOMATION_STATUS_FILTERS.map((key) => (
-            <button
-              key={key}
-              type="button"
-              aria-pressed={statusFilter === key}
-              className={cn(
-                "rounded-full px-2.5 py-0.5 text-ui-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
-                statusFilter === key
-                  ? "bg-selected text-foreground"
-                  : "text-foreground-subtle hover:bg-hover hover:text-foreground",
-              )}
-              onClick={() => setStatusFilter(key)}
-            >
-              {intl.formatMessage({ id: `automations.statusFilter.${key}` })}
-            </button>
-          ))}
         </div>
       ) : null}
 
@@ -1704,7 +1703,7 @@ export function AutomationsSection({
                             }}
                             className={cn(
                               // 任务卡与模板卡曾分别使用 surface/border，跨主题下描边深浅不一致。
-                              "group relative flex h-full min-h-0 cursor-pointer gap-3 overflow-hidden rounded-xl border border-card-border bg-background p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
+                              "group relative flex h-full min-h-0 cursor-pointer gap-3 overflow-hidden rounded-lg border border-card-border bg-background p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused",
                               // 已完成任务保持静态弱化，不在 hover 时恢复透明度或改变背景。
                               status === "completed" ? "opacity-60" : "hover:bg-hover",
                             )}
@@ -1826,7 +1825,7 @@ export function AutomationsSection({
                 /* 空状态卡先于 Keep-awake，按钮组整体较卡片中心下移 8px。 */
                 <div
                   data-automations-empty-state
-                  className="flex h-[226px] w-full items-center justify-center rounded-2xl border border-card-border bg-background px-4"
+                  className="flex h-[226px] w-full items-center justify-center rounded-lg border border-card-border bg-background px-4"
                 >
                   <div className="flex translate-y-2 flex-col items-center gap-5">
                     <p className="text-ui-base font-medium leading-5 text-foreground-subtlest">
@@ -1894,7 +1893,7 @@ export function AutomationsSection({
               ) : automationTemplates.offPeak.length === 0 ? (
                 <div
                   data-automation-template-empty-state
-                  className="flex min-h-[114px] w-full items-center justify-center rounded-xl border border-card-border bg-background p-3 text-center text-ui-base font-normal text-foreground-subtlest"
+                  className="flex min-h-[114px] w-full items-center justify-center rounded-lg border border-card-border bg-background p-3 text-center text-ui-base font-normal text-foreground-subtlest"
                 >
                   {intl.formatMessage({ id: "automations.templates.unavailable" })}
                 </div>
@@ -1934,7 +1933,7 @@ export function AutomationsSection({
                           });
                         }}
                         // Grid wrapper 虽已拉伸到行高，卡片本体仍需 h-full 才能继承同一行的最大高度；只设 min-height 时短文案卡会矮一截。
-                        className="flex h-full min-h-[114px] w-full flex-col gap-2 overflow-hidden rounded-xl border border-card-border bg-background p-3 text-left transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+                        className="flex h-full min-h-[114px] w-full flex-col gap-2 overflow-hidden rounded-lg border border-card-border bg-background p-3 text-left transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
                       >
                         <div className="flex items-center gap-0.5 text-foreground">
                           <OffPeakTemplateIcon
@@ -1994,7 +1993,7 @@ export function AutomationsSection({
               ) : automationTemplates.scheduled.length === 0 ? (
                 <div
                   data-automation-template-empty-state
-                  className="flex min-h-[114px] w-full items-center justify-center rounded-xl border border-card-border bg-background p-3 text-center text-ui-base font-normal text-foreground-subtlest"
+                  className="flex min-h-[114px] w-full items-center justify-center rounded-lg border border-card-border bg-background p-3 text-center text-ui-base font-normal text-foreground-subtlest"
                 >
                   {intl.formatMessage({ id: "automations.templates.unavailable" })}
                 </div>
@@ -2006,7 +2005,7 @@ export function AutomationsSection({
                         key={template.id}
                         type="button"
                         onClick={() => handleUseTemplate(template)}
-                        className="group flex min-h-[114px] flex-col gap-2 overflow-hidden rounded-xl border border-card-border bg-background p-3 text-left transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+                        className="group flex min-h-[114px] flex-col gap-2 overflow-hidden rounded-lg border border-card-border bg-background p-3 text-left transition-colors hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
                       >
                         <div className="flex min-w-0 items-center gap-1 text-foreground">
                           <span className="flex size-5 shrink-0 items-center justify-center">

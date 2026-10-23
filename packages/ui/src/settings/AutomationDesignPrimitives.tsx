@@ -38,7 +38,7 @@ export type AutomationSettingsHistoryTab = "settings" | "history";
 /** 定时与闲时共用运行历史空态，防止透明留白与卡片容器样式再次漂移。 */
 export function AutomationHistoryEmptyState({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-[226px] items-center justify-center rounded-xl border border-dashed border-card-border bg-background px-4 text-center text-ui-base text-foreground-subtle">
+    <div className="flex min-h-[226px] items-center justify-center rounded-lg border border-dashed border-card-border bg-background px-4 text-center text-ui-base text-foreground-subtle">
       {children}
     </div>
   );

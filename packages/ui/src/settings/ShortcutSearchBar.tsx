@@ -34,7 +34,7 @@ export function ShortcutSearchBar({
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-foreground-subtle" />
         <Input
-          className={`pl-9 font-mono ${keyLabel !== null ? "pr-16 text-brand" : "pr-9"}`}
+          className={`pl-9 font-mono ${keyLabel !== null ? "pr-16 text-foreground" : "pr-9"}`}
           placeholder={
             keySearch.armed
               ? intl.formatMessage({ id: "settings.shortcuts.keySearchPlaceholder" })
@@ -64,7 +64,7 @@ export function ShortcutSearchBar({
           aria-pressed={keySearch.armed}
           data-testid="settings-shortcut-key-search"
           className={`absolute right-2.5 top-1/2 -translate-y-1/2 rounded-sm p-1 focus-visible:outline-2 focus-visible:outline-offset-2 ${
-            keySearch.armed ? "text-brand" : "text-foreground-subtle hover:text-foreground"
+            keySearch.armed ? "text-foreground" : "text-foreground-subtle hover:text-foreground"
           }`}
           onClick={() => {
             if (!keySearch.armed) {

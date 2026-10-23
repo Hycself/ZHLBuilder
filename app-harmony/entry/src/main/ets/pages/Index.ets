@@ -1,194 +1,229 @@
-import { router } from '@kit.ArkUI';
-import { promptAction } from '@kit.ArkUI';
-import { scanBarcode, scanCore } from '@kit.ScanKit';
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { Api, ApiError, getToken, setToken, myDevices } from '../model/Api';
+import { common } from '@kit.AbilityKit';
+import { zhlHasToken } from '../service/AuthService';
+import { zhlParsePairQr, zhlStartPairScan, ZhlPairQr } from '../service/ScanService';
+import { zhlSessionStoreReady } from '../service/SessionStore';
+import { ZhlDeviceDetailParam, ZhlPinGateParam, ZhlTaskOutputParam } from '../model/Types';
+import { ZHL_BG, ZHL_CARD_GAP, ZHL_PAGE_PAD, ZHL_TEXT } from '../common/Theme';
+import { ZhlSkeletonBar } from '../components/SkeletonBar';
+import {
+  ZhlTabBarItem, ZhlTabSpec, ZHL_TAB_BAR_HEIGHT, zhlTabBarBlurStyle, zhlTabBarSolid, zhlTabSpecs,
+} from '../components/ImmersiveTabBar';
+import { ZhlLoginPage } from './Login';
+import { ZhlDevicesPane } from './panes/DevicesPane';
+import { ZhlTasksPane } from './panes/TasksPane';
+import { ZhlProfilePane } from './panes/ProfilePane';
 
 /**
- * ZHLBuilder 首页：登录 → 设备列表（扫码绑定）。
- * 深色 ZHL 品牌风（#05090F 底 + #22D3EE 强调）。
+ * 应用外壳：登录门 + 底部导航（设备 / 任务 / 我的）+ 系统路由表承载的子页。
+ *
+ * 页面跳转一律走 Navigation + 系统路由表（resources/base/profile/router_map.json），
+ * 不用 @ohos.router。五个子页：RemotePanel / Register / PinGate / DeviceDetail / TaskOutput。
  */
-const BG = '#05090F';
-const PANEL = '#0C1420';
-const LINE = '#1B2839';
-const TXT = '#E6EDF6';
-const DIM = '#8CA0B8';
-const FAINT = '#5A6E86';
-const ACCENT = '#22D3EE';
-const OK = '#34D399';
-const DOWN = '#F87171';
+
+interface ZhlTabItemParam {
+  itemIndex: number;
+}
 
 @Entry
 @Component
 struct Index {
-  @State loggedIn: boolean = false;
-  @State account: string = '';
-  @State password: string = '';
-  @State loading: boolean = false;
-  @State err: string = '';
-  @State devices: Array<Record<string, Object>> = [];
-  @State showServer: boolean = false;
-  @State baseUrl: string = 'https://dis.zhl.asia';
+  private pathStack: NavPathStack = new NavPathStack();
+  private tabsController: TabsController = new TabsController();
+  /**
+   * 登录门三态：unknown（凭据恢复中）/ loggedIn / loggedOut。
+   *
+   * 本地初值改成 'unknown' 而不是 'loggedOut'：冷启动时 AppStorage 里还没有这个键，
+   * 按 AppStorage 的规则此时取本地初值。旧初值是 'loggedOut'，于是恢复期间第一帧
+   * 必然先渲染登录页，等 HUKS 读完再跳主界面 —— 用户看到的是「闪一下登录页」，
+   * 万一 preferences 打开失败就永远停在登录页，也就是「记住我根本没生效」。
+   */
+  @StorageLink('zhlAuthState') authState: string = 'unknown';
+  @State currentTabIndex: number = 0;
 
   aboutToAppear(): void {
-    getToken(this.context).then((t) => {
-      if (t) {
-        this.loggedIn = true;
-        this.refresh();
-      }
-    });
-  }
-
-  refresh(): void {
-    myDevices(this.context).then((list) => {
-      this.devices = list;
-      this.err = '';
-    }).catch((e: ApiError) => {
-      this.err = e.message;
-    });
-  }
-
-  doLogin(): void {
-    this.loading = true;
-    this.err = '';
-    login(this.context, this.account.trim(), this.password)
-      .then(async (r) => {
-        await setToken(this.context, String(r.token ?? ''));
-        this.loading = false;
-        this.loggedIn = true;
-        this.refresh();
+    // 初始化由 EntryAbility.onCreate 发起，这里只等它的结果再落登录态。
+    zhlSessionStoreReady()
+      .then(() => zhlHasToken())
+      .then((hasToken: boolean) => {
+        AppStorage.setOrCreate('zhlAuthState', hasToken ? 'loggedIn' : 'loggedOut');
       })
-      .catch((e: ApiError) => {
-        this.loading = false;
-        this.err = e.message;
+      .catch(() => {
+        AppStorage.setOrCreate('zhlAuthState', 'loggedOut');
       });
   }
 
-  startScan(): void {
-    const options: scanBarcode.ScanOptions = {
-      scanTypes: [scanCore.ScanType.QR_CODE],
-      enableMultiMode: false,
-      enableAlbum: false,
+  /** 恢复凭据期间的占位：按规格用骨架条，不许用占满屏的转圈 */
+  @Builder
+  restoringView() {
+    Column({ space: ZHL_CARD_GAP }) {
+      ZhlSkeletonBar({ barWidth: '46%', barHeight: 16 })
+      ZhlSkeletonBar({ barWidth: '100%', barHeight: 62 })
+      ZhlSkeletonBar({ barWidth: '100%', barHeight: 62 })
+      Text('正在恢复登录状态…')
+        .fontSize(13)
+        .fontColor(ZHL_TEXT)
+        .opacity(0.55)
+    }
+    .width('100%')
+    .height('100%')
+    .padding(ZHL_PAGE_PAD)
+    .justifyContent(FlexAlign.Start)
+    .alignItems(HorizontalAlign.Start)
+    .backgroundColor(ZHL_BG)
+  }
+
+  // ===== 跳转 =====
+
+  openRegister(): void {
+    // Register 页不读参数，这里传空字符串占位（param 必填）
+    this.pathStack.pushDestination(new NavPathInfo('Register', ''));
+  }
+
+  openRemotePanel(): void {
+    this.pathStack.pushDestination(new NavPathInfo('RemotePanel', ''));
+  }
+
+  openDeviceDetail(deviceId: number, deviceName: string): void {
+    const param: ZhlDeviceDetailParam = { deviceId: deviceId, deviceName: deviceName };
+    this.pathStack.pushDestination(new NavPathInfo('DeviceDetail', param));
+  }
+
+  openTaskOutput(deviceId: number, deviceName: string, taskId: number): void {
+    const param: ZhlTaskOutputParam = { deviceId: deviceId, taskId: taskId, deviceName: deviceName };
+    this.pathStack.pushDestination(new NavPathInfo('TaskOutput', param));
+  }
+
+  openPinGate(deviceId: number, deviceName: string): void {
+    const param: ZhlPinGateParam = {
+      mode: 'gate',
+      pairCode: '',
+      deviceId: deviceId,
+      deviceName: deviceName,
+      nextPage: '',
     };
-    scanBarcode.startScanForResult(this.context, options)
-      .then((result) => {
-        const raw = result.originalValue;
-        this.handlePairQr(raw);
+    this.pathStack.pushDestination(new NavPathInfo('PinGate', param));
+  }
+
+  /** 扫码绑定：校验 app 字段后带配对码进 PIN 页设置 6 位 PIN */
+  doScanBind(): void {
+    zhlStartPairScan(this.getUIContext().getHostContext() as common.UIAbilityContext)
+      .then((raw: string) => {
+        const qr: ZhlPairQr | undefined = zhlParsePairQr(raw);
+        if (qr === undefined) {
+          this.getUIContext().getPromptAction().showToast({
+            message: '二维码内容无法识别',
+          });
+          return;
+        }
+        const code: string = qr.pairCode ?? '';
+        AppStorage.setOrCreate('zhlPendingPairCode', code);
+        const param: ZhlPinGateParam = {
+          mode: 'pair',
+          pairCode: code,
+          deviceId: 0,
+          deviceName: '',
+          nextPage: '',
+        };
+        this.pathStack.pushDestination(new NavPathInfo('PinGate', param));
       })
-      .catch((e: Error) => {
-        hilog.info(0x0, 'ZHLBuilder', 'scan cancelled: ' + String(e));
+      .catch(() => {
+        // 用户取消扫码
       });
   }
 
-  handlePairQr(raw: string): void {
-    let pairCode = '';
-    try {
-      const o = JSON.parse(raw) as Record<string, Object>;
-      pairCode = String(o.pairCode ?? '');
-    } catch (_) {
-      if (/^[A-Z2-9]{8}$/.test(raw)) {
-        pairCode = raw;
+  // ===== 底部导航 =====
+
+  tabLabelOf(index: number): string {
+    const specs: Array<ZhlTabSpec> = zhlTabSpecs();
+    for (let i = 0; i < specs.length; i++) {
+      if (specs[i].tabIndex === index) {
+        return specs[i].tabLabel;
       }
     }
-    if (!pairCode) {
-      promptAction.showToast({ message: '二维码内容无法识别' });
-      return;
+    return '';
+  }
+
+  tabIconOf(index: number): Resource {
+    const specs: Array<ZhlTabSpec> = zhlTabSpecs();
+    for (let i = 0; i < specs.length; i++) {
+      if (specs[i].tabIndex === index) {
+        return specs[i].tabIcon;
+      }
     }
-    // 二级弹窗：输入 6 位 PIN 完成绑定
-    promptAction.openCustomDialog({
-      builder: () => {
-        // 简化：用两段式 confirm 输入 PIN（完整自定义 UI 见 DeviceDetail 同款）
-        promptAction.showToast({ message: `配对码 ${pairCode}：请在下方输入 PIN 绑定` });
-      },
-    }).catch(() => undefined);
-    AppStorage.setOrCreate('pendingPairCode', pairCode);
-    router.pushUrl({ url: 'pages/PinGate?mode=pair' });
+    return $r('sys.symbol.house');
+  }
+
+  @Builder
+  tabItem(param: ZhlTabItemParam) {
+    ZhlTabBarItem({
+      itemLabel: this.tabLabelOf(param.itemIndex),
+      itemSelected: param.itemIndex === this.currentTabIndex,
+      itemIcon: this.tabIconOf(param.itemIndex),
+    })
   }
 
   build() {
-    Column() {
-      Row() {
-        Text('ZB')
-          .fontSize(13).fontWeight(FontWeight.ExtraBold).fontColor(ACCENT)
-          .width(34).height(34).textAlign(TextAlign.Center)
-          .backgroundColor('#123047').borderRadius(9)
-        Text(' ZHLBuilder ').fontSize(19).fontWeight(FontWeight.Bold).fontColor(TXT)
-        Text('设备').fontSize(13).fontColor(FAINT)
-      }.width('100%').padding({ top: 16, bottom: 8 })
-
-      if (!this.loggedIn) {
-        Column({ space: 12 }) {
-          TextInput({ placeholder: '账号（用户名或邮箱）', text: this.account })
-            .onChange((v) => { this.account = v; })
-            .backgroundColor(PANEL).borderColor(LINE).fontColor(TXT)
-          TextInput({ placeholder: '密码', text: this.password })
-            .type(InputType.Password)
-            .onChange((v) => { this.password = v; })
-            .backgroundColor(PANEL).borderColor(LINE).fontColor(TXT)
-          if (this.showServer) {
-            TextInput({ text: this.baseUrl })
-              .onChange((v) => { this.baseUrl = v; })
-              .backgroundColor(PANEL).borderColor(LINE).fontColor(TXT)
-          }
-          if (this.err) {
-            Text(this.err).fontSize(13).fontColor(DOWN)
-          }
-          Button(this.loading ? '登录中…' : '登录')
-            .width('100%').backgroundColor(ACCENT).fontColor('#06222B')
-            .enabled(this.account !== '' && this.password !== '' && !this.loading)
-            .onClick(() => {
-              getStoreBase(this.context, this.baseUrl);
-              this.doLogin();
+    Navigation(this.pathStack) {
+      if (this.authState === 'loggedIn') {
+        Tabs({ barPosition: BarPosition.End, index: this.currentTabIndex, controller: this.tabsController }) {
+          TabContent() {
+            ZhlDevicesPane({
+              onOpenDevice: (deviceId: number, deviceName: string) => {
+                this.openDeviceDetail(deviceId, deviceName);
+              },
+              onScanBind: () => {
+                this.doScanBind();
+              },
             })
-          Text('服务器设置').fontSize(12).fontColor(FAINT).onClick(() => {
-            this.showServer = !this.showServer;
-          })
-        }.margin({ top: 48 })
-      } else {
-        Row() {
-          Text('我的设备').fontSize(14).fontColor(FAINT)
-          Blank()
-          Button('扫码绑定').fontSize(13).backgroundColor(ACCENT).fontColor('#06222B')
-            .onClick(() => this.startScan())
-        }.width('100%').margin({ top: 8, bottom: 10 })
+          }
+          .tabBar(this.tabItem({ itemIndex: 0 }))
 
-        if (this.err) {
-          Text(this.err).fontSize(13).fontColor('#FBBF24').margin({ bottom: 8 })
+          TabContent() {
+            ZhlTasksPane({
+              onOpenTask: (deviceId: number, deviceName: string, taskId: number) => {
+                this.openTaskOutput(deviceId, deviceName, taskId);
+              },
+              onUnlock: (deviceId: number, deviceName: string) => {
+                this.openPinGate(deviceId, deviceName);
+              },
+            })
+          }
+          .tabBar(this.tabItem({ itemIndex: 1 }))
+
+          TabContent() {
+            ZhlProfilePane({
+              onOpenRemotePanel: () => {
+                this.openRemotePanel();
+              },
+            })
+          }
+          .tabBar(this.tabItem({ itemIndex: 2 }))
         }
-
-        List({ space: 10 }) {
-          ForEach(this.devices, (d: Record<string, Object>) => {
-            ListItem() {
-              Column() {
-                Row() {
-                  Text(String(d.name ?? '')).fontSize(15).fontWeight(FontWeight.Medium).fontColor(TXT)
-                  Blank()
-                  Circle({ width: 9, height: 9 })
-                    .fill(Boolean(d.online) ? OK : FAINT)
-                  Text(Boolean(d.online) ? '在线' : '离线').fontSize(12).fontColor(DIM).margin({ left: 6 })
-                }.width('100%')
-                Text(`设备 #${d.id ?? ''}`)
-                  .fontSize(12.5).fontColor(DIM).margin({ top: 4 })
-              }
-              .padding(16).backgroundColor(PANEL).borderRadius(14).width('100%')
-              .onClick(() => {
-                AppStorage.setOrCreate('currentDeviceId', Number(d.id));
-                router.pushUrl({ url: 'pages/DeviceDetail' });
-              })
-            }
-          }, (d: Record<string, Object>) => String(d.id))
-        }.layoutWeight(1).width('100%')
+        .barHeight(ZHL_TAB_BAR_HEIGHT + 12)
+        .barBackgroundColor(zhlTabBarSolid())
+        .barBackgroundBlurStyle(zhlTabBarBlurStyle())
+        .animationDuration(240)
+        .scrollable(false)
+        .width('100%')
+        .height('100%')
+        .backgroundColor(ZHL_BG)
+        .onChange((index: number) => {
+          this.currentTabIndex = index;
+        })
+      } else if (this.authState === 'unknown') {
+        this.restoringView()
+      } else {
+        ZhlLoginPage({
+          onOpenRegister: () => {
+            this.openRegister();
+          },
+        })
       }
     }
-    .width('100%').height('100%')
-    .backgroundColor(BG)
-    .padding({ left: 20, right: 20 })
+    .hideTitleBar(true)
+    .mode(NavigationMode.Stack)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(ZHL_BG)
   }
-}
-
-async function getStoreBase(ctx: Context, url: string): Promise<void> {
-  const { getStore } = await import('../model/Api');
-  const p = await getStore(ctx);
-  p.putSync('base_url', url.trim().replace(/\/+$/, ''));
-  p.flush();
 }

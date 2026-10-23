@@ -91,7 +91,7 @@ export function TrajectoryExpandedContent({
                 data-trajectory-expanded-tool-name=""
                 data-trajectory-search-field="tool-name"
                 variant="outline"
-                className="h-5 rounded-full border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle"
+                className="h-5 rounded-md border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle"
                 title={metadata.names}
               >
                 {metadata.names}
@@ -102,7 +102,7 @@ export function TrajectoryExpandedContent({
                 data-trajectory-expanded-tool-id=""
                 data-trajectory-search-field="tool-id"
                 variant="outline"
-                className="h-5 min-w-0 truncate rounded-full border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle"
+                className="h-5 min-w-0 truncate rounded-md border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle"
                 title={metadata.ids}
               >
                 {metadata.ids}

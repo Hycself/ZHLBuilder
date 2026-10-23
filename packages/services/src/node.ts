@@ -21,8 +21,10 @@ export {
   ZCODE_BUILTIN_PROVIDER_CONFIG_FILE_ENV,
 } from "@zhlbuilder/provider-node";
 
-export { createFileService } from "./file/fileService.js";
-export {
+// 桌面设备代理直接以 node bundle 起任务，需要与 host 同一套 agent 路径解析
+export { findZCodeAgentRuntimeNodeBundle } from "./runtime-tools/providerRuntimeResolver.js";
+
+export { createFileService } from "./file/fileService.js";export {
   attributeHostProcessTree,
   createProcessResourceSampler,
   createProcessResourceTableReader,

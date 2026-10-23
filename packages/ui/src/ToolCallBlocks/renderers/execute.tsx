@@ -296,7 +296,7 @@ export function ExecuteToolCallBlock(context: ToolCallBlockRenderContext) {
   );
   const renderContent = useCallback(
     () => (
-      <div className="space-y-3 mb-2 rounded-xl border border-border bg-panel px-4 py-3">
+      <div className="space-y-3 mb-2 rounded-lg border border-border bg-panel px-4 py-3">
         <div className="space-y-1">
           <div className="flex items-start gap-2 font-sans text-ui-base text-foreground">
             <span className="shrink-0 text-foreground-subtle">$</span>
@@ -374,7 +374,7 @@ export function ExecuteToolCallBlock(context: ToolCallBlockRenderContext) {
           }
         />
       ) : null}
-      {/* <pre className="text-[8px]">{JSON.stringify(toolCall, null, 2)}</pre> */}
+      {/* <pre className="text-ui-base">{JSON.stringify(toolCall, null, 2)}</pre> */}
     </>
   );
 }

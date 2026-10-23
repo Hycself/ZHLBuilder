@@ -300,7 +300,7 @@ export function SavedWorkflowsSection({
         ) : allProjectsEmpty ? (
           <div
             data-testid={TID_WORKFLOWS_EMPTY}
-            className="mt-8 flex h-[226px] w-full items-center justify-center rounded-2xl border border-card-border bg-background px-4"
+            className="mt-8 flex h-[226px] w-full items-center justify-center rounded-lg border border-card-border bg-background px-4"
           >
             <div className="flex translate-y-2 flex-col items-center gap-5">
               <div className="flex flex-col items-center gap-1.5 text-center">

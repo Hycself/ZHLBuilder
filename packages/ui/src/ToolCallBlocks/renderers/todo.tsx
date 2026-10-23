@@ -74,7 +74,7 @@ export function TodoToolCallBlock(context: ToolCallBlockRenderContext) {
   const renderContent = useCallback(
     () =>
       plan ? (
-        <div className="space-y-1 rounded-xl bg-surface px-3 py-2">
+        <div className="space-y-1 rounded-lg bg-surface px-3 py-2">
           {plan.map((step) => (
             <div key={step.id} className="flex min-w-0 items-center gap-2 py-1">
               <TodoStatusIcon status={step.status} />

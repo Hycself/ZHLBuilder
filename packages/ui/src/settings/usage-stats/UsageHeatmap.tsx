@@ -338,7 +338,7 @@ export function UsageHeatmap({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl bg-surface px-3 py-3">
+      <div className="rounded-lg bg-surface px-3 py-3">
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="min-w-0 truncate text-ui-base font-medium text-foreground">
             {intl.formatMessage({ id: "settings.usage.heatmapTitle" })}

@@ -125,7 +125,7 @@ export function ShortcutBindingRow({
         >
           <KbdGroup>
             {formatShortcutBindingLabelParts(binding).map((part, partIndex) => (
-              <Kbd key={`${part}-${partIndex}`} className={isOverridden ? "text-brand" : undefined}>
+              <Kbd key={`${part}-${partIndex}`} className={isOverridden ? "text-foreground" : undefined}>
                 {part}
               </Kbd>
             ))}

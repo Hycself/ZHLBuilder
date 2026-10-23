@@ -52,13 +52,13 @@ export function UsageMeter({
           style={{ width: `${systemPercent}%` }}
         />
         <div
-          className="absolute inset-y-0 left-0 rounded-sm bg-brand"
+          className="absolute inset-y-0 left-0 rounded-sm bg-foreground-subtle"
           style={{ width: `${appPercent}%` }}
         />
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-ui-xs text-foreground-subtle">
         <span className="inline-flex items-center gap-1">
-          <span className="size-2 rounded-sm bg-brand" aria-hidden="true" />
+          <span className="size-2 rounded-sm bg-foreground-subtle" aria-hidden="true" />
           {appLabel}
         </span>
         <span className="inline-flex items-center gap-1">

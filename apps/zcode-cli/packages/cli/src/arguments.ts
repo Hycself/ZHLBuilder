@@ -73,6 +73,11 @@ export const parseGlobalArgs = (argv: string[]) =>
       mode: {
         type: "string",
       },
+      // 本次运行的模型覆盖：providerId/modelId，可带 $reasoningLevel。
+      // 只作用于本次调用，不写回 provider 配置里的默认选择。
+      model: {
+        type: "string",
+      },
       verbose: {
         type: "boolean",
       },

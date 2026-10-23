@@ -70,7 +70,7 @@ export function WorkflowRunCompactCard({
       <section
         aria-label={ariaLabel}
         className={cn(
-          "flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-card-border bg-card px-3 py-2.5 text-foreground shadow-xs outline-none transition-colors",
+          "flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-card-border bg-card px-3 py-2.5 text-foreground shadow-xs outline-none transition-colors",
           onOpen
             ? "hover:border-border-hover focus-visible:border-input-border-focused focus-visible:ring-2 focus-visible:ring-ring/40"
             : undefined,

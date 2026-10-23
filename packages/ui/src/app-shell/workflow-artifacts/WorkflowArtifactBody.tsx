@@ -222,7 +222,7 @@ function WorkflowArtifactContent({
   if (contentType.startsWith("image/")) {
     return (
       <div
-        className="flex h-full min-h-0 items-center justify-center overflow-auto bg-background-alt p-4"
+        className="flex h-full min-h-0 items-center justify-center overflow-auto bg-sidebar p-4"
         data-artifact-body="image"
       >
         {objectUrl === null ? (

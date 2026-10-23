@@ -132,20 +132,20 @@ function ErrorFallback({
           // 错误信息和组件堆栈可能非常长，之前外层不可滚动会把内容挤出视口，
           // 用户既看不完堆栈，也点不到“重试/刷新”按钮。这里让 fallback 卡片固定从顶部开始，
           // 并配合外层纵向滚动，确保窗口再小也能完整访问全部操作。
-          className="w-full max-w-xl self-start rounded-3xl border border-destructive/20 bg-surface-alt p-6 shadow-sm"
+          className="w-full max-w-xl self-start rounded-xl border border-destructive/20 bg-card p-6"
         >
-          <div className="flex size-10 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-destructive/10 text-destructive">
             <AlertTriangleIcon className="size-5" />
           </div>
 
-          <h1 className="mt-4 text-lg font-semibold text-foreground">
+          <h1 className="mt-4 text-ui-xl font-semibold text-foreground">
             {formatBoundaryMessage("appError.title")}
           </h1>
-          <p className="mt-2 text-ui-base leading-6 text-on-surface-muted">
+          <p className="mt-2 text-ui-base leading-6 text-foreground-subtle">
             {formatBoundaryMessage("appError.description")}
           </p>
 
-          <div className="mt-4 rounded-2xl border border-border bg-background px-3 py-2 font-mono text-ui-base leading-5 text-on-surface-muted">
+          <div className="mt-4 rounded-lg border border-border bg-background px-3 py-2 font-mono text-ui-base leading-5 text-foreground-subtle">
             {errorSummary}
           </div>
 
@@ -159,16 +159,16 @@ function ErrorFallback({
             </Button>
           </div>
 
-          <p className="mt-4 text-ui-base leading-5 text-on-surface-muted">
+          <p className="mt-4 text-ui-base leading-5 text-foreground-subtle">
             {formatBoundaryMessage("appError.hint")}
           </p>
 
           {componentStack ? (
-            <details className="mt-4 rounded-2xl border border-border bg-background px-3 py-2">
-              <summary className="cursor-pointer text-ui-base font-medium text-on-surface-muted">
+            <details className="mt-4 rounded-lg border border-border bg-background px-3 py-2">
+              <summary className="cursor-pointer text-ui-base font-medium text-foreground-subtle">
                 {formatBoundaryMessage("appError.details")}
               </summary>
-              <pre className="mt-2 max-h-[40vh] overflow-auto whitespace-pre-wrap break-words text-ui-base leading-5 text-on-surface-muted">
+              <pre className="mt-2 max-h-[40vh] overflow-auto whitespace-pre-wrap break-words text-ui-base leading-5 text-foreground-subtle">
                 {/* 组件堆栈展开后会瞬间增高，限制 pre 高度并独立滚动，
                     避免 details 撑满全屏导致主操作区被挤出可视区域。 */}
                 {componentStack.trim()}
@@ -285,7 +285,7 @@ function ScopedErrorFallback({
         className,
       )}
     >
-      <div className="w-full max-w-md rounded-xl border border-destructive/20 bg-surface p-4 shadow-sm">
+      <div className="w-full max-w-md rounded-xl border border-destructive/20 bg-surface p-4">
         {content}
       </div>
     </div>

@@ -30,7 +30,7 @@ export function SettingsSearchInput({
         type="search"
         size="lg"
         className={cn(
-          "h-9 rounded-xl pl-9 [&::-webkit-search-cancel-button]:appearance-none",
+          "h-9 rounded-lg pl-9 [&::-webkit-search-cancel-button]:appearance-none",
           canClear && "pr-9",
           className,
         )}

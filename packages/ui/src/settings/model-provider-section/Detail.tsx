@@ -66,11 +66,11 @@ import { resolveAccountProviderInspectionAccess } from "@/lib/accountProviderAcc
 import { projectProviderSettingsViewToFormProviders } from "@/lib/providerSettingsFormProjection.js";
 
 const START_PLAN_ENTRY_BANNER_CLASS =
-  "min-h-20 w-full overflow-hidden rounded-xl border border-border bg-[radial-gradient(circle_at_14%_12%,color-mix(in_srgb,var(--color-success)_24%,var(--color-background)_76%)_0%,color-mix(in_srgb,var(--color-success)_10%,var(--color-surface)_90%)_64%,var(--color-surface)_300%)] p-4 text-left transition-colors hover:border-border-hover";
+  "min-h-20 w-full overflow-hidden rounded-lg border border-border bg-surface p-4 text-left transition-colors hover:border-border-hover";
 const PERSONAL_PLAN_ENTRY_BANNER_CLASS =
-  "min-h-20 w-full overflow-hidden rounded-xl border border-border bg-[radial-gradient(circle_at_14%_12%,color-mix(in_srgb,#4099ff_24%,var(--color-background)_76%)_0%,color-mix(in_srgb,#4099ff_10%,var(--color-surface)_90%)_64%,var(--color-surface)_300%)] p-4 text-left transition-colors hover:border-border-hover";
+  "min-h-20 w-full overflow-hidden rounded-lg border border-border bg-surface p-4 text-left transition-colors hover:border-border-hover";
 const TEAM_PLAN_ENTRY_BANNER_CLASS =
-  "min-h-20 w-full overflow-hidden rounded-xl border border-border bg-[radial-gradient(circle_at_14%_12%,color-mix(in_srgb,#0ea5e9_24%,var(--color-background)_76%)_0%,color-mix(in_srgb,#0ea5e9_10%,var(--color-surface)_90%)_64%,var(--color-surface)_300%)] p-4 text-left transition-colors hover:border-border-hover";
+  "min-h-20 w-full overflow-hidden rounded-lg border border-border bg-surface p-4 text-left transition-colors hover:border-border-hover";
 
 function isPlanNavItem(
   item: ModelProviderNavItem | null,
@@ -966,7 +966,7 @@ function CodingPlanPurchaseChoiceBanners({
             priceState: personalPrice,
             className: PERSONAL_PLAN_ENTRY_BANNER_CLASS,
             Icon: AstroidIcon,
-            iconClassName: "text-[#4099ff]",
+            iconClassName: "text-brand",
             onClick: () => onSelect("personal"),
           },
         ]
@@ -1023,7 +1023,7 @@ function CodingPlanPurchaseChoiceBanners({
               </span>
               {item.metric ? (
                 <span className="mt-1 flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span className="text-2xl font-bold leading-none text-foreground">
+                  <span className="text-ui-display font-bold leading-none text-foreground">
                     {item.metric}
                   </span>
                   {item.metricUnit ? (
@@ -1040,7 +1040,7 @@ function CodingPlanPurchaseChoiceBanners({
                   locale={locale}
                 />
               ) : item.priceState?.kind === "soldOut" ? (
-                <span className="mt-1 block text-lg font-semibold leading-6 text-foreground">
+                <span className="mt-1 block text-ui-xl font-semibold leading-6 text-foreground">
                   {intl.formatMessage({
                     id: "settings.modelProvider.codingPlan.purchaseBanner.temporarilySoldOut",
                   })}
@@ -1176,7 +1176,7 @@ function PurchaseChoiceBannerPrice({
   const isChineseLocale = locale.toLowerCase().startsWith("zh");
   if (!isChineseLocale) {
     return (
-      <span className="mt-1 block text-lg font-semibold leading-6 text-foreground">
+      <span className="mt-1 block text-ui-xl font-semibold leading-6 text-foreground">
         {intl.formatMessage(
           { id: "settings.modelProvider.codingPlan.purchase.fromPrice" },
           { price: formattedAmount },
@@ -1189,7 +1189,7 @@ function PurchaseChoiceBannerPrice({
   const label = labelParts.join(" ").trim();
   return (
     <span className="mt-1 flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-      <span className="text-lg font-semibold leading-6 text-foreground">{amount}</span>
+      <span className="text-ui-xl font-semibold leading-6 text-foreground">{amount}</span>
       <span className="text-ui-base font-medium text-foreground-subtle">
         {[
           label,
@@ -1206,7 +1206,7 @@ function PurchaseChoiceBannerPrice({
 
 function CodingPlanAccessBanner({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4">
+    <div className="rounded-lg border border-border bg-surface p-4">
       <div className="text-ui-base font-medium text-foreground">{title}</div>
       <p className="mt-1 text-ui-sm leading-6 text-foreground-subtle">{description}</p>
     </div>

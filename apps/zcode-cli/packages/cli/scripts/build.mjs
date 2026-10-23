@@ -157,6 +157,12 @@ export const resolveBuildAliases = ({
     rootDirectory,
     "../../packages/shared/src/model-selection.ts",
   ),
+  // 设备端任务事件契约（device-command 与 Desktop 主进程共用）同样是 shared 子路径，
+  // 不精确声明就会被拼成 src/index.ts/zhlTaskEvents，CLI 与 Desktop agent 打包一起失败。
+  "@zhlbuilder/shared/zhlTaskEvents": resolve(
+    rootDirectory,
+    "../../packages/shared/src/zhlTaskEvents.ts",
+  ),
   // 共享 Model Schema 新增的子路径不能被通用 alias 拼到 index.ts 后面。
   "@zhlbuilder/shared/model-config": resolve(rootDirectory, "../../packages/shared/src/model-config.ts"),
   // 进程异常边界在 bootstrap 之前使用该轻量契约，不能落入 shared 的通用前缀 alias。

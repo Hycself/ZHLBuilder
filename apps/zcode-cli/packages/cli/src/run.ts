@@ -42,6 +42,9 @@ const version = typeof __CLI_VERSION__ === "string" ? __CLI_VERSION__ : "0.0.0";
 const EMPTY_TARGET_ERROR = "--target requires non-empty text.";
 const DEFAULT_HEADLESS_PROMPT_MODE: CliPermissionMode = "yolo";
 const FORCE_MCS_SCOPE_ERROR = "--force-mcs can only be used with --prompt, --target, or tui.";
+// TUI 已有 /model 交互选择器，--model 目前只接到无头入口；
+// 明确拒绝而不是静默忽略——被忽略的参数比报错更难排查。
+const MODEL_SCOPE_ERROR = "--model can only be used with --prompt or --target.";
 const TARGET_REPLACE_REQUIRES_TARGET_ERROR = "--target-replace requires --target.";
 const TARGET_CONFLICTS_WITH_PROMPT_ERROR =
   '--target cannot be used with --prompt. Use either --target <objective> or --prompt "/goal <objective>".';
@@ -106,9 +109,15 @@ const globalOptions = (
     force: values.force === true,
     json: values.json === true,
     locale,
+    ...(typeof values.model === "string" && values.model.trim().length > 0
+      ? { model: values.model.trim() }
+      : {}),
     ...(values["memory-bench"] === true ? { memoryBench: true } : {}),
     noColor: values["no-color"] === true,
     ...(outputFormat ? { outputFormat } : {}),
+    ...(typeof values.server === "string" && values.server.trim().length > 0
+      ? { server: values.server.trim() }
+      : {}),
     verbose: values.verbose === true,
   };
 };
@@ -467,6 +476,16 @@ export const run = async (ctx: RunContext, deps: RunDependencies = {}): Promise<
     })
   ) {
     ctx.stderr.write(`${FORCE_MCS_SCOPE_ERROR}\n`);
+    return 1;
+  }
+
+  const modelOption = options.model;
+  if (
+    modelOption !== undefined &&
+    typeof parsed.values.prompt !== "string" &&
+    targetRequest === undefined
+  ) {
+    ctx.stderr.write(`${MODEL_SCOPE_ERROR}\n`);
     return 1;
   }
 

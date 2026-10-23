@@ -24,7 +24,7 @@ const STATUS_INDICATOR_CLASS = {
   succeeded: { dot: "bg-success", text: "text-success" },
   failed: { dot: "bg-destructive", text: "text-destructive" },
   skipped: { dot: "bg-foreground-subtlest", text: "text-foreground-subtle" },
-  running: { dot: "bg-brand", text: "text-brand" },
+  running: { dot: "bg-foreground", text: "text-foreground" },
 } as const satisfies Record<string, { dot: string; text: string }>;
 
 function resolveOffPeakHistoryStatus(

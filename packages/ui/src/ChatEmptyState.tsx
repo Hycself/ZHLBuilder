@@ -266,7 +266,7 @@ export function ChatEmptyWorkspacePreviewMenu({
     <DropdownMenu>
       <div
         className={cn(
-          "group/workspace-chip relative flex min-w-0 items-center rounded-full hover:bg-surface-hover focus-within:bg-surface-hover",
+          "group/workspace-chip relative flex min-w-0 items-center rounded-md hover:bg-surface-hover focus-within:bg-surface-hover",
           containerClassName,
         )}
       >
@@ -275,7 +275,7 @@ export function ChatEmptyWorkspacePreviewMenu({
             type="button"
             variant="ghost"
             size="icon-sm"
-            className="pointer-events-none absolute left-1.5 z-10 rounded-full text-foreground-subtle opacity-0 transition-opacity group-hover/workspace-chip:pointer-events-auto group-hover/workspace-chip:opacity-100 group-focus-within/workspace-chip:pointer-events-auto group-focus-within/workspace-chip:opacity-100"
+            className="pointer-events-none absolute left-1.5 z-10 rounded-md text-foreground-subtle opacity-0 transition-opacity group-hover/workspace-chip:pointer-events-auto group-hover/workspace-chip:opacity-100 group-focus-within/workspace-chip:pointer-events-auto group-focus-within/workspace-chip:opacity-100 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100"
             aria-label={intl.formatMessage({ id: "chat.empty.detachProject" })}
             data-testid={TID_COMPOSER_PROJECT_DETACH}
             onClick={(event) => {

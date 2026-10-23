@@ -253,7 +253,7 @@ export function OnboardingAgentSettingsStep(props: {
             {error}
           </div>
         ) : (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-background-alt px-4 py-8 text-center text-ui-base text-foreground-subtle">
+          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-sidebar px-4 py-8 text-center text-ui-base text-foreground-subtle">
             {intl.formatMessage({ id: "onboarding.agentSettings.empty" })}
           </div>
         )}
@@ -332,7 +332,7 @@ export function OnboardingFinishStep(props: {
         <div className="flex size-14 items-center justify-center rounded-full bg-success text-success-foreground">
           <CheckIcon className="size-7" />
         </div>
-        <div className="text-2xl font-medium text-foreground">
+        <div className="text-ui-xl font-medium text-foreground">
           {intl.formatMessage({ id: "onboarding.finish.done" })}
         </div>
         <div className="text-ui-base text-foreground-subtle">

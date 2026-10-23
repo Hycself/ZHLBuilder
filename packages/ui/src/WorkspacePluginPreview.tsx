@@ -159,7 +159,7 @@ export function WorkspacePluginPreview({
       <PopoverContent
         align="start"
         side="bottom"
-        className="w-72 max-w-[calc(100vw-2rem)] gap-0 rounded-2xl bg-menu p-0 shadow-xs"
+        className="w-72 max-w-[calc(100vw-2rem)] gap-0 rounded-lg bg-menu p-0 shadow-xs"
       >
         <Command className="bg-menu pb-0 [&_[data-slot=command-input-wrapper]]:border-b-0 [&_[data-slot=command-input-wrapper]]:p-0">
           <CommandInput

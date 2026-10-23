@@ -1893,7 +1893,7 @@ function ConversationStatusPanelImpl({
         data-ended-workflow-count={endedWorkflowRunCount}
         style={shellStyle}
         className={cn(
-          "pointer-events-auto relative overflow-hidden rounded-2xl border border-[var(--color-popover-border)] bg-[var(--color-popover)] text-[var(--color-foreground)] shadow-md transition-[border-radius,padding,background-color,box-shadow] duration-300 ease-in-out",
+          "pointer-events-auto relative overflow-hidden rounded-lg border border-[var(--color-popover-border)] bg-[var(--color-popover)] text-[var(--color-foreground)] shadow-md transition-[border-radius,padding,background-color,box-shadow] duration-300 ease-in-out",
           variant === "mini"
             ? "inline-flex max-h-8.5 w-[var(--chat-summary-panel-mini-width)] max-w-[calc(100vw-1.5rem)] flex-col"
             : variant === "panel"

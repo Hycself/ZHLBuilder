@@ -341,8 +341,8 @@ export function WhiteboardPane({
           </ControlHintTooltip>
         </div>
       </div>
-      <div className="flex min-h-0 flex-1 items-center justify-center bg-background-alt p-3">
-        <div className="relative aspect-[16/10] max-h-full w-full overflow-hidden rounded-lg border border-border bg-white shadow-sm">
+      <div className="flex min-h-0 flex-1 items-center justify-center bg-sidebar p-3">
+        <div className="relative aspect-[16/10] max-h-full w-full overflow-hidden rounded-lg border border-border bg-white">
           <canvas
             ref={canvasRef}
             className="h-full w-full touch-none"

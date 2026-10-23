@@ -158,7 +158,7 @@ function AppUsageLifetimeSummaryStrip({ snapshot }: { snapshot: AppUsageSnapshot
   ];
 
   return (
-    <section className="flex flex-col overflow-hidden rounded-xl bg-surface sm:flex-row sm:items-center">
+    <section className="flex flex-col overflow-hidden rounded-lg bg-surface sm:flex-row sm:items-center">
       {items.map((item, index) => (
         <Fragment key={item.label}>
           {index > 0 ? (

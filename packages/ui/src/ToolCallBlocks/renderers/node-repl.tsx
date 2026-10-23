@@ -245,14 +245,14 @@ export function NodeReplToolCallBlock(context: ToolCallBlockRenderContext) {
           // BUA 常返回 done、标题或 URL 等短结果，完整代码块的标题栏、边框和
           // 操作按钮会让内容重量远大于信息本身；短结果按普通次级正文展示。
           <p
-            className="break-words rounded-xl border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
+            className="break-words rounded-lg border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
             data-testid="node-repl-result-surface"
           >
             {model.resultText.trim()}
           </p>
         ) : model.resultText ? (
           <div
-            className="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+            className="max-h-72 overflow-auto rounded-lg border border-border bg-card"
             data-testid="node-repl-result-surface"
           >
             <FriendlyCodeBlock
@@ -314,7 +314,7 @@ export function NodeReplToolCallBlock(context: ToolCallBlockRenderContext) {
               <div className="space-y-2 pt-2">
                 {model.code ? (
                   <div
-                    className="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+                    className="max-h-72 overflow-auto rounded-lg border border-border bg-card"
                     data-testid="node-repl-detail-surface"
                   >
                     <FriendlyCodeBlock
@@ -330,7 +330,7 @@ export function NodeReplToolCallBlock(context: ToolCallBlockRenderContext) {
                 ) : null}
                 {model.error?.stack ? (
                   <div
-                    className="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+                    className="max-h-72 overflow-auto rounded-lg border border-border bg-card"
                     data-testid="node-repl-detail-surface"
                   >
                     <FriendlyCodeBlock

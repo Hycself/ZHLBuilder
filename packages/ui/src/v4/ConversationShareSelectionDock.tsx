@@ -106,7 +106,7 @@ function ConversationShareSelectionDockImpl({
     <section
       data-conversation-share-keep-open="selection-dock"
       data-testid="conversation-share-selection-dock"
-      className="w-full overflow-hidden rounded-2xl border border-input-border bg-input text-foreground"
+      className="w-full overflow-hidden rounded-lg border border-input-border bg-input text-foreground"
     >
       <p
         data-testid="conversation-share-selection-stage-hint"

@@ -200,7 +200,7 @@ const SubagentDirectoryContents = memo(function SubagentDirectoryContents({
         </section>
 
         {directory.error ? (
-          <p role="alert" className="mx-3 mt-4 text-ui-sm text-[var(--color-danger)]">
+          <p role="alert" className="mx-3 mt-4 text-ui-sm text-destructive">
             {intl.formatMessage({ id: "subagentDirectory.loadFailed" })}
           </p>
         ) : null}

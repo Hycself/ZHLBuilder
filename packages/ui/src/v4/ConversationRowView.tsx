@@ -63,7 +63,6 @@ import {
 import type { PdfViewerRangeSource } from "@/components/ui/pdf-viewer.js";
 import {
   MessageAction,
-  MessageActions,
   MessageResponse,
 } from "@/components/ai-elements/message.js";
 import {
@@ -127,7 +126,11 @@ import {
 } from "@/v4/ConversationUserInputEpilogue.js";
 import { ConversationHookDetailsAction } from "@/v4/ConversationHookDetailsAction.js";
 import { formatModelChangeLabel } from "@/v4/composer/modelTriggerDisplay.js";
-import { formatMessageTimeLabel } from "@/v4/messageTimeLabel.js";
+import {
+  MessageRowActions,
+  MessageRowTime,
+  type MessageRowActionsScope,
+} from "@/next-message/messageRowActions.js";
 import { parseConversationShareContext } from "@/lib/conversationShareContext.js";
 
 function RowShell({
@@ -1256,7 +1259,11 @@ const UserInputRowView = memo(function UserInputRowView({
         // 气泡保留 flex item 的自动宽度；宿主至少 624px 时再以 36rem 封顶并保留 48px 余量。
         <div
           data-v4-user-input-bubble="true"
-          className="flex max-w-full flex-col gap-2 rounded-xl rounded-tr-xs border border-border bg-surface px-4 py-3 text-ui-base text-foreground @min-[624px]/conversation:max-w-xl"
+          // 「纸与墨」P2：用户消息不再是「聊天气泡」。
+          // 去掉右上角那道 2px 的小圆角切角（气泡语言的标志），圆角收到 6px，
+          // 保留极浅底色作为「引文块」的区分 —— 纸与墨用版面和底色区分发言方，
+          // 不用左右对齐 + 气泡尾巴去模仿即时通讯。
+          className="flex max-w-full flex-col gap-2 rounded-md border border-border bg-surface px-4 py-3 text-ui-base text-foreground @min-[624px]/conversation:max-w-xl"
         >
           {hasVisibleText ? (
             <ConversationUserInputBody contentText={visibleText} rowId={row.rowId}>
@@ -1279,14 +1286,9 @@ const UserInputRowView = memo(function UserInputRowView({
           {status}
         </div>
       ) : null}
-      {/* 手机远控没有 hover，v4 迁移时漏掉了旧 UserMessage 的常显分支，
-          导致复制和编辑入口不可发现；远控直接显示，桌面端继续通过 hover/focus 降噪。 */}
-      <MessageActions
-        className={cn(
-          "mt-1",
-          "opacity-0 transition-opacity group-hover/user-row:opacity-100 focus-within:opacity-100",
-        )}
-      >
+      {/* 手机远控没有 hover：显现规则统一由 MessageRowActions 的触屏常显分支承载
+          （复制/编辑入口在触屏必须可发现），桌面端继续通过 hover/focus 降噪。 */}
+      <MessageRowActions scope="user-row" className="mt-1">
         <CopyRowAction
           text={row.text}
           rowId={row.rowId}
@@ -1302,7 +1304,7 @@ const UserInputRowView = memo(function UserInputRowView({
             <PencilIcon className="size-3.5" />
           </MessageAction>
         ) : null}
-      </MessageActions>
+      </MessageRowActions>
     </RowShell>
   );
 });
@@ -1319,6 +1321,7 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   onFork,
   onFeedbackChange,
   className,
+  actionsScope = "assistant-row",
 }: {
   rowId: number;
   entityId?: string;
@@ -1332,8 +1335,10 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
   onRetry?: (target: ConversationRowTarget) => void;
   onFeedbackChange?: AssistantFeedbackHandler;
   className?: string;
+  /** 显现作用域：行内用 assistant-row，轮尾工具栏用 assistant-turn。 */
+  actionsScope?: MessageRowActionsScope;
 }) {
-  const { intl, locale } = useZCodeIntl();
+  const { intl } = useZCodeIntl();
   const platform = useOptionalPlatform();
   const [localFeedback, setLocalFeedback] = useState<AssistantMessageFeedback | null>(feedback);
   const copyLabel = intl.formatMessage({ id: "chat.message.copy" });
@@ -1344,7 +1349,6 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
     id: localFeedback === "dislike" ? "chat.message.disliked" : "chat.message.dislike",
   });
   const forkLabel = intl.formatMessage({ id: "chat.message.fork" });
-  const timeLabel = formatMessageTimeLabel(createdAt, locale, intl);
   const resolveTooltip = (label: string): string | undefined => label;
 
   useEffect(() => {
@@ -1404,7 +1408,7 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
     }
   }, [entityId, onFork, rowId]);
   return (
-    <MessageActions className={cn(className)}>
+    <MessageRowActions scope={actionsScope} className={className}>
       <CopyRowAction
         text={text}
         rowId={rowId}
@@ -1467,10 +1471,8 @@ export const ConversationAssistantTextActions = memo(function ConversationAssist
       ) : null}
       {/* 旧 conversation surface 删除后，V4 动作栏漏掉了消息创建时间；
           时间是 row.createdAt 的只读派生展示，不新增 renderer 状态。 */}
-      {timeLabel ? (
-        <span className="select-none text-ui-sm text-foreground-subtlest">{timeLabel}</span>
-      ) : null}
-    </MessageActions>
+      <MessageRowTime createdAt={createdAt} />
+    </MessageRowActions>
   );
 });
 
@@ -1520,7 +1522,7 @@ const AssistantTextRowView = memo(function AssistantTextRowView({
       {/* MessageResponse 只消费自身声明的 props，不会把 data-* 透传到真实 DOM，
           导致 assistant 正文虽然在 JSX 上标了 selectable，框选逻辑却永远找不到该区域。
           selectable 语义必须放在稳定的 DOM 包装层上，完成态和 streaming 共用同一路径。 */}
-      <div data-conversation-selectable="true" className="w-full text-ui-base">
+      <div data-conversation-selectable="true" className="w-full max-w-3xl text-ui-base">
         <MessageResponse
           renderZCodeFileCitations
           streaming={streaming}
@@ -1579,10 +1581,7 @@ const AssistantTextRowView = memo(function AssistantTextRowView({
           onFork={onFork}
           onRetry={onRetry}
           onFeedbackChange={onFeedbackChange}
-          className={cn(
-            "mt-1",
-            "opacity-0 transition-opacity group-hover/assistant-row:opacity-100 focus-within:opacity-100",
-          )}
+          className="mt-1"
         />
       ) : null}
     </RowShell>

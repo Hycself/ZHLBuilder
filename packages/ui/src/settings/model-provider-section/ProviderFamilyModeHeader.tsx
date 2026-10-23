@@ -77,7 +77,7 @@ export function ProviderFamilyHeader({
     <div className="flex h-8 min-w-0 flex-wrap items-center justify-between gap-2">
       <div className="flex min-w-0 flex-wrap items-center gap-2">
         <ProviderLogo logo={resolveModelProviderNavLogo(selectedNavItem)} className="size-5" />
-        <h3 className="truncate text-ui-lg font-medium text-foreground">
+        <h3 className="truncate text-ui-lg tracking-ink font-semibold text-foreground">
           {selectedNavItem.type === "codingPlan" && isStartPlanModelProviderId(providerId)
             ? "Start Plan"
             : familySpec.label}

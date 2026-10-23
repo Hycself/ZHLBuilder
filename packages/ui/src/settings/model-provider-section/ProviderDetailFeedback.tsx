@@ -110,13 +110,13 @@ export function ProviderDetailFeedbackBoundary({ children }: { children: ReactNo
               role={item.state === "failure" ? "alert" : "status"}
               data-provider-detail-feedback-state={item.state}
               className={cn(
-                "pointer-events-auto flex min-h-11 w-full items-center gap-3 rounded-xl border px-3 py-2.5 backdrop-blur-sm",
+                "pointer-events-auto flex min-h-11 w-full items-center gap-3 rounded-lg border px-3 py-2.5 backdrop-blur-sm",
                 item.state === "success" &&
                   (item.successEmphasis
-                    ? "border-success/30 bg-success/10 text-success shadow-md"
+                    ? "border-success/30 bg-success/10 text-success"
                     : "border-border bg-popover/95 text-foreground shadow-md"),
                 item.state === "failure" &&
-                  "border-destructive/30 bg-destructive/10 text-destructive shadow-lg",
+                  "border-destructive/30 bg-destructive/10 text-destructive",
                 item.state === "pending" && "border-border bg-popover/95 text-foreground shadow-md",
               )}
             >

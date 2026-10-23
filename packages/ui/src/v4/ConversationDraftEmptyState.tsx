@@ -5,15 +5,17 @@
  * 手机远控复用同一组件，但继续保留 20px 紧凑标题；桌面草稿首页才按标题自身宽度适配。
  */
 import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
-import darkEmptyStateLogoUrl from "@/assets/zhlbuilder-mark.png";
 import { cn } from "@/components/lib/utils.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { useIsOfficeMode } from "@/hooks/useInterfaceMode.js";
 import { logger } from "@/logger.js";
 
 const GREETING_BOUNDARY_HOURS = [5, 9, 12, 14, 18, 23] as const;
-const GREETING_MIN_FONT_SIZE_PX = 20;
-const GREETING_MAX_FONT_SIZE_PX = 30;
+// 问候语原本是 20–30px 的展示级标题，和它下面的输入框抢同一个视觉重心，
+// 而输入框才是这一屏唯一的动作。现在收进排版的标题档：最大 18px（text-ui-xl），
+// 长译文放不下时才降到 16px（text-ui-lg），层级靠位置与字重表达，不靠字号堆。
+const GREETING_MIN_FONT_SIZE_PX = 16;
+const GREETING_MAX_FONT_SIZE_PX = 18;
 
 type ChatEmptyGreetingMessageId =
   | "chat.empty.greeting.morningEarly"
@@ -170,19 +172,13 @@ export function ConversationDraftEmptyState({ className }: { className?: string 
   return (
     <div
       className={cn(
-        "relative mb-10 flex w-full max-w-2xl flex-col items-center justify-center gap-6 text-foreground sm:mb-8",
+        // 左对齐到输入框同一列的左沿：问候语因此变成这张卡的标题，
+        // 而不是一屏居中的 hero。间距也从 gap-6 收到 gap-3，让它贴着输入框。
+        // 「纸与墨」：容器只承担排版节奏，不再承载任何装饰性图层。
+        "relative mb-8 flex w-full max-w-3xl flex-col items-start justify-center gap-4 text-foreground sm:mb-6",
         className,
       )}
     >
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute left-1/2 top-1/2 aspect-[5/4] w-[min(72vw,25rem)] -mt-10",
-          "-translate-x-1/2 -translate-y-1/2 text-foreground-subtlest",
-        )}
-      >
-        <ZCodeEmptyStateLogo className="h-full w-full" />
-      </div>
       <p
         ref={greetingContainerRef}
         data-v4-draft-greeting="true"
@@ -192,46 +188,22 @@ export function ConversationDraftEmptyState({ className }: { className?: string 
           } as CSSProperties
         }
         className={cn(
-          "relative z-10 w-full px-4 text-center font-medium text-foreground",
-          "text-[length:var(--v4-draft-greeting-font-size)]/[1.2]",
+          // 纸与墨：问候语按「出版物章节标题」处理 —— 半粗、紧字距、下方一道发丝线收口。
+          // 原先的半粗 + 宽松行距读起来像营销 hero；收紧字距并加一条细线，
+          // 它就变成正文的开头，而不是飘在页面中间的标语。
+          "relative z-10 w-full border-b border-border px-4 pb-4 text-left font-semibold tracking-ink-tight text-foreground",
+          "text-[length:var(--v4-draft-greeting-font-size)]/[1.3]",
         )}
       >
         <span
           ref={greetingMeasurementRef}
           aria-hidden="true"
-          className="pointer-events-none invisible absolute whitespace-nowrap text-3xl/[1.2]"
+          className="pointer-events-none invisible absolute whitespace-nowrap text-ui-xl/[1.4]"
         >
           {greeting}
         </span>
         <span>{greeting}</span>
       </p>
     </div>
-  );
-}
-
-function ZCodeEmptyStateLogo({ className }: { className?: string }) {
-  // 这里原本浅色用上游内联的 "Z" 字标线框、深色用一张实心 PNG：
-  // 前者是上游商标（品牌清理只搜字符串时漏掉了矢量图形），后者在深色下是
-  // 一大块实心青色，压在问候语上非常突兀。
-  // 现在两套主题统一用自己的飞机标，并用遮罩渐隐 + 降透明度 + 轻微模糊
-  // 还原原设计"背景水印"的分寸，而不是把 logo 当主视觉。
-  return (
-    <img
-      aria-hidden="true"
-      className={cn(
-        className,
-        // 上游原资源是 opacity 0.15 + 高斯模糊，所以水印几乎"看不见但撑住构图"；
-        // 之前直接贴实心 PNG 才会突兀。这里用同样的量级还原。
-        "opacity-[0.22] dark:opacity-[0.18] blur-[1.2px]",
-        "[mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.6)_50%,transparent_82%,transparent_100%)]",
-        "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.6)_50%,transparent_82%,transparent_100%)]",
-        "[mask-repeat:no-repeat] [mask-size:100%_100%]",
-        "[-webkit-mask-repeat:no-repeat] [-webkit-mask-size:100%_100%]",
-      )}
-      data-v4-draft-logo="both"
-      src={darkEmptyStateLogoUrl}
-      alt=""
-      draggable={false}
-    />
   );
 }

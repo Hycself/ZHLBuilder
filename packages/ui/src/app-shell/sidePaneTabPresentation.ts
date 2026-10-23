@@ -89,6 +89,7 @@ export function getLocalizedSidePaneTabTitle(
       "planTool.panel.planTab": labels.planTitle,
       "sidePane.workflowRun": labels.workflowRunTitle,
       "sidePane.workflowActor": labels.workflowActorTitle,
+      "sidePane.workflowDirectory": labels.workflowDirectoryTitle,
       "sidePane.workflowScript": labels.workflowScriptTitle,
       "sidePane.workflowArtifact": labels.workflowArtifactTitle,
     };

@@ -1,3 +1,4 @@
+// LEGACY: 5.1.0(18) 历史实现，已冻结。6.1 SDK 交付线见 ../../ZHLBuilder for HarmonyOS。
 {
   "app": {
     "signingConfigs": [],

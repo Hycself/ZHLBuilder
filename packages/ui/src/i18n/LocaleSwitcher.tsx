@@ -26,7 +26,7 @@ export function LocaleSwitcher() {
     <button
       onClick={cycleLocale}
       data-testid={TID_LOCALE_TOGGLE}
-      className="cursor-pointer rounded-lg bg-btn-alt-bg px-3 py-1 text-ui-base text-btn-alt-text transition hover:bg-surface-raised"
+      className="cursor-pointer rounded-lg bg-surface px-3 py-1 text-ui-base text-foreground-subtle transition hover:bg-surface-hover"
       title={intl.formatMessage({ id: "locale.switchLanguage" })}
     >
       {LOCALE_LABELS[locale]}

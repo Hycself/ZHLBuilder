@@ -276,7 +276,7 @@ export const Attachment = ({
             "hover:bg-accent/50",
           ],
           isOpenable && [
-            "cursor-pointer hover:border-border-hover hover:text-accent-foreground",
+            "cursor-pointer hover:border-border-hover hover:text-foreground",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           ],
           !isOpenable && "cursor-default",
@@ -312,7 +312,7 @@ export const AttachmentPreview = ({
   const iconSize = variant === "inline" ? "size-3" : "size-4";
 
   const renderIcon = (Icon: typeof ImageIcon) => (
-    <Icon className={cn(iconSize, "text-muted-foreground")} />
+    <Icon className={cn(iconSize, "text-foreground-subtle")} />
   );
 
   const renderContent = () => {
@@ -347,9 +347,9 @@ export const AttachmentPreview = ({
     <div
       className={cn(
         "flex shrink-0 items-center justify-center overflow-hidden",
-        variant === "grid" && "size-full bg-muted",
+        variant === "grid" && "size-full bg-surface",
         variant === "inline" && "size-5 rounded bg-background",
-        variant === "list" && "size-12 rounded bg-muted",
+        variant === "list" && "size-12 rounded bg-surface",
         className,
       )}
       {...props}
@@ -404,10 +404,10 @@ export const AttachmentInfo = ({
     <div className={cn("min-w-0 flex-1", className)} {...props}>
       <span className="block truncate">{label}</span>
       {description ? (
-        <span className="block truncate text-muted-foreground text-ui-base">{description}</span>
+        <span className="block truncate text-foreground-subtle text-ui-base">{description}</span>
       ) : null}
       {showMediaType && data.mediaType && (
-        <span className="block truncate text-muted-foreground text-ui-base">{data.mediaType}</span>
+        <span className="block truncate text-foreground-subtle text-ui-base">{data.mediaType}</span>
       )}
     </div>
   );
@@ -555,7 +555,7 @@ export type AttachmentEmptyProps = HTMLAttributes<HTMLDivElement>;
 export const AttachmentEmpty = ({ className, children, ...props }: AttachmentEmptyProps) => (
   <div
     className={cn(
-      "flex items-center justify-center p-4 text-muted-foreground text-ui-base",
+      "flex items-center justify-center p-4 text-foreground-subtle text-ui-base",
       className,
     )}
     {...props}

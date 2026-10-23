@@ -524,7 +524,7 @@ function GitCommitDialog({
               </button>
             </div>
 
-            <div className="border-t border-border/50 px-2.5 py-2">
+            <div className="border-t border-border px-2.5 py-2">
               {!hasIdentity ? (
                 <div className="mb-1.5 flex items-start gap-2 rounded-lg bg-warning/10 px-3 py-2 text-ui-base text-warning">
                   <AlertCircleIcon className="mt-0.5 size-4 shrink-0" />
@@ -644,9 +644,9 @@ function GitPushDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg gap-0 rounded-2xl p-0 overflow-hidden">
+      <DialogContent className="max-w-lg gap-0 rounded-lg p-0 overflow-hidden">
         <DialogHeader className="gap-2 px-6 py-5 pb-0">
-          <DialogTitle className="text-lg font-medium text-foreground">
+          <DialogTitle className="text-ui-xl font-medium text-foreground">
             {intl.formatMessage({ id: "git.actionMenu.pushDialog.title" })}
           </DialogTitle>
           <DialogDescription className="text-ui-base leading-6 text-foreground-subtle">
@@ -656,7 +656,7 @@ function GitPushDialog({
 
         <div className="space-y-5 px-6 py-6">
           {!error && (
-            <div className="rounded-xl bg-background/30">
+            <div className="rounded-lg bg-background/30">
               <div className="flex items-start justify-between p-4">
                 <div className="text-ui-base font-medium text-foreground">
                   {intl.formatMessage({
@@ -669,7 +669,7 @@ function GitPushDialog({
                 </div>
               </div>
 
-              <div className="space-y-3 border-t border-border/50 p-4 text-ui-base">
+              <div className="space-y-3 border-t border-border p-4 text-ui-base">
                 <div className="flex items-center justify-between gap-4">
                   <div className="text-ui-base font-medium text-foreground">
                     {intl.formatMessage({
@@ -702,7 +702,7 @@ function GitPushDialog({
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-between gap-4 border-t border-border/50 pt-3">
+                <div className="flex items-center justify-between gap-4 border-t border-border pt-3">
                   <div className="text-ui-base font-medium text-foreground">
                     {intl.formatMessage({
                       id: "git.actionMenu.pushDialog.pushLabel",
@@ -722,7 +722,7 @@ function GitPushDialog({
           )}
 
           {!pushEnabled ? (
-            <div className="flex items-start gap-3 rounded-xl bg-warning/10 px-4 py-3 text-ui-base text-warning">
+            <div className="flex items-start gap-3 rounded-lg bg-warning/10 px-4 py-3 text-ui-base text-warning">
               <AlertCircleIcon className="mt-0.5 size-4 shrink-0" />
               <span>
                 {intl.formatMessage({
@@ -734,7 +734,7 @@ function GitPushDialog({
 
           {error ? (
             <>
-              <div className="flex items-start gap-3 rounded-xl bg-warning/10 px-4 py-3 text-ui-base text-warning">
+              <div className="flex items-start gap-3 rounded-lg bg-warning/10 px-4 py-3 text-ui-base text-warning">
                 <AlertCircleIcon className="mt-0.5 size-4 shrink-0" />
                 <span>
                   {intl.formatMessage({

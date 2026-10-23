@@ -75,3 +75,8 @@ app-android/.gradle/
 app-android/.kotlin/
 app-android/app/build/
 app-android/local.properties
+# HarmonyOS 构建中间物与产物（hvigor 可再生，且体积大）
+app-harmony/.hvigor/
+app-harmony/**/build/
+# v3 令牌脚本改写前的本地取证备份，不属于源码
+packages/ui/src/styles.css.p0-backup

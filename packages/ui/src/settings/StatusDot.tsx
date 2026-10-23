@@ -8,7 +8,7 @@ const TONE_CLASS: Record<StatusDotTone, string> = {
   green: "text-green-500",
   amber: "text-yellow-500",
   red: "text-red-500",
-  muted: "text-muted-foreground",
+  muted: "text-foreground-subtlest",
   subtle: "text-foreground-subtle",
 };
 

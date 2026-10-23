@@ -177,7 +177,7 @@ export function MemorySettingsSection({
       </SettingsGroupCard>
 
       {!projectMemoryViewerAvailable ? (
-        <div className="rounded-xl border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
+        <div className="rounded-lg border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
           {intl.formatMessage({ id: "settings.memory.viewer.localOnly" })}
         </div>
       ) : !memoryEnabled ? null : (

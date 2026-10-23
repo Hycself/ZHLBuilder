@@ -425,7 +425,7 @@ function CodingPlanQuotaCards({
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <h3 className="text-ui-lg font-medium text-foreground">
+          <h3 className="text-ui-lg tracking-ink font-semibold text-foreground">
             {intl.formatMessage({ id: "settings.usage.quotaTitle" })}
           </h3>
           {(fiveHourCardVisible && resetUi.entry) || (weeklyCardVisible && resetUi.week.entry) ? (
@@ -461,7 +461,7 @@ function CodingPlanQuotaCards({
           const percentage = getQuotaRemainingPercentage(card.limit) ?? 0;
           const resetTime = formatUsageStatsQuotaResetTime(locale, card.limit.nextResetTime);
           return (
-            <div key={card.key} className="min-w-0 flex-1 rounded-xl bg-surface/70 p-4">
+            <div key={card.key} className="min-w-0 flex-1 rounded-lg bg-surface/70 p-4">
               {/* min-h 与重置动作(h-5)对齐:没有动作的额度卡也保持同高,避免同排数值/进度条错位。 */}
               <div className="flex min-h-5 min-w-0 items-center gap-1">
                 <span className="min-w-0 truncate text-ui-base text-foreground">{card.label}</span>
@@ -548,7 +548,7 @@ function CodingPlanUsageTrendsSection({
   return (
     <section id={CODING_PLAN_USAGE_TRENDS_SECTION_ID} className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-ui-lg font-medium text-foreground">
+        <h3 className="text-ui-lg tracking-ink font-semibold text-foreground">
           {intl.formatMessage({ id: "settings.usage.trendsTitle" })}
         </h3>
         <div className="flex flex-wrap items-center gap-2">
@@ -597,10 +597,10 @@ function CodingPlanActivitySection({ snapshot }: { snapshot: CodingPlanUsageSnap
 
   return (
     <section className="space-y-4">
-      <h3 className="text-ui-lg font-medium text-foreground">
+      <h3 className="text-ui-lg tracking-ink font-semibold text-foreground">
         {intl.formatMessage({ id: "settings.usage.activityTitle" })}
       </h3>
-      <div className="flex flex-col overflow-hidden rounded-xl bg-surface sm:flex-row sm:items-center">
+      <div className="flex flex-col overflow-hidden rounded-lg bg-surface sm:flex-row sm:items-center">
         {items.map((item, index) => (
           <Fragment key={item.label}>
             {index > 0 ? (
@@ -738,7 +738,7 @@ function CodingPlanUsageDetailSection({ snapshot }: { snapshot: CodingPlanUsageS
   return (
     <section className="space-y-4">
       {showDetailSummary ? <CodingPlanUsageDetailSummary summary={activeSummary} /> : null}
-      <div className="rounded-xl bg-surface/70 p-3">
+      <div className="rounded-lg bg-surface/70 p-3">
         <div className="flex flex-wrap items-center gap-2">
           {hasCreditUsageData ? (
             <>
@@ -935,7 +935,7 @@ function CodingPlanUsageDetailSummary({
   return (
     <div className="grid gap-3 sm:grid-cols-3">
       {items.map((item) => (
-        <div key={item.label} className="rounded-xl bg-surface/70 p-4">
+        <div key={item.label} className="rounded-lg bg-surface/70 p-4">
           <div className="truncate text-ui-lg font-medium text-foreground">{item.value}</div>
           <div className="mt-1 flex min-w-0 items-center gap-2 text-ui-base text-foreground-subtle">
             <span className="min-w-0 truncate">{item.label}</span>
@@ -974,14 +974,14 @@ function CodingPlanHealthSection({ snapshot }: { snapshot: CodingPlanUsageSnapsh
   return (
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-ui-lg font-medium text-foreground">
+        <h3 className="text-ui-lg tracking-ink font-semibold text-foreground">
           {intl.formatMessage({ id: "settings.usage.healthTitle" })}
         </h3>
         <span className="text-ui-sm text-foreground-subtle">
           {intl.formatMessage({ id: "settings.usage.healthRange.7d" })}
         </span>
       </div>
-      <div className="rounded-xl bg-surface/70 p-3">
+      <div className="rounded-lg bg-surface/70 p-3">
         <UsageChartLoadBoundary
           scope="settings.usage.coding-plan-health-chart"
           resetKeys={[snapshot.sourceProvider.id, snapshot.generatedAt]}

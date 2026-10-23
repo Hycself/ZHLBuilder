@@ -574,7 +574,7 @@ export const MemoTaskItem = memo(function TaskListItem({
           ) : leadingIndicator === "unread" ? (
             <span
               data-unread-indicator="true"
-              className="h-1.5 w-1.5 rounded-full bg-sky-500 dark:bg-sky-400"
+              className="h-1.5 w-1.5 rounded-full bg-foreground"
             />
           ) : leadingIndicator === "loading" ? (
             <LoaderIcon className="size-4 animate-spin text-foreground-subtle" />

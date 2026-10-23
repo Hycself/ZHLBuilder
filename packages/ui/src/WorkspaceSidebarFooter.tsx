@@ -66,7 +66,7 @@ function getSidebarProfileName(user?: UserInfo | null): string {
     return username;
   }
 
-  return "ZCode";
+  return "ZHLBuilder";
 }
 
 function getSidebarProfileBadge(
@@ -208,6 +208,8 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
       if (!isCancelled && Number.isFinite(state.zoomLevel)) {
         setDesktopZoomLevel(state.zoomLevel);
       }
+    }).catch(() => {
+      // 桥在少数宿主上会 reject；没有 catch 就是一条未处理拒绝
     });
 
     const dispose = platform.onDesktopZoomLevelChanged?.((state) => {
@@ -228,8 +230,11 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
 
   return (
     // footer 被 Settings 复用，页面专属边距由调用方传入，避免修改共享默认样式。
-    <footer className={cn("flex shrink-0 flex-col gap-2.5 px-4 pt-2 pb-4", className)}>
-      <div className="flex min-w-0 gap-2">
+    <footer className={cn("flex shrink-0 flex-col gap-2.5 border-t border-border px-4 pt-3 pb-4", className)}>
+      {/* 一枚圆角容器装下「身份 + 远程 + 设置」。原来是「只圆左两角的 pill」加两枚散在
+          右边的图标：半圆角既不符合圆角层级（rounded-lg 只批给对话框与输入壳），也让
+          这三件事看着互不相干；新导航轨是方角图标，底栏用同一颗圆角容器才成一套。 */}
+      <div className="flex min-w-0 items-center gap-1 rounded-xl border border-border bg-surface py-1 pr-1">
         <DropdownMenu open={profileMenuOpen} onOpenChange={setProfileMenuOpen}>
           <DropdownMenuTrigger asChild>
             {/* 头像和 Login 之前直接绑定到登录动作，导致用户无法从这里打开偏好设置。
@@ -237,8 +242,7 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
             <Button
               type="button"
               variant="ghost"
-              size={"lg"}
-              className="min-w-0 flex-1 justify-start gap-2 overflow-hidden rounded-tl-2xl rounded-bl-2xl border-0 pl-0"
+              className="h-8 min-w-0 flex-1 justify-start gap-2 overflow-hidden rounded-lg bg-transparent pl-2.5 hover:bg-surface-hover"
               data-testid={TID_LOGIN_TRIGGER}
               aria-label={profileBadge}
             >
@@ -377,6 +381,20 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
                 </DropdownMenuItem>
               </>
             ) : null}
+            {zhl.available && zhl.loggedIn && zhl.canLogout ? (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  disabled={zhl.busy}
+                  onSelect={() => {
+                    void zhl.logout();
+                  }}
+                >
+                  <LogOut className="size-4" />
+                  {intl.formatMessage({ id: "app.logout.zhl" })}
+                </DropdownMenuItem>
+              </>
+            ) : null}
             {!zhl.available && onLogin && !user ? (
               <>
                 <DropdownMenuSeparator />
@@ -397,7 +415,7 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
             ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="flex shrink-0 items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-0.5">
           {isDesktop && workspacePath ? (
             <WorkspaceWebRemoteControlTrigger
               workspacePath={workspacePath}

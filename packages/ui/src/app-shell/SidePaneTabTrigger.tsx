@@ -209,7 +209,7 @@ export function SidePaneTabDragOverlay({
   return (
     <div
       className={cn(
-        "inline-flex !h-7 w-39 min-w-15 max-w-39 items-center justify-start gap-1.5 whitespace-nowrap rounded-lg border border-transparent bg-selected px-1.5 pr-1 text-ui-base font-medium text-foreground shadow-md",
+        "inline-flex !h-7 w-39 min-w-15 max-w-39 items-center justify-start gap-1.5 whitespace-nowrap rounded-lg shadow-md border border-transparent bg-selected px-1.5 pr-1 text-ui-base font-medium text-foreground",
         "cursor-grabbing",
       )}
     >

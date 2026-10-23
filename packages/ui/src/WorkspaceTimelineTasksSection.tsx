@@ -594,8 +594,10 @@ export function WorkspaceTimelineTasksSection({
   }
 
   if (items.length === 0) {
+    // 空态之前是一行裸文字，和上面的项目行同权重，读起来像"坏了/没加载出来"。
+    // 用虚线框把它声明成一个有意的空槽位，字号降到次级，让列表区不再假装有一行内容。
     return (
-      <div className="px-3 py-2 text-ui-base text-foreground-subtle">
+      <div className="mx-2 mb-2 rounded-lg border border-dashed border-border px-3 py-3 text-ui-sm text-foreground-subtle">
         {emptyMessage ?? intl.formatMessage({ id: "taskList.noTasks" })}
       </div>
     );

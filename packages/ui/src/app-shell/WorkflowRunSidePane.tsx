@@ -8,7 +8,7 @@ import { buildWorkflowTimeline } from "@/components/workflow-timeline/timeline-m
 import { workflowSubagentModelCardLabel } from "@/components/workflow-timeline/subagent-model-label.js";
 import { workflowSummaryParts } from "@/components/workflow-timeline/timeline-summary.js";
 import { WorkflowRunArtifactsSection } from "@/app-shell/WorkflowRunArtifactsSection.js";
-import { WorkflowRunPhaseList } from "@/app-shell/WorkflowRunPhaseList.js";
+import { WorkflowRunPhaseSection } from "@/next-workflow/WorkflowRunPhaseSection.js";
 import { WorkflowRunProvenance } from "@/app-shell/WorkflowRunProvenance.js";
 import {
   WorkflowRunResultSections,
@@ -385,11 +385,12 @@ const WorkflowRunContent = memo(function WorkflowRunContent({
       <WorkflowRunResultSections result={result} />
 
       {/*
-       * 阶段清单：时间线读作一份纵向清单，
-       *           升级问题挂在提问者那一行下面。图不可得（老对话翻不到发起行）时念一句「图不可用」。
+       * 过程段：账本套上节头（可折叠，默认展开）——实时段（状态头）与错误/终止红条常显，
+       *           过程与交付（产物段自带节头）是两枚抽屉。图不可得（老对话翻不到发起行）时念一句
+       *           「图不可用」。
        */}
       {graph !== undefined && model !== undefined ? (
-        <WorkflowRunPhaseList
+        <WorkflowRunPhaseSection
           graph={graph}
           model={model}
           pendingQuestions={pendingQuestions}

@@ -303,7 +303,7 @@ export function ResponsiveBrowserViewport({
       ref={canvasRef}
       className={cn(
         "h-full min-h-0 w-full min-w-0",
-        active ? "overflow-auto bg-background-alt" : "overflow-hidden bg-background",
+        active ? "overflow-auto bg-sidebar" : "overflow-hidden bg-background",
       )}
       data-responsive-browser-mode={active ? "active" : "inactive"}
     >
@@ -317,7 +317,7 @@ export function ResponsiveBrowserViewport({
         <div
           className={cn(
             "relative shrink-0",
-            active ? "bg-card shadow-sm ring-1 ring-border" : "h-full w-full",
+            active ? "bg-card ring-1 ring-border" : "h-full w-full",
           )}
           data-testid={TID_BROWSER_RESPONSIVE_SCALED_FRAME}
           style={

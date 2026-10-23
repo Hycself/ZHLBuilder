@@ -251,7 +251,7 @@ export function MentionPanel({
 
   return (
     <div
-      className="mb-1 overflow-hidden rounded-2xl border border-border bg-menu shadow-xs"
+      className="mb-1 overflow-hidden rounded-lg border border-border bg-menu shadow-xs"
       data-testid={TID_PROMPT_SUGGESTION_PANEL}
       data-trigger={trigger}
     >

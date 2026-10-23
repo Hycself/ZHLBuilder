@@ -74,11 +74,11 @@ function PlanStatusCardSurface({
   usageContent?: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4">
+    <div className="rounded-lg border border-border bg-surface p-4">
       <div className="flex min-w-0 items-center justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
         <div className="min-w-0 space-y-1">
           <div className="flex min-w-0 flex-wrap items-center gap-1">
-            <h3 className="min-w-0 truncate text-ui-lg font-semibold leading-5 text-foreground">
+            <h3 className="min-w-0 truncate text-ui-lg tracking-ink font-semibold leading-5 text-foreground">
               {planTitle}
             </h3>
             {titleAccessory}
@@ -105,7 +105,7 @@ function PlanStatusCardSurface({
 
 export function ModelProviderLoadingCard({ loadingLabel }: { loadingLabel: string }) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-3">
+    <div className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-3">
       <div className="flex items-center gap-2 text-ui-base text-foreground-subtle">
         <Loader2Icon className="size-4 animate-spin" />
         <span>{loadingLabel}</span>
@@ -124,7 +124,7 @@ export function PresetProviderPlaceholderCard({
   const { intl } = useZCodeIntl();
 
   return (
-    <div className="bg-background/50 rounded-2xl p-3">
+    <div className="bg-background/50 rounded-lg p-3">
       <div className="text-ui-lg font-semibold text-foreground">{displayName}</div>
       <div className="mt-1 text-ui-base text-foreground-subtle">
         {intl.formatMessage({ id: messageId })}

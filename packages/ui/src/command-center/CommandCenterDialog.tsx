@@ -374,7 +374,7 @@ function CommandCenterSearchHistory({
               className="inline-flex min-h-5 max-w-44 shrink-0 items-center gap-1 rounded-full border border-border px-2 py-0.5 leading-none text-ui-base text-foreground-subtle hover:bg-surface-hover hover:text-foreground"
               onClick={() => onPickEntry(entry)}
             >
-              {prefix ? <span className="font-mono text-ui-xs text-brand">{prefix}</span> : null}
+              {prefix ? <span className="font-mono text-ui-xs text-foreground-subtlest">{prefix}</span> : null}
               <span className="min-w-0 truncate">{entry.query}</span>
             </button>
           );
@@ -987,7 +987,7 @@ export const CommandCenterDialog = memo(function CommandCenterDialogComponent({
     >
       <Command shouldFilter={false} loop className={quickPickCommandClassName}>
         <div className="border-b border-border px-2 pt-2 pb-2">
-          <div className="flex h-8 items-center gap-2 rounded-full border border-input-border bg-input px-2.5 transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused">
+          <div className="flex h-8 items-center gap-2 rounded-lg border border-input-border bg-input px-2.5 transition-colors hover:border-input-border-hover focus-within:border-input-border-focused focus-within:bg-input-focused">
             <SearchIcon className="size-4 shrink-0 text-foreground-subtlest" />
             <CommandPrimitive.Input
               value={rawQuery}

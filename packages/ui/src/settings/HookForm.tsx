@@ -176,7 +176,7 @@ export function HookForm({
   return (
     <div className="space-y-4" data-testid="hooks-form">
       <div className="space-y-1">
-        <h3 className="text-ui-xl font-semibold text-foreground">
+        <h3 className="text-ui-xl tracking-ink font-semibold text-foreground">
           {intl.formatMessage({
             id: isEditing ? "settings.hooks.edit" : "settings.hooks.add",
           })}
@@ -186,7 +186,7 @@ export function HookForm({
         </p>
       </div>
 
-      <div className="space-y-3 rounded-xl border border-border p-4">
+      <div className="space-y-3 rounded-lg border border-border p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="grid w-full min-w-0 gap-3 sm:grid-cols-2 md:w-auto">
             <Field label={intl.formatMessage({ id: "settings.hooks.event" })} htmlFor="hook-event">

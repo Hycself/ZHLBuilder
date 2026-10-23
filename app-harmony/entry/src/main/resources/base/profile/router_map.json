@@ -1,0 +1,29 @@
+{
+  "routerMap": [
+    {
+      "name": "Register",
+      "pageSourceFile": "src/main/ets/pages/Register.ets",
+      "buildFunction": "RegisterBuilder"
+    },
+    {
+      "name": "PinGate",
+      "pageSourceFile": "src/main/ets/pages/PinGate.ets",
+      "buildFunction": "PinGateBuilder"
+    },
+    {
+      "name": "DeviceDetail",
+      "pageSourceFile": "src/main/ets/pages/DeviceDetail.ets",
+      "buildFunction": "DeviceDetailBuilder"
+    },
+    {
+      "name": "TaskOutput",
+      "pageSourceFile": "src/main/ets/pages/TaskOutput.ets",
+      "buildFunction": "TaskOutputBuilder"
+    },
+    {
+      "name": "RemotePanel",
+      "pageSourceFile": "src/main/ets/pages/RemotePanel.ets",
+      "buildFunction": "RemotePanelBuilder"
+    }
+  ]
+}

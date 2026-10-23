@@ -19,7 +19,7 @@ import { cn } from "@/components/lib/utils.js";
  * Settings 功能的标题起点、顶部基线和内容宽度不一致。
  */
 export const SETTINGS_FRAME_CONTENT_CLASSNAME =
-  "mx-auto w-full max-w-4xl px-4 pb-8 pt-0 lg:px-8 lg:pb-10";
+  "mx-auto w-full max-w-4xl px-4 pt-6 pb-8 lg:px-8 lg:pt-8 lg:pb-10";
 
 export function ThemeSelect({
   value,
@@ -66,13 +66,13 @@ export function ThemePreviewCard({
   const { intl } = useZCodeIntl();
   const previewSurfaceClassName = mode === "light" ? "ring-1 ring-black/5" : "ring-1 ring-white/8";
   const previewThemeStyle = {
-    "--color-background": mode === "light" ? "#f8f8f8" : "#161616",
-    "--color-card": mode === "light" ? "#f8f8f8" : "#161616",
-    "--color-foreground": mode === "light" ? "#0d0d0d" : "#ffffff",
+    "--color-background": "var(--color-background)",
+    "--color-card": "var(--color-card)",
+    "--color-foreground": mode === "light" ? "#16202E" : "#E6EDF6",
   } as CSSProperties;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <div>
           <div className="text-ui-base font-semibold text-foreground">{title}</div>
@@ -147,7 +147,7 @@ export function SettingsRow({
 
 export function SettingsGroupCard({ children }: { children: ReactNode }) {
   return (
-    <Card className="overflow-hidden rounded-xl border border-border bg-card py-0 shadow-none">
+    <Card className="overflow-hidden rounded-lg border border-border bg-card py-0 shadow-none">
       <CardContent className="space-y-0 px-0">{children}</CardContent>
     </Card>
   );

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 const CONTAINER_CLASS_NAME =
-  "rounded-xl border border-dashed border-border bg-transparent px-4 py-10 text-center";
+  "rounded-lg border border-dashed border-border bg-transparent px-4 py-10 text-center";
 
 export function PluginLoadingState({ label }: { label: string }) {
   return (

@@ -43,7 +43,7 @@ export function AutomationInstructionsComposer({
   return (
     <div
       data-invalid={invalid || undefined}
-      className="flex min-h-39 flex-col overflow-hidden rounded-xl border-0 bg-surface @container/composer"
+      className="flex min-h-39 flex-col overflow-hidden rounded-lg border-0 bg-surface @container/composer"
     >
       {children}
     </div>
@@ -106,7 +106,7 @@ export function AutomationInstructionsTextarea({
       rows={rows}
       onInput={handleInput}
       className={cn(
-        "h-29 min-h-29 max-h-39 shrink-0 resize-none overflow-y-hidden rounded-xl border border-input-border bg-input p-3 text-foreground outline-none transition-colors placeholder:text-ui-base placeholder:text-foreground-subtlest hover:border-input-border-hover focus:border-input-border-focused focus:bg-input-focused focus:outline-none aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20",
+        "h-29 min-h-29 max-h-39 shrink-0 resize-none overflow-y-hidden rounded-lg border border-input-border bg-input p-3 text-foreground outline-none transition-colors placeholder:text-ui-base placeholder:text-foreground-subtlest hover:border-input-border-hover focus:border-input-border-focused focus:bg-input-focused focus:outline-none aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20",
         AUTOMATION_FORM_INPUT_TYPOGRAPHY_CLASSNAME,
       )}
     />

@@ -1,9 +1,10 @@
 import { memo, useState } from "react";
 import type { BotProvider } from "@zhlbuilder/shared";
-import { Bot as BotIcon, MonitorSmartphone, XIcon } from "lucide-react";
+import { Bot as BotIcon, ChevronRightIcon, MonitorSmartphone, XIcon } from "lucide-react";
 import { BotsDialog } from "@/BotsDialog.js";
 import { ProviderIcon } from "@/BotsDialog/shared.js";
 import { Button } from "@/components/ui/button.js";
+import { cn } from "@/components/lib/utils.js";
 import {
   Dialog,
   DialogContent,
@@ -45,6 +46,8 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
   const [botsDialogOpen, setBotsDialogOpen] = useState(false);
   const [botEntryProvider, setBotEntryProvider] =
     useState<RemoteControlBotProvider | null>(null);
+  // Bot 渠道列表较长，默认折叠成摘要行，点击展开后再选择渠道。
+  const [botChannelExpanded, setBotChannelExpanded] = useState(false);
 
   const handleOpenBotEntry = (provider: RemoteControlBotProvider) => {
     setBotEntryProvider(provider);
@@ -70,7 +73,7 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           showCloseButton={false}
-          className="max-h-[calc(100vh-6rem)] max-w-lg gap-0 overflow-hidden rounded-2xl p-0"
+          className="max-h-[calc(100vh-6rem)] max-w-lg gap-0 overflow-hidden rounded-lg p-0"
         >
           <Button
             type="button"
@@ -89,7 +92,7 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
           <div className="max-h-[calc(100vh-6rem)] min-h-0 overflow-y-auto p-5">
             <DialogHeader className="space-y-2 pr-8">
               <div className="flex items-center gap-2">
-                <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-surface text-primary">
+                <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-surface text-foreground-subtle">
                   <MonitorSmartphone className="size-5" />
                 </div>
                 <div className="space-y-1">
@@ -104,10 +107,18 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
             </DialogHeader>
 
             <div className="mt-5 grid gap-4">
-              <section className="flex min-h-[360px] flex-col rounded-xl border border-border bg-card p-4">
-                <div className="mb-4 flex items-start gap-2">
+              <section className="flex flex-col rounded-xl border border-border bg-card p-4">
+                <button
+                  aria-expanded={botChannelExpanded}
+                  aria-label={intl.formatMessage({
+                    id: "webRemoteControl.botChannel.title",
+                  })}
+                  className="flex w-full items-start gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                  onClick={() => setBotChannelExpanded((value) => !value)}
+                  type="button"
+                >
                   <BotIcon className="mt-0.5 size-4 shrink-0 text-foreground-subtle" />
-                  <div className="min-w-0 space-y-1">
+                  <div className="min-w-0 flex-1 space-y-1">
                     <div className="text-ui-base font-medium text-foreground">
                       {intl.formatMessage({
                         id: "webRemoteControl.botChannel.title",
@@ -119,68 +130,79 @@ export const WebRemoteControlDialog = memo(function WebRemoteControlDialogCompon
                       })}
                     </p>
                   </div>
-                </div>
-                <div className="grid min-h-0 flex-1 gap-3">
-                  {REMOTE_CONTROL_BOT_ENTRIES.map((entry) => {
-                    const regionTagLabelId = getBotProviderRegionTagLabelId(
-                      entry.provider,
-                    );
+                  <ChevronRightIcon
+                    aria-hidden
+                    className={cn(
+                      "mt-0.5 size-3.5 shrink-0 text-foreground-subtlest transition-transform",
+                      botChannelExpanded && "rotate-90",
+                    )}
+                  />
+                </button>
+                {botChannelExpanded ? (
+                  <>
+                    <div className="mt-4 grid min-h-0 flex-1 gap-3">
+                      {REMOTE_CONTROL_BOT_ENTRIES.map((entry) => {
+                        const regionTagLabelId = getBotProviderRegionTagLabelId(
+                          entry.provider,
+                        );
 
-                    return (
-                      <button
-                        key={entry.provider}
-                        type="button"
-                        className="flex min-h-0 cursor-pointer items-start gap-3 rounded-lg border border-transparent bg-surface px-3 py-3 text-left transition-colors hover:border-input-border-focused hover:bg-surface-hover focus-visible:border-input-border-focused"
-                        onClick={() => handleOpenBotEntry(entry.provider)}
-                      >
-                        {/* Bugfix: 远控 Bot Channel 入口原来用通用 lucide 图标，用户无法一眼区分微信、飞书和 Telegram。
-                            这里直接复用 BotsDialog 的渠道 logo，不再额外包裹容器，保证品牌图标本身作为视觉识别。 */}
-                        <ProviderIcon
-                          provider={entry.provider}
-                          className="size-12 shrink-0"
-                        />
-                        <span className="min-w-0 flex-1 space-y-1">
-                          <span className="flex min-w-0 items-center gap-1.5 text-ui-base font-medium text-foreground">
-                            <span className="min-w-0 truncate">
-                              {intl.formatMessage({
-                                id: `webRemoteControl.botChannel.${entry.provider}.title`,
-                              })}
-                            </span>
-                            {regionTagLabelId ? (
-                              <span className="inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-ui-xs font-medium leading-none text-foreground-subtle">
-                                {intl.formatMessage({ id: regionTagLabelId })}
+                        return (
+                          <button
+                            key={entry.provider}
+                            type="button"
+                            className="flex min-h-0 cursor-pointer items-start gap-3 rounded-lg border border-transparent bg-surface px-3 py-3 text-left transition-colors hover:border-input-border-focused hover:bg-surface-hover focus-visible:border-input-border-focused"
+                            onClick={() => handleOpenBotEntry(entry.provider)}
+                          >
+                            {/* Bugfix: 远控 Bot Channel 入口原来用通用 lucide 图标，用户无法一眼区分微信、飞书和 Telegram。
+                                这里直接复用 BotsDialog 的渠道 logo，不再额外包裹容器，保证品牌图标本身作为视觉识别。 */}
+                            <ProviderIcon
+                              provider={entry.provider}
+                              className="size-12 shrink-0"
+                            />
+                            <span className="min-w-0 flex-1 space-y-1">
+                              <span className="flex min-w-0 items-center gap-1.5 text-ui-base font-medium text-foreground">
+                                <span className="min-w-0 truncate">
+                                  {intl.formatMessage({
+                                    id: `webRemoteControl.botChannel.${entry.provider}.title`,
+                                  })}
+                                </span>
+                                {regionTagLabelId ? (
+                                  <span className="inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-ui-xs font-medium leading-none text-foreground-subtle">
+                                    {intl.formatMessage({ id: regionTagLabelId })}
+                                  </span>
+                                ) : null}
                               </span>
-                            ) : null}
-                          </span>
-                          <span className="block text-ui-base/relaxed text-foreground-subtle">
-                            {intl.formatMessage({
-                              id: `webRemoteControl.botChannel.${entry.provider}.description`,
-                            })}
-                          </span>
-                          <span className="block text-ui-base font-medium text-primary">
-                            {intl.formatMessage({
-                              id: "webRemoteControl.botChannel.configure",
-                            })}
-                          </span>
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="lg"
-                    className="w-full justify-center gap-2 enabled:cursor-pointer"
-                    onClick={handleOpenBotsDialog}
-                  >
-                    <BotIcon className="size-3.5" />
-                    {intl.formatMessage({
-                      id: "webRemoteControl.botChannel.manageBots",
-                    })}
-                  </Button>
-                </div>
+                              <span className="block text-ui-base/relaxed text-foreground-subtle">
+                                {intl.formatMessage({
+                                  id: `webRemoteControl.botChannel.${entry.provider}.description`,
+                                })}
+                              </span>
+                              <span className="block text-ui-base font-medium text-primary">
+                                {intl.formatMessage({
+                                  id: "webRemoteControl.botChannel.configure",
+                                })}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="mt-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="lg"
+                        className="w-full justify-center gap-2 enabled:cursor-pointer"
+                        onClick={handleOpenBotsDialog}
+                      >
+                        <BotIcon className="size-3.5" />
+                        {intl.formatMessage({
+                          id: "webRemoteControl.botChannel.manageBots",
+                        })}
+                      </Button>
+                    </div>
+                  </>
+                ) : null}
               </section>
 
               <ZhlAppPairSection />

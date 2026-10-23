@@ -348,7 +348,7 @@ export function TaskFindDialog({
         aria-modal="false"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="absolute top-3 left-1/2 z-30 w-[min(360px,calc(100%-1rem))] -translate-x-1/2 overflow-hidden rounded-2xl border border-popover-border bg-popover p-0 text-ui-base/relaxed text-foreground shadow-md outline-none [app-region:no-drag] max-md:top-2"
+        className="absolute top-3 left-1/2 z-30 w-[min(360px,calc(100%-1rem))] -translate-x-1/2 overflow-hidden rounded-lg border border-popover-border bg-popover p-0 text-ui-base/relaxed text-foreground shadow-md outline-none [app-region:no-drag] max-md:top-2"
       >
         <div className="sr-only">
           <h2 id={titleId}>{intl.formatMessage({ id: "quickPick.find.title" })}</h2>

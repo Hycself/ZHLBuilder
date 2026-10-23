@@ -42,9 +42,9 @@ export function GitBranchCreateDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg gap-0 rounded-2xl p-0 overflow-hidden">
+      <DialogContent className="max-w-lg gap-0 rounded-lg p-0 overflow-hidden">
         <DialogHeader className="gap-2 px-6 py-5 pb-0">
-          <DialogTitle className="text-lg font-medium text-foreground">
+          <DialogTitle className="text-ui-xl font-medium text-foreground">
             {intl.formatMessage({
               id: "git.branchSwitcher.createDialog.title",
             })}
@@ -165,9 +165,9 @@ export function GitBranchSwitchAssistDialog({
       }}
     >
       {step === "blocked" && state ? (
-        <DialogContent className="max-w-lg gap-0 rounded-2xl p-0 overflow-hidden">
+        <DialogContent className="max-w-lg gap-0 rounded-lg p-0 overflow-hidden">
           <DialogHeader className="gap-2 px-6 py-5 pb-0">
-            <DialogTitle className="text-lg font-medium text-foreground">
+            <DialogTitle className="text-ui-xl font-medium text-foreground">
               {intl.formatMessage({
                 id: "git.branchSwitcher.blockedDialog.title",
               })}
@@ -258,9 +258,9 @@ export function GitBranchSwitchAssistDialog({
       ) : null}
 
       {step === "commit" && state ? (
-        <DialogContent className="max-w-lg gap-0 rounded-2xl p-0 overflow-hidden">
+        <DialogContent className="max-w-lg gap-0 rounded-lg p-0 overflow-hidden">
           <DialogHeader className="gap-2 px-6 py-5 pb-0">
-            <DialogTitle className="text-lg font-medium text-foreground">
+            <DialogTitle className="text-ui-xl font-medium text-foreground">
               {intl.formatMessage({
                 id: "git.branchSwitcher.commitDialog.title",
               })}
@@ -297,7 +297,7 @@ export function GitBranchSwitchAssistDialog({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between gap-3 border-t border-border/50 p-4 text-ui-base">
+              <div className="flex items-center justify-between gap-3 border-t border-border p-4 text-ui-base">
                 <div className="text-ui-base font-medium text-foreground">
                   {intl.formatMessage({
                     id: "git.branchSwitcher.commitDialog.changesLabel",

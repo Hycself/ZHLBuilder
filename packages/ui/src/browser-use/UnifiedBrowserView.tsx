@@ -12,6 +12,7 @@ import { logger } from "@/logger.js";
 import { BrowserToolbar } from "@/EmbeddedBrowserPaneParts.js";
 import { BrowserViewportSurface } from "@/browser-use/BrowserViewportSurface.js";
 import { BrowserViewportToolbar } from "@/browser-use/BrowserViewportToolbar.js";
+import { BrowserTaskBar } from "@/next-cua/BrowserTaskBar.js";
 import { useBrowserResizeOperationWarning } from "@/browser-use/useBrowserResizeOperationWarning.js";
 import { useBrowserScreenshotSurfaceReady } from "@/browser-use/useBrowserScreenshotSurfaceReady.js";
 import { useEmbeddedBrowserWheelChain } from "@/browser-use/useEmbeddedBrowserWheelChain.js";
@@ -1049,6 +1050,12 @@ export function UnifiedBrowserView({
           zoom={responsiveViewportZoom}
         />
       ) : null}
+      {/* 当前任务条（自研重写 v2 · C3）：地址行与画面之间的一条 slim 状态横条。 */}
+      <BrowserTaskBar
+        {...(browserUseOperationUntil === undefined
+          ? {}
+          : { operationUntil: browserUseOperationUntil })}
+      />
       <BrowserViewportSurface
         browserRegionRef={browserRegionRef}
         browserState={browserState}

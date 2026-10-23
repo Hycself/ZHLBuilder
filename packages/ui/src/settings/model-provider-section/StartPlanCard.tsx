@@ -36,7 +36,7 @@ export function StartPlanCard({
           id: "settings.modelProvider.startPlan.quotaSectionTitle",
         })}
       </h3>
-      <div className="min-h-20 overflow-hidden rounded-xl border border-border bg-[radial-gradient(circle_at_14%_12%,color-mix(in_srgb,var(--color-success)_24%,var(--color-background)_76%)_0%,color-mix(in_srgb,var(--color-success)_10%,var(--color-surface)_90%)_64%,var(--color-surface)_300%)] p-4">
+      <div className="min-h-20 overflow-hidden rounded-lg border border-border bg-surface p-4">
         <div className="flex min-w-0 flex-col gap-1.5">
           <div className="flex min-w-0 items-center justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -51,7 +51,7 @@ export function StartPlanCard({
                 </span>
               </div>
               <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span className="text-2xl font-bold leading-none text-foreground">
+                <span className="text-ui-display font-bold leading-none text-foreground">
                   {heroMetric}
                 </span>
                 <span className="text-ui-base font-medium text-foreground-subtle">

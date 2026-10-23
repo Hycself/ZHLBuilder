@@ -608,7 +608,7 @@ export function WorkspaceFileTree({
       className="flex h-full min-h-0 flex-col text-foreground"
       data-testid={TID_WORKSPACE_FILE_TREE_PANEL}
     >
-      <div className="px-2 pb-3 pt-3">
+      <div className="flex h-12 shrink-0 items-center border-b border-border px-2">
         <Button
           type="button"
           variant="ghost"

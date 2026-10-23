@@ -209,14 +209,14 @@ export function McpToolCallBlock(context: ToolCallBlockRenderContext) {
           </section>
         ) : resultText && isCompactResult(resultText) ? (
           <p
-            className="break-words rounded-xl border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
+            className="break-words rounded-lg border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
             data-testid="mcp-result-surface"
           >
             {resultText.trim()}
           </p>
         ) : resultText ? (
           <div
-            className="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+            className="max-h-72 overflow-auto rounded-lg border border-border bg-card"
             data-testid="mcp-result-surface"
           >
             <CodeBlock
@@ -244,7 +244,7 @@ export function McpToolCallBlock(context: ToolCallBlockRenderContext) {
           </div>
         ) : toolCall.status === "pending" ? (
           <p
-            className="break-words rounded-xl border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
+            className="break-words rounded-lg border border-border bg-card px-3 py-2 text-ui-base text-foreground-subtle"
             data-testid="mcp-pending-surface"
           >
             {context.statusLabel}
@@ -284,7 +284,7 @@ export function McpToolCallBlock(context: ToolCallBlockRenderContext) {
                     <h4 className="text-ui-sm font-medium text-foreground-subtlest">
                       {parametersLabel}
                     </h4>
-                    <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
+                    <div className="max-h-72 overflow-auto rounded-lg border border-border bg-card">
                       <CodeBlock
                         appTheme={context.theme}
                         code={JSON.stringify(toolCall.input, null, 2)}

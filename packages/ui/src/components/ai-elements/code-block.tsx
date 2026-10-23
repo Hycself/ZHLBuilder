@@ -152,7 +152,9 @@ export const CodeBlockContainer = ({
 }: HTMLAttributes<HTMLDivElement> & { language: string }) => (
   <div
     className={cn(
-      "group relative w-full overflow-hidden rounded-xl bg-background text-foreground",
+      // 「纸与墨」P2：代码块按「印刷附样」处理 —— 6px 圆角、纸面底色、由调用方的
+      // 发丝线收边；不再是 12px 圆角的浮起卡片。
+      "group relative w-full overflow-hidden rounded-md bg-background text-foreground",
       className,
     )}
     data-language={language}
@@ -187,7 +189,7 @@ export const CodeBlockHeader = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 px-3 py-2 text-ui-base text-muted-foreground",
+        "flex items-center justify-between gap-3 px-3 py-2 text-ui-base text-foreground-subtle",
         className,
       )}
       {...props}
@@ -390,7 +392,7 @@ export const CodeBlockWrapButton = ({
       <Button
         aria-label={ariaLabel ?? label}
         aria-pressed={wrapLongLines}
-        className={cn("shrink-0", wrapLongLines && "bg-muted", className)}
+        className={cn("shrink-0", wrapLongLines && "bg-surface", className)}
         onClick={(event) => {
           onClick?.(event);
           if (!event.defaultPrevented) {

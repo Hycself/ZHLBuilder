@@ -14,7 +14,7 @@ export function AutomationTemplateSkeletonGrid({ label }: { label: string }) {
           key={key}
           data-automation-template-skeleton-card
           aria-hidden="true"
-          className="motion-safe:animate-pulse flex min-h-[114px] flex-col gap-2 rounded-xl border border-card-border bg-background p-3"
+          className="motion-safe:animate-pulse flex min-h-[114px] flex-col gap-2 rounded-lg border border-card-border bg-background p-3"
         >
           <div className="flex items-center gap-1">
             <span className="size-5 shrink-0 rounded-md bg-surface" />

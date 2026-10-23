@@ -455,7 +455,7 @@ export function TreemappingPane({
                 key={`${event.toolCallId}-${event.action}-${index}`}
                 className={cn(
                   "flex min-h-8 min-w-0 items-center justify-between gap-3 px-2 py-1.5 text-ui-base",
-                  index > 0 && "border-t border-border/60",
+                  index > 0 && "border-t border-border",
                 )}
               >
                 <span className="flex min-w-0 items-center gap-1.5">

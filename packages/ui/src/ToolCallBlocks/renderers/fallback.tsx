@@ -61,7 +61,7 @@ export function FallbackToolCallBlock(context: FallbackToolCallBlockProps) {
           }
         />
         {!hasInlinePreview && !context.hideRawFallback ? (
-          <pre className="px-4 py-3 rounded-xl bg-surface text-ui-xs mt-1 text-foreground-subtle max-h-50 overflow-auto">
+          <pre className="px-4 py-3 rounded-lg bg-surface text-ui-xs mt-1 text-foreground-subtle max-h-50 overflow-auto">
             {JSON.stringify(toolCall, null, 2)}
           </pre>
         ) : null}

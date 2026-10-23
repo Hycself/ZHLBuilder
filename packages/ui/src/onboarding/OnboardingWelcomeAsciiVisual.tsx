@@ -15,7 +15,7 @@ export function OnboardingWelcomeAsciiVisual() {
         <div className="space-y-2">
           <p
             className={cn(
-              "whitespace-nowrap text-3xl font-semibold leading-[1.08] tracking-tight",
+              "whitespace-nowrap text-ui-display-lg font-semibold leading-[1.08] tracking-tight",
               palette.heading,
             )}
           >

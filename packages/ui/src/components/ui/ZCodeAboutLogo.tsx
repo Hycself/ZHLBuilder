@@ -2,7 +2,7 @@ import { cn } from "@/components/lib/utils.js";
 import zhlbuilderMark from "@/assets/zhlbuilder-mark.png";
 
 /**
- * ZHLBuilder 品牌标（XFSZHL 飞机标，品牌青 #22D3EE）。
+ * ZHLBuilder 品牌标（XFSZHL 飞机标；品牌深青 #0B7285，深色底提亮 #22D3EE）。
  * 替换上游 ZCode 的 "Z" 字标 —— 上游视觉标识不随 fork 分发。
  */
 export function ZCodeAboutLogo({ className }: { className?: string }) {

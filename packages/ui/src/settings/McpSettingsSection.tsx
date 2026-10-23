@@ -515,7 +515,7 @@ function PluginMcpServerList({
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300"
+                  className="text-foreground-subtle underline underline-offset-2 hover:text-foreground dark:text-foreground-subtle dark:hover:text-foreground"
                   aria-label={openAuthorizationLabel}
                   data-testid={testId(TID_MCP_OPEN_AUTHORIZATION_BUTTON, item.runtimeServerName)}
                   title={openAuthorizationLabel}
@@ -1363,7 +1363,7 @@ export function McpSettingsSection({
         <div className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0 space-y-1">
-              <h3 className="text-ui-xl font-semibold text-foreground">
+              <h3 className="text-ui-xl tracking-ink font-semibold text-foreground">
                 {editingServer
                   ? intl.formatMessage({ id: "settings.mcp.form.editTitle" })
                   : intl.formatMessage({ id: "settings.mcp.form.createTitle" })}

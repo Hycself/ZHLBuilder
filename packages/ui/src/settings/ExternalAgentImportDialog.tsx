@@ -585,7 +585,7 @@ function ExternalAgentImportDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h-[min(84vh,640px)] max-h-[calc(100vh-2rem)] max-w-2xl overflow-hidden rounded-2xl p-0">
+      <DialogContent className="h-[min(84vh,640px)] max-h-[calc(100vh-2rem)] max-w-2xl overflow-hidden rounded-lg p-0">
         <div className="flex h-full min-h-0 min-w-0 flex-col">
           <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden p-4 sm:p-5">
             <DialogHeader className="shrink-0 sm:-mt-1">
@@ -621,7 +621,7 @@ function ExternalAgentImportDialog({
               </div>
             </DialogHeader>
 
-            <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-border bg-card">
+            <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-border bg-card">
               <div className="h-full overflow-auto p-3">
                 {displayError ? (
                   <div className="mb-3 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-ui-base text-foreground">
@@ -756,7 +756,7 @@ export function ExternalAgentImportSelectionPanel({
           </ControlHintTooltip>
         </div>
       </div>
-      <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-border bg-card">
+      <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-border bg-card">
         <div className="h-full overflow-auto p-3">
           {state.error ? (
             <div className="mb-3 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-ui-base text-foreground">

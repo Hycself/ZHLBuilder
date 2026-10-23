@@ -37,7 +37,7 @@ export function ToolSnapshotFieldNotice({
   });
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-border/70 bg-muted/40 px-3 py-2 text-ui-base text-foreground-subtle sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-2 rounded-lg border border-border bg-surface/40 px-3 py-2 text-ui-base text-foreground-subtle sm:flex-row sm:items-center sm:justify-between">
       <span>{description}</span>
       <Button
         type="button"

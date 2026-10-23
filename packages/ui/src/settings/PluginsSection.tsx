@@ -1,5 +1,6 @@
 /* eslint-disable max-lines -- 共享能力外壳聚合 Scope，并承载 Plugin tabs 与独立 Commands 入口。 */
 import { PluginAddMenu } from "@/settings/PluginAddMenu.js";
+import { ContentSectionHeader } from "@/next-shell/ContentPageScaffold.js";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Loader2,
@@ -482,7 +483,7 @@ function PluginList({
   }, [initialize, pluginManagementService, configScope, target, targetServiceResolution.rpcReady]);
 
   const renderPluginRows = (items: ZCodePluginInfo[]) => (
-    <div className="overflow-hidden rounded-xl bg-surface">
+    <div className="overflow-hidden rounded-lg bg-surface">
       {items.map((plugin, index) => (
         <Fragment key={plugin.id}>
           {index > 0 ? <div className="h-px bg-border/50" aria-hidden="true" /> : null}
@@ -639,7 +640,7 @@ function PluginList({
   );
 
   const renderUnavailableComputerUse = () => (
-    <div className="overflow-hidden rounded-xl bg-surface">
+    <div className="overflow-hidden rounded-lg bg-surface">
       <div className="flex min-w-0 items-center gap-3 px-4 py-3 text-foreground-subtle">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-background text-foreground-subtle">
           <Monitor className="size-4" aria-hidden="true" />
@@ -776,17 +777,9 @@ function PluginList({
         />
       ) : null}
       <div className={hideInstalledGroup ? "hidden" : "space-y-4"}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3
-            id="plugin-installed-title"
-            className="flex h-7 items-center gap-1.5 text-ui-base font-medium text-foreground"
-          >
-            {intl.formatMessage({ id: "settings.plugin.plugins.installed" })}
-            <span className="text-ui-sm font-normal text-foreground-subtle">
-              {visibleInstalledPlugins.length}
-            </span>
-          </h3>
-          <div className="flex flex-wrap items-center gap-2">
+        <ContentSectionHeader
+          actions={
+            <div className="flex flex-wrap items-center gap-2">
             {connectedRemoteSyncTarget ? (
               <ControlHintTooltip
                 title={intl.formatMessage({
@@ -824,8 +817,14 @@ function PluginList({
                 />
               </>
             ) : null}
-          </div>
-        </div>
+            </div>
+          }
+          count={visibleInstalledPlugins.length}
+          countTone="subtle"
+          headingLevel={3}
+          id="plugin-installed-title"
+          title={intl.formatMessage({ id: "settings.plugin.plugins.installed" })}
+        />
         {configScope === "workspace" && target ? (
           <div
             className="rounded-lg border border-border bg-card px-3 py-2 text-ui-sm text-foreground-subtle"
@@ -877,12 +876,12 @@ function PluginList({
       </div>
       {!hasEmptySearchResult && visibleBuiltInPlugins.length > 0 ? (
         <div className="space-y-4">
-          <h3 className="flex h-7 items-center gap-1.5 text-ui-base font-medium text-foreground">
-            {intl.formatMessage({ id: "settings.plugin.plugins.builtIn" })}
-            <span className="text-ui-sm font-normal text-foreground-subtle">
-              {visibleBuiltInPlugins.length}
-            </span>
-          </h3>
+          <ContentSectionHeader
+            count={visibleBuiltInPlugins.length}
+            countTone="subtle"
+            headingLevel={3}
+            title={intl.formatMessage({ id: "settings.plugin.plugins.builtIn" })}
+          />
           {renderPluginRows(visibleBuiltInPlugins)}
         </div>
       ) : null}
@@ -940,7 +939,7 @@ function PluginList({
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-ui-base text-foreground-subtle">
+    <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-ui-base text-foreground-subtle">
       {message}
     </div>
   );

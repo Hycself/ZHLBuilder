@@ -151,7 +151,7 @@ export const WorkspaceHookPendingBanner = memo(function WorkspaceHookPendingBann
       <button
         type="button"
         data-testid={TID_V4_WORKSPACE_HOOK_PENDING_REVIEW}
-        className="shrink-0 rounded-md bg-primary px-2.5 py-1 text-primary-foreground hover:bg-primary/80"
+        className="shrink-0 rounded-md border border-border bg-surface px-2.5 py-1 text-foreground hover:bg-surface-hover"
         onClick={handleReview}
       >
         {intl.formatMessage({ id: "chat.workspaceHookPending.review" })}

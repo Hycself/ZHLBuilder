@@ -75,7 +75,7 @@ export function SwitchModeToolCallBlock(context: ToolCallBlockRenderContext) {
           aria-label={intl.formatMessage({ id: "planTool.panel.open" })}
           onClick={handleCardClick}
           onKeyDown={handleCardKeyDown}
-          className="group w-full min-w-0 overflow-hidden rounded-xl border border-card-border bg-card text-foreground shadow-xs outline-none transition-colors hover:border-border-hover focus-visible:border-input-border-focused focus-visible:ring-2 focus-visible:ring-ring/40"
+          className="group w-full min-w-0 overflow-hidden rounded-lg border border-card-border bg-card text-foreground shadow-xs outline-none transition-colors hover:border-border-hover focus-visible:border-input-border-focused focus-visible:ring-2 focus-visible:ring-ring/40"
         >
           <header className="flex h-10 min-w-0 items-start gap-2 px-4 pt-4">
             <div className="flex shrink-0 items-center gap-2">

@@ -125,6 +125,9 @@ const desktopNodeRuntimeExternals = [
   "node-forge",
   // ZIP 解包器内部依赖 CommonJS require("fs")，不能内联到 ESM main/host 产物。
   "yauzl",
+  // ZHL 设备代理在 main 启动图顶层 import qrcode（配对二维码）；这里显式声明为运行时外部依赖，
+  // 消除"隐式外置"在打包链路里被漏拷的风险（Windows 曾报启动即崩 Cannot find module 'qrcode'）。
+  "qrcode",
 ];
 
 function createDevReadyMarkerHook(target: "main" | "host" | "preload"): string {

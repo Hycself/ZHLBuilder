@@ -75,7 +75,7 @@ export function WorkflowDiagnosticsSection({
 
   return (
     <div
-      className="flex flex-col gap-1.5 rounded-xl border border-border bg-panel px-3 py-2"
+      className="flex flex-col gap-1.5 rounded-lg border border-border bg-panel px-3 py-2"
       data-testid="workflow-compiler-feedback"
     >
       <div className="flex min-w-0 items-baseline justify-between gap-2 text-ui-xs font-medium text-foreground-subtle">

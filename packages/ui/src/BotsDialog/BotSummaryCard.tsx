@@ -15,10 +15,7 @@ import {
 } from "@/components/ui/select.js";
 import { Switch } from "@/components/ui/switch.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
-import {
-  SettingsGroupCard,
-  SettingsRow,
-} from "@/settings/SettingsPageParts.js";
+import { SettingsRow } from "@/settings/SettingsPageParts.js";
 import {
   getBotReplyGranularitiesForProvider,
   getBotReplyGranularityEntryForProvider,
@@ -231,22 +228,20 @@ export function BotDangerCard({ onDelete }: { onDelete: () => void }) {
   const { intl } = useZCodeIntl();
 
   return (
-    <SettingsGroupCard>
-      <SettingsRow
-        label={intl.formatMessage({ id: "bots.delete" })}
-        description={intl.formatMessage({ id: "bots.delete.description" })}
-        control={
-          <Button
-            variant="destructive"
-            size="lg"
-            onClick={onDelete}
-            title={intl.formatMessage({ id: "bots.delete" })}
-          >
-            <Trash2 className="size-4" />
-            {intl.formatMessage({ id: "bots.delete" })}
-          </Button>
-        }
-      />
-    </SettingsGroupCard>
+    <SettingsRow
+      label={intl.formatMessage({ id: "bots.delete" })}
+      description={intl.formatMessage({ id: "bots.delete.description" })}
+      control={
+        <Button
+          variant="destructive"
+          size="lg"
+          onClick={onDelete}
+          title={intl.formatMessage({ id: "bots.delete" })}
+        >
+          <Trash2 className="size-4" />
+          {intl.formatMessage({ id: "bots.delete" })}
+        </Button>
+      }
+    />
   );
 }

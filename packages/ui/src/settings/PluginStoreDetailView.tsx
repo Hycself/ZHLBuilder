@@ -125,13 +125,13 @@ export function PluginStoreDetailView({
     <div className="space-y-8" data-testid="plugin-store-detail" data-plugin-id={item.id}>
       {/* 头部：大图标后，显示名与菜单/主按钮同排；简介和来源提示另起一行。 */}
       <div className="space-y-3">
-        <PluginStoreAvatar item={item} className="size-16 rounded-2xl" iconClassName="size-6" />
+        <PluginStoreAvatar item={item} className="size-16 rounded-lg" iconClassName="size-6" />
         <div
           className="flex min-w-0 items-center justify-between gap-3"
           data-testid="plugin-store-title-actions"
         >
           <div className="flex min-w-0 items-center gap-2">
-            <h1 className="min-w-0 truncate text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className="min-w-0 truncate text-ui-display font-semibold tracking-tight text-foreground">
               {displayName}
             </h1>
             <PluginStorePaidPlanBadge item={item} />
@@ -214,7 +214,7 @@ export function PluginStoreDetailView({
         </div>
       ) : componentsFailed ? (
         <div
-          className="flex items-center justify-between gap-2 rounded-xl border border-warning/30 bg-warning/10 px-3 py-2 text-ui-base text-foreground-subtle"
+          className="flex items-center justify-between gap-2 rounded-lg border border-warning/30 bg-warning/10 px-3 py-2 text-ui-base text-foreground-subtle"
           data-testid="plugin-store-components-error"
         >
           <span>{intl.formatMessage({ id: "settings.plugins.marketplace.componentsError" })}</span>
@@ -265,7 +265,7 @@ function HeroSection({
         data-testid="plugin-store-example-prompt"
         data-plugin-id={item.id}
         // 彩色 Hero 上统一使用参考图的深色半透明胶囊，不随底图有无切换为普通卡片。
-        className="group/prompt flex w-fit max-w-2xl items-center gap-2.5 rounded-3xl bg-black/75 px-3.5 py-2.5 text-left text-ui-base text-white shadow-lg backdrop-blur-md transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+        className="group/prompt flex w-fit max-w-2xl items-center gap-2.5 rounded-lg bg-black/75 px-3.5 py-2.5 text-left text-ui-base text-white shadow-lg backdrop-blur-md transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
         onClick={() => onUsePrompt(item, prompt)}
       >
         <img
@@ -290,7 +290,7 @@ function HeroSection({
 
   return (
     <div
-      className="relative min-h-72 overflow-hidden rounded-3xl sm:aspect-[3/1] sm:min-h-0"
+      className="relative min-h-72 overflow-hidden rounded-lg sm:aspect-[3/1] sm:min-h-0"
       data-testid="plugin-store-hero"
     >
       <ThemeHeroVisual className="pointer-events-none absolute inset-0" />
@@ -324,7 +324,7 @@ function ComponentSection({ group }: { group: PluginComponentDisplayGroup }) {
   return (
     <section data-testid="plugin-store-component-section" data-component-kind={group.kind}>
       <div className="flex items-baseline gap-2 border-b border-border pb-2">
-        <h2 className="text-ui-lg font-semibold text-foreground">
+        <h2 className="text-ui-lg tracking-ink font-semibold text-foreground">
           {intl.formatMessage({ id: SECTION_TITLE_IDS[group.kind] })}
         </h2>
         <span className="text-ui-base text-foreground-subtle">{group.count}</span>
@@ -431,7 +431,7 @@ function InfoSection({
   return (
     <section>
       <div className="border-b border-border pb-2">
-        <h2 className="text-ui-lg font-semibold text-foreground">
+        <h2 className="text-ui-lg tracking-ink font-semibold text-foreground">
           {intl.formatMessage({ id: "settings.plugins.store.info.title" })}
         </h2>
       </div>
@@ -450,7 +450,7 @@ function InfoSection({
                 type="button"
                 title={row.url}
                 aria-label={`${row.label}: ${row.url}`}
-                className="inline-flex items-center gap-1 rounded-md text-ui-base text-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
+                className="inline-flex items-center gap-1 rounded-md text-ui-base text-foreground transition-colors hover:text-foreground-subtlest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-input-border-focused"
                 onClick={() => platform?.openExternal(row.url)}
               >
                 <ExternalLink className="size-3.5" aria-hidden="true" />

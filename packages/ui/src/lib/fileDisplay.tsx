@@ -172,7 +172,7 @@ export function createFileDisplayDom(
   if (options.showFilePath && descriptor.filePath) {
     const secondary = document.createElement("span");
     secondary.className =
-      options.filePathClassName ?? "truncate text-[0.85em] text-muted-foreground";
+      options.filePathClassName ?? "truncate text-[0.85em] text-foreground-subtle";
     secondary.textContent = descriptor.filePath;
     container.append(secondary);
   }

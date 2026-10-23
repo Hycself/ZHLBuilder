@@ -160,7 +160,7 @@ export function GitGraphDialog({ open, workspacePath, onOpenChange }: GitGraphDi
     >
       <DialogContent
         showCloseButton={false}
-        className="h-[min(78vh,720px)] max-w-5xl gap-0 overflow-hidden rounded-2xl p-0"
+        className="h-[min(78vh,720px)] max-w-5xl gap-0 overflow-hidden rounded-lg p-0"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>{intl.formatMessage({ id: "gitGraph.title" })}</DialogTitle>
@@ -185,7 +185,7 @@ export function GitGraphDialog({ open, workspacePath, onOpenChange }: GitGraphDi
           </div>
         ) : errorMessage ? (
           <div className="flex h-full items-center justify-center bg-background p-6">
-            <div className="max-w-md rounded-xl border border-border bg-card p-4 text-ui-base text-foreground">
+            <div className="max-w-md rounded-lg border border-border bg-card p-4 text-ui-base text-foreground">
               <div className="flex items-start gap-3">
                 <AlertCircleIcon className="mt-0.5 size-4 shrink-0 text-warning" />
                 <p className="break-words text-foreground-subtle">{errorMessage}</p>

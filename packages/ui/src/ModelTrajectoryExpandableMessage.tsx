@@ -174,7 +174,7 @@ export function ExpandableTrajectoryMessage({
                 data-trajectory-tool-result-name=""
                 data-trajectory-search-field="tool-name"
                 variant="outline"
-                className="ml-1.5 h-5 rounded-full border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle group-data-[state=open]:hidden"
+                className="ml-1.5 h-5 rounded-md border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle group-data-[state=open]:hidden"
                 title={toolResultMeta.names}
               >
                 {toolResultMeta.names}
@@ -185,7 +185,7 @@ export function ExpandableTrajectoryMessage({
                 data-trajectory-tool-result-id=""
                 data-trajectory-search-field="tool-id"
                 variant="outline"
-                className="ml-1 h-5 max-w-[40%] truncate rounded-full border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle group-data-[state=open]:hidden"
+                className="ml-1 h-5 max-w-[40%] truncate rounded-md border-border bg-tag px-2 font-mono text-ui-xs text-foreground-subtle group-data-[state=open]:hidden"
                 title={toolResultMeta.ids}
               >
                 {toolResultMeta.ids}

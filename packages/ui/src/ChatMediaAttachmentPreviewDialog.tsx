@@ -86,12 +86,12 @@ export function ChatMediaAttachmentPreviewDialog({
             {attachment?.mediaType ?? title}
           </DialogDescription>
         </DialogHeader>
-        <div className="flex max-h-[72vh] min-h-64 items-center justify-center bg-background-alt p-4">
+        <div className="flex max-h-[72vh] min-h-64 items-center justify-center bg-sidebar p-4">
           {attachment?.pdfSource || attachment?.url ? (
             isPdf ? (
               <Suspense
                 fallback={
-                  <p className="text-ui-base text-muted-foreground" role="status">
+                  <p className="text-ui-base text-foreground-subtle" role="status">
                     {loadingLabel}
                   </p>
                 }
@@ -105,7 +105,7 @@ export function ChatMediaAttachmentPreviewDialog({
             ) : isVideo ? (
               videoState === "unsupported" ? (
                 <p
-                  className="max-w-xl px-6 text-center text-ui-base text-muted-foreground"
+                  className="max-w-xl px-6 text-center text-ui-base text-foreground-subtle"
                   role="alert"
                 >
                   {unsupportedVideoLabel}
@@ -113,7 +113,7 @@ export function ChatMediaAttachmentPreviewDialog({
               ) : (
                 <>
                   {videoState === "loading" ? (
-                    <p className="text-ui-base text-muted-foreground" role="status">
+                    <p className="text-ui-base text-foreground-subtle" role="status">
                       {loadingLabel}
                     </p>
                   ) : null}
@@ -143,7 +143,7 @@ export function ChatMediaAttachmentPreviewDialog({
               {unavailableLabel}
             </p>
           ) : loading ? (
-            <p className="text-ui-base text-muted-foreground" role="status">
+            <p className="text-ui-base text-foreground-subtle" role="status">
               {loadingLabel}
             </p>
           ) : null}

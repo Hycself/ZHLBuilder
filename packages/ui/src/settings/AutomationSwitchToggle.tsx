@@ -17,7 +17,7 @@ export function AutomationSwitchToggle({
   color = "green",
   size = "default",
 }: AutomationSwitchToggleProps) {
-  const activeColor = color === "blue" ? "bg-brand" : "bg-success";
+  const activeColor = color === "blue" ? "bg-foreground" : "bg-success";
   const isSmall = size === "sm";
 
   return (

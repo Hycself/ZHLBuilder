@@ -439,7 +439,7 @@ export function WorkspaceHeaderTitleSection({
                 />
               ) : null}
               {workspaceBranchLabel ? (
-                <span className="flex min-w-0 items-center gap-2 border-t border-border/50 pt-3 font-normal">
+                <span className="flex min-w-0 items-center gap-2 border-t border-border pt-3 font-normal">
                   <GitBranch className="size-4 shrink-0" />
                   <span className="min-w-0 break-words [overflow-wrap:anywhere]">
                     {workspaceBranchLabel}
@@ -470,7 +470,7 @@ export function WorkspaceHeaderTitleSection({
         className={cn(
           "flex min-w-12 max-w-100 shrink items-center gap-2 truncate font-semibold text-foreground @max-[560px]/workspace-header:max-w-[30vw] @max-[420px]/workspace-header:max-w-[22vw]",
           simplifyForNarrowRemote && "max-md:max-w-[42vw]",
-          compact ? "text-[0.92rem]" : "text-ui-base",
+          compact ? "text-ui-caption" : "text-ui-base",
         )}
         title={activeTaskTitle}
       >

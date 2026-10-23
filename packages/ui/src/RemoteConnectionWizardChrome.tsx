@@ -55,7 +55,7 @@ export function RemoteConnectionWizardSidebar({ currentStep }: { currentStep: Re
                   isCurrent
                     ? "bg-card text-foreground"
                     : isCompleted
-                      ? "bg-background-alt text-foreground"
+                      ? "bg-sidebar text-foreground"
                       : "text-foreground-subtle",
                 )}
               >
@@ -99,7 +99,7 @@ export function RemoteConnectionWizardSidebar({ currentStep }: { currentStep: Re
                     isCurrent
                       ? "border-border-hover bg-card"
                       : isCompleted
-                        ? "border-transparent bg-background-alt"
+                        ? "border-transparent bg-sidebar"
                         : "border-transparent bg-transparent",
                   )}
                 >
@@ -151,7 +151,7 @@ export function RemoteConnectionWizardHeader({
   return (
     <div className="space-y-2">
       <div className="flex items-start justify-between gap-4">
-        <DialogTitle className="text-lg font-medium">{title}</DialogTitle>
+        <DialogTitle className="text-ui-xl font-medium">{title}</DialogTitle>
         <div className="flex shrink-0 items-center gap-1">
           {onMinimize ? (
             <Button

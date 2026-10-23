@@ -90,7 +90,7 @@ function SummaryLeadingContent({
       {sourceLabel ? (
         <span
           className={cn(
-            "shrink-0 rounded border border-border bg-background-alt px-1.5 py-0.5 text-ui-xs leading-none text-foreground-subtlest",
+            "shrink-0 rounded border border-border bg-sidebar px-1.5 py-0.5 text-ui-xs leading-none text-foreground-subtlest",
             prioritizePrimaryText && "@max-[360px]/conversation:hidden",
           )}
         >

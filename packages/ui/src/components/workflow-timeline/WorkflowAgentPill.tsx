@@ -195,7 +195,7 @@ export function WorkflowAgentPill({
     <Root
       aria-label={open?.label}
       className={cn(
-        "wf-pill wf-agent-pill wf-arrive flex rounded-full min-w-0 items-center",
+        "wf-pill wf-agent-pill wf-arrive flex rounded-md min-w-0 items-center",
         size === "row"
           ? "h-6 gap-1.5 pl-1 pr-1.5 text-ui-sm"
           : "h-8 gap-2 bg-surface pl-2 pr-2.5 text-ui-sm",

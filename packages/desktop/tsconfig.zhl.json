@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out/zhlcheck",
+    "rootDir": "src",
+    "lib": ["es2025"]
+  },
+  // src/main 整体有 87 条历史类型错误，进不了根 typecheck；但 ZHL 设备链路这几份文件
+  // 已经是零错误，单独成一个工程，避免下次又靠"主进程不参与类型检查"混过去。
+  "include": ["src/main/zhlDeviceAgent.ts", "src/main/zhlDeviceTaskRunner.ts", "src/main/zhlGate.ts"],
+  "references": [{ "path": "../shared" }, { "path": "../services" }]
+}

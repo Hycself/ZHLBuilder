@@ -6,9 +6,10 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
 import QRCode from "qrcode";
-import { Bot, Loader2, Plus } from "lucide-react";
+import { Bot, ChevronRightIcon, Loader2, Plus } from "lucide-react";
 import type {
   BotConfig,
   BotProvider,
@@ -72,6 +73,52 @@ function createEmptyConfig(): BotsConfigFile {
   return { version: 3, bots: [] };
 }
 
+/**
+ * 右侧详情里的可折叠分组：节头是一条摘要行（标题 + 简述 + chevron），
+ * 内容默认收起、点击展开。分组各自持有折叠状态，默认只展开主卡（BotSummaryCard），
+ * 其余分组收起，降低弹层信息密度。
+ */
+function BotSection({
+  title,
+  hint,
+  expanded,
+  onToggle,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  expanded: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <SettingsGroupCard>
+      <button
+        aria-expanded={expanded}
+        aria-label={title}
+        className="flex h-9 w-full items-center gap-2 px-3 text-left outline-none transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring/40"
+        onClick={onToggle}
+        type="button"
+      >
+        <span className="min-w-0 shrink-0 truncate text-ui-base font-medium text-foreground">
+          {title}
+        </span>
+        {hint ? (
+          <span className="min-w-0 truncate text-ui-sm text-foreground-subtle">{hint}</span>
+        ) : null}
+        <ChevronRightIcon
+          aria-hidden
+          className={cn(
+            "ml-auto size-3.5 shrink-0 text-foreground-subtlest transition-transform",
+            expanded && "rotate-90",
+          )}
+        />
+      </button>
+      {expanded ? children : null}
+    </SettingsGroupCard>
+  );
+}
+
 function createDraftBot(params: { provider: BotProvider }): BotConfig {
   // Bugfix: Bot id 只是配置实体身份，不应该带 provider 前缀；
   // 新建时如果看到 telegram-* 这类 id，容易误以为渠道被固定到了 Telegram。
@@ -133,6 +180,10 @@ export function BotsDialog({
   const [credentialValue, setCredentialValue] = useState("");
   const [secretSaving, setSecretSaving] = useState(false);
   const [workspaceAccessSaving, setWorkspaceAccessSaving] = useState(false);
+  // 右侧分组默认折叠，只展开主卡（BotSummaryCard）。
+  const [connectionExpanded, setConnectionExpanded] = useState(false);
+  const [behaviorExpanded, setBehaviorExpanded] = useState(false);
+  const [dangerExpanded, setDangerExpanded] = useState(false);
   const [botNameDraft, setBotNameDraft] = useState<{
     botId: string;
     value: string;
@@ -244,6 +295,10 @@ export function BotsDialog({
     setWorkspaceAccessSaving(false);
     setFeishuRegistration(null);
     setWeixinRegistration(null);
+    // 切换机器人时回到默认折叠态，保证“默认只展开主卡”。
+    setConnectionExpanded(false);
+    setBehaviorExpanded(false);
+    setDangerExpanded(false);
   }, [selectedBotId, selectedBot?.provider]);
 
   useEffect(() => {
@@ -1116,13 +1171,13 @@ export function BotsDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex h-[calc(100vh-6rem)] max-h-168 max-w-4xl flex-col overflow-hidden rounded-2xl"
+        className="flex h-[calc(100vh-6rem)] max-h-168 max-w-4xl flex-col overflow-hidden rounded-lg"
         onEscapeKeyDown={handleDialogEscapeKeyDown}
       >
         <DialogHeader>
           <div className="flex items-center gap-2">
             <Bot className="size-5 text-foreground" />
-            <DialogTitle className="text-lg font-medium text-foreground">
+            <DialogTitle className="text-ui-xl font-medium text-foreground">
               {intl.formatMessage({ id: "bots.title" })}
             </DialogTitle>
             <DialogDescription className="ml-3">
@@ -1303,36 +1358,50 @@ export function BotsDialog({
                   onPatchBot={patchSelectedBot}
                 />
 
-                <ProviderSettingsCard
-                  bot={selectedBot}
-                  runtime={selectedRuntime}
-                  credentialValue={credentialValue}
-                  bindCode={bindCode}
-                  bindExpired={bindExpired}
-                  bindRemainingMs={bindRemainingMs}
-                  bindCountdownProgress={bindCountdownProgress}
-                  feishuRegistration={feishuRegistration}
-                  feishuRegistrationLoading={feishuRegistrationLoading}
-                  weixinRegistration={weixinRegistration}
-                  weixinRegistrationLoading={weixinRegistrationLoading}
-                  weixinActivated={Boolean(selectedBotState?.weixinActivatedAt)}
-                  secretSaving={secretSaving}
-                  onCredentialValueChange={setCredentialValue}
-                  onSaveSecret={() => void handleSaveSecret()}
-                  onRemoveSecret={() => void handleRemoveSecret()}
-                  onOpenTelegramBotFather={handleOpenTelegramBotFather}
-                  onStartWeixinRegistration={() =>
-                    void handleStartWeixinRegistration()
-                  }
-                  onStartFeishuRegistration={() =>
-                    void handleStartFeishuRegistration()
-                  }
-                  onCreateBindCode={() => void handleCreateBindCode()}
-                  onUnbind={() => void handleUnbind()}
-                  onCopyBindCommand={() => void copyBindCommand()}
-                />
+                {selectedBot.provider === "webhook" ? null : (
+                  <BotSection
+                    title={intl.formatMessage({ id: "bots.section.connection" })}
+                    hint={intl.formatMessage({ id: "bots.section.connection.hint" })}
+                    expanded={connectionExpanded}
+                    onToggle={() => setConnectionExpanded((value) => !value)}
+                  >
+                    <ProviderSettingsCard
+                      bot={selectedBot}
+                      runtime={selectedRuntime}
+                      credentialValue={credentialValue}
+                      bindCode={bindCode}
+                      bindExpired={bindExpired}
+                      bindRemainingMs={bindRemainingMs}
+                      bindCountdownProgress={bindCountdownProgress}
+                      feishuRegistration={feishuRegistration}
+                      feishuRegistrationLoading={feishuRegistrationLoading}
+                      weixinRegistration={weixinRegistration}
+                      weixinRegistrationLoading={weixinRegistrationLoading}
+                      weixinActivated={Boolean(selectedBotState?.weixinActivatedAt)}
+                      secretSaving={secretSaving}
+                      onCredentialValueChange={setCredentialValue}
+                      onSaveSecret={() => void handleSaveSecret()}
+                      onRemoveSecret={() => void handleRemoveSecret()}
+                      onOpenTelegramBotFather={handleOpenTelegramBotFather}
+                      onStartWeixinRegistration={() =>
+                        void handleStartWeixinRegistration()
+                      }
+                      onStartFeishuRegistration={() =>
+                        void handleStartFeishuRegistration()
+                      }
+                      onCreateBindCode={() => void handleCreateBindCode()}
+                      onUnbind={() => void handleUnbind()}
+                      onCopyBindCommand={() => void copyBindCommand()}
+                    />
+                  </BotSection>
+                )}
 
-                <SettingsGroupCard>
+                <BotSection
+                  title={intl.formatMessage({ id: "bots.section.behavior" })}
+                  hint={intl.formatMessage({ id: "bots.section.behavior.hint" })}
+                  expanded={behaviorExpanded}
+                  onToggle={() => setBehaviorExpanded((value) => !value)}
+                >
                   <BotReplyGranularityCard
                     bot={selectedBot}
                     onPatchBot={patchSelectedBot}
@@ -1351,9 +1420,16 @@ export function BotsDialog({
                     onPatchAllowedWorkspaces={patchAllowedWorkspaces}
                     onToggleWorkspaceAccess={toggleWorkspaceAccess}
                   />
-                </SettingsGroupCard>
+                </BotSection>
 
-                <BotDangerCard onDelete={() => void handleDelete()} />
+                <BotSection
+                  title={intl.formatMessage({ id: "bots.delete" })}
+                  hint={intl.formatMessage({ id: "bots.delete.description" })}
+                  expanded={dangerExpanded}
+                  onToggle={() => setDangerExpanded((value) => !value)}
+                >
+                  <BotDangerCard onDelete={() => void handleDelete()} />
+                </BotSection>
               </div>
             )}
           </section>

@@ -37,7 +37,7 @@ export const BackgroundBashOutputSidePane = memo(function BackgroundBashOutputSi
       className="flex h-full min-h-0 min-w-0 flex-col bg-panel text-ui-base text-foreground-subtle"
     >
       {preview.error ? (
-        <div role="alert" className="flex shrink-0 items-center gap-2 px-4 py-2 text-danger">
+        <div role="alert" className="flex shrink-0 items-center gap-2 px-4 py-2 text-destructive">
           <span>{intl.formatMessage({ id: `bashOutput.error.${preview.error}` })}</span>
           <Button variant="ghost" size="sm" onClick={preview.refresh}>
             {intl.formatMessage({ id: "bashOutput.retry" })}

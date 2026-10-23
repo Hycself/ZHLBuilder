@@ -146,7 +146,7 @@ export function ResourceManagerApp({
         </Tabs>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-auto bg-background-alt p-4">
+      <div className="min-h-0 flex-1 overflow-auto bg-sidebar p-4">
         {tab === "storage" ? (
           <StorageSection bridge={storage} active={tab === "storage"} />
         ) : (

@@ -85,7 +85,7 @@ export function CodingPlanEmbeddedWebviewDialog({
 }: CodingPlanEmbeddedWebviewDialogProps) {
   const { intl, locale } = useZCodeIntl();
   const platform = usePlatform();
-  const theme = useZCodeStoreWithDefault((state) => state.theme, "zai-dark");
+  const theme = useZCodeStoreWithDefault((state) => state.theme, "zai-light");
   const userId = useZCodeStoreWithDefault((state) => state.user?.id ?? null, null);
   const webviewRef = useRef<ElectronWebviewTag | null>(null);
   const onOpenResultRef = useRef(onOpenResult);
@@ -458,7 +458,7 @@ export function CodingPlanEmbeddedWebviewDialog({
           )}
         >
           {authError ? (
-            <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-ui-base text-foreground-subtle">
+            <div className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-border bg-surface p-3 text-ui-base text-foreground-subtle">
               <span>
                 {intl.formatMessage({
                   id: "settings.modelProvider.codingPlan.webview.authInjectFailed",
@@ -474,7 +474,7 @@ export function CodingPlanEmbeddedWebviewDialog({
           ) : null}
           {loadError ? (
             <div
-              className="mb-3 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 text-ui-base text-foreground-subtle"
+              className="mb-3 flex flex-col gap-3 rounded-lg border border-border bg-surface p-4 text-ui-base text-foreground-subtle"
               data-testid="coding-plan-embedded-webview-load-error"
             >
               <span className="font-medium text-foreground">

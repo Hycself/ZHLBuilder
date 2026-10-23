@@ -64,7 +64,7 @@ export function AppUsageModelUsagePieChart({ snapshot }: { snapshot: AppUsageSna
   );
 
   return (
-    <section className="space-y-3 rounded-xl bg-surface p-4">
+    <section className="space-y-3 rounded-lg bg-surface p-4">
       <h3 className="text-ui-base font-medium text-foreground">
         {intl.formatMessage({ id: "settings.usage.modelChartTitle" })}
       </h3>
@@ -110,7 +110,7 @@ export function AppUsageModelUsagePieChart({ snapshot }: { snapshot: AppUsageSna
             {chartData.map((slice) => (
               <div
                 key={slice.key}
-                className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 border-b border-border/70 py-2 last:border-b-0"
+                className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 border-b border-border py-2 last:border-b-0"
                 role="listitem"
               >
                 <span

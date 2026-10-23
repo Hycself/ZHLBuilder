@@ -41,7 +41,7 @@ export function ConversationShareSuccessDock({
     <section
       data-conversation-share-keep-open="success-dock"
       data-testid="conversation-share-success-dock"
-      className="w-full overflow-hidden rounded-2xl border border-input-border bg-input text-foreground"
+      className="w-full overflow-hidden rounded-lg border border-input-border bg-input text-foreground"
     >
       <div className="flex items-start justify-between gap-3 p-3 pb-2">
         <div

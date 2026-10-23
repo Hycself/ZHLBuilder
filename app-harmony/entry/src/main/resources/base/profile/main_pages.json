@@ -1,7 +1,5 @@
 {
   "src": [
-    "pages/Index",
-    "pages/PinGate",
-    "pages/DeviceDetail"
+    "pages/Index"
   ]
 }

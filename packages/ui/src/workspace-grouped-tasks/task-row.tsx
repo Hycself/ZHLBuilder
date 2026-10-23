@@ -139,8 +139,8 @@ function GroupedTaskRowComponent({
     leadingIndicator === "error"
       ? "bg-destructive"
       : leadingIndicator === "unread"
-        ? // grouped task 未读点需要和普通 task list 共用 sky 色，避免 brand 色在不同主题下表达漂移。
-          "bg-sky-500 dark:bg-sky-400"
+        ? // 未读点改用中性前景色：侧栏是长期驻留区，未读靠权重区分即可，不再叠一个强调色。
+          "bg-foreground"
         : null;
   const canShowHoverActions = !dragOverlay;
   // 工作流运行行：分组行同样长在标题下；
@@ -168,7 +168,7 @@ function GroupedTaskRowComponent({
         "group/task-row",
         TASK_GROUP_ROW_CLASS,
         dragOverlay
-          ? "pointer-events-none cursor-grabbing border border-border bg-background shadow-lg opacity-100"
+          ? "pointer-events-none cursor-grabbing border border-border bg-background opacity-100"
           : "cursor-pointer",
         isActive ? "bg-selected" : canShowHoverActions && "hover:bg-surface-hover",
         dragging && "opacity-0",

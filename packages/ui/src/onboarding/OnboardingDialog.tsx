@@ -467,7 +467,7 @@ export function OnboardingDialog(props: {
       }}
     >
       <DialogContent
-        className="h-[calc(100vh-6rem)] max-w-4xl max-h-168 overflow-hidden rounded-2xl p-0"
+        className="h-[calc(100vh-6rem)] max-w-4xl max-h-168 overflow-hidden rounded-lg p-0"
         showCloseButton
       >
         <DialogTitle className="sr-only">{dialogTitle}</DialogTitle>

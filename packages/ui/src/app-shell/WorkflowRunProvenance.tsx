@@ -5,9 +5,11 @@
 // 与「配置」修订出来的。
 // 工具路径发起的 run 没有——它的来历是转写里那一行 CreateWorkflow。只读，无动作。
 
-import { Fragment, memo } from "react";
+import { Fragment, memo, useState } from "react";
+import { ChevronRightIcon } from "lucide-react";
 import type { WorkflowLaunchMeta } from "@zhlbuilder/shared/zcode-protocol-v4";
 import { workflowSettingsProvenanceRows } from "@/components/workflow-timeline/workflowSettingsChange.js";
+import { cn } from "@/components/lib/utils.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 
 /** 实参值：字符串原样，其余 `JSON.stringify`（与实参窗 / 通知同一条归一化）。 */
@@ -31,6 +33,9 @@ export const WorkflowRunProvenance = memo(function WorkflowRunProvenance({
   startedAt?: number;
 }) {
   const { intl } = useZCodeIntl();
+  // 启动信息默认折叠成摘要行（时刻 + 作用域），说明与实参表按需展开：
+  // 来龙去脉是回看时才读的元数据，不该占满详情页首屏。
+  const [expanded, setExpanded] = useState(false);
   const amend = meta.amend;
   const caption = intl.formatMessage({
     id:
@@ -65,7 +70,14 @@ export const WorkflowRunProvenance = memo(function WorkflowRunProvenance({
       data-workflow-launch-kind={amend === undefined ? "launch" : "settings"}
       {...(meta.scope === undefined ? {} : { "data-workflow-launch-scope": meta.scope })}
     >
-      <div className="flex min-w-0 items-center gap-2 text-ui-xs text-foreground-subtle">
+      <button
+        aria-expanded={expanded}
+        aria-label={caption}
+        className="flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-sm text-left text-ui-xs text-foreground-subtle outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
+        data-testid="workflow-run-provenance-toggle"
+        onClick={() => setExpanded((value) => !value)}
+        type="button"
+      >
         <span className="min-w-0 truncate">
           {time === undefined ? caption : `${caption} · ${time}`}
         </span>
@@ -78,15 +90,22 @@ export const WorkflowRunProvenance = memo(function WorkflowRunProvenance({
             {intl.formatMessage({ id: `chat.workflowLaunch.scope.${meta.scope}` })}
           </span>
         )}
-      </div>
-      {amend === undefined && meta.description ? (
+        <ChevronRightIcon
+          aria-hidden
+          className={cn(
+            "ml-auto size-3.5 shrink-0 text-foreground-subtlest transition-transform",
+            expanded && "rotate-90",
+          )}
+        />
+      </button>
+      {expanded && amend === undefined && meta.description ? (
         <p className="mt-1 min-w-0 text-ui-sm leading-5 text-foreground-subtle">
           {meta.description}
         </p>
       ) : null}
       {/* 键值表：实参是键 mono、值 mono 单行截断（title 兜全文）；设置改动是人话标签、值照样单行。
-          侧板有的是纵向空间，不折叠。 */}
-      {rows.length > 0 ? (
+          整块随启动信息一起折叠展开，展开后表本身不再二次折叠。 */}
+      {expanded && rows.length > 0 ? (
         <dl
           className="mt-2 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1"
           data-testid={

@@ -55,9 +55,12 @@ import {
   TID_PROJECT_ADD,
   TID_PROJECT_SECTION,
   TID_SIDEBAR,
+  TID_TASK_NEW_BUTTON,
   TID_WORKSPACE_LIST,
 } from "@zhlbuilder/shared";
+import { AppNavRail, type AppNavRailItem } from "@/next-shell/AppNavRail.js";
 import { ControlHintTooltip } from "@/ControlHintTooltip.js";
+import { runUserAction } from "@/lib/userActionTelemetry.js";
 import { Button } from "@/components/ui/button.js";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.js";
 import {
@@ -72,7 +75,6 @@ import {
 } from "@/components/ui/dropdown-menu.js";
 import { useZCodeIntl } from "@/i18n/IntlProvider.js";
 import { logger } from "@/logger.js";
-import { NewTaskButtonGroup } from "@/NewTaskButtonGroup.js";
 import { selectWorkspaceZCodeState, useZCodeSessionStore } from "@/store/zcodeSessionStore.js";
 import { useZCodeStore } from "@/store/StoreProvider.js";
 import { useTabStore } from "@/store/TabStoreProvider.js";
@@ -137,21 +139,6 @@ import {
 } from "@/lib/workspaceSidebarDrag.js";
 import { createPortal } from "react-dom";
 
-function WorkspaceNewTaskTooltip({
-  children,
-  disabledReason,
-}: {
-  children: ReactNode;
-  disabledReason?: string;
-}) {
-  // 正常状态下按钮已带“新建任务”文案和快捷键，再挂 tooltip 只是重复；仅禁用时才解释原因。
-  if (!disabledReason) return children;
-  return (
-    <ControlHintTooltip title={disabledReason}>
-      <div>{children}</div>
-    </ControlHintTooltip>
-  );
-}
 export { applyWorkspaceTriggerSelection } from "@/WorkspaceSidebar/workspaceSidebarSelection.js";
 export { WorkspaceSidebarCollapsedRail } from "@/WorkspaceSidebar/WorkspaceSidebarCollapsedRail.js";
 
@@ -184,7 +171,7 @@ function WorkspaceDragOverlay({ tab, width }: { tab: WorkspaceTabState; width: n
   return (
     <div
       data-testid="workspace-drag-overlay"
-      className="pointer-events-none flex cursor-grabbing items-center rounded-lg border border-border bg-background text-ui-base text-foreground shadow-lg h-8 px-2.5 gap-2 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0"
+      className="pointer-events-none flex cursor-grabbing items-center rounded-lg border border-border bg-background text-ui-base text-foreground h-8 px-2.5 gap-2 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0"
       style={width ? { width } : undefined}
     >
       {/* 项目列表图标位于 Button 内，运行态会被按钮 SVG 规则收敛为 14px；
@@ -246,7 +233,7 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
   reconnectingRemoteWorkspaceLogsByWorkspaceKey = EMPTY_RECONNECTING_REMOTE_WORKSPACE_LOGS_BY_WORKSPACE_KEY,
   isDesktop = false,
   isMacDesktop: _isMacDesktop = false,
-  isWindowsDesktop = false,
+  isWindowsDesktop: _isWindowsDesktop = false,
   isSidebarVisible: _isSidebarVisible = true,
   onToggleSidebar: _onToggleSidebar,
   toggleSidebarShortcutLabel: _toggleSidebarShortcutLabel,
@@ -359,6 +346,7 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
     : undefined;
   const setTheme = useZCodeStore((state) => state.setTheme);
   const commandCenterShortcutLabel = useShortcutCommandLabel("openCommandCenter");
+  const newTaskShortcutLabel = useShortcutCommandLabel("newTask");
   const tabs = useTabStore((state) => state.tabs);
   const activateTab = useTabStore((state) => state.activateTab);
   const closeTab = useTabStore((state) => state.closeTab);
@@ -1017,8 +1005,7 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
   // 这里把 render prop 稳定在真正影响工具栏展示的状态上，避免消息流更新污染侧栏任务区。
   const workspaceTaskToolbar = useCallback(
     () => (
-      <div className="pl-2.5 pr-3">
-        <div className="flex min-w-0 items-center justify-between gap-2">
+      <div className="flex w-full min-w-0 items-center justify-between gap-2">
           <div className="flex min-w-0 shrink-0 items-center gap-1">
             <Tabs
               value={activePrimaryTaskMode}
@@ -1225,7 +1212,6 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
               </Button>
             </ControlHintTooltip>
           </div>
-        </div>
       </div>
     ),
     [
@@ -1248,14 +1234,103 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
     ],
   );
 
+  /**
+   * 轨上的「新建任务」保持与原 NewTaskButtonGroup 完全相同的分支语义：
+   * 分组视图优先复用已注册的草稿动作，否则按视图投不同的 createSource。
+   * 遥测包一层 runUserAction，口径与原来一致（乐观投影即记完成）。
+   */
+  const handleCreateTaskFromRail = useCallback(() => {
+    if (workspaceReadOnly) {
+      return;
+    }
+    runUserAction({
+      input: { featureId: "task.lifecycle", action: "create", trigger: "button" },
+      operation: () => {
+        if (taskViewMode === "grouped") {
+          if (createGroupedTaskDraftAction) {
+            createGroupedTaskDraftAction();
+            return;
+          }
+          onCreateTask({ groupedDraftPlacement: { type: "top" } });
+          return;
+        }
+        onCreateTask({ createSource: "project" });
+      },
+      completed: { resultSource: "optimistic_projection" },
+      failureStage: "task_create",
+    });
+  }, [workspaceReadOnly, taskViewMode, createGroupedTaskDraftAction, onCreateTask]);
+
+  // 「去处」交给导航轨，右列只留内容；文案全部沿用各自的既有 i18n key。
+  const navRailItems: AppNavRailItem[] = useMemo(
+    () => [
+      {
+        id: "new-task",
+        icon: MessageCirclePlus,
+        label: intl.formatMessage({ id: "taskList.newThread" }),
+        shortcutLabel: newTaskShortcutLabel,
+        disabledReason: workspaceReadOnlyReason,
+        testId: TID_TASK_NEW_BUTTON,
+        disabled: workspaceReadOnly,
+        onSelect: handleCreateTaskFromRail,
+      },
+      {
+        id: "command-center",
+        icon: Search,
+        label: intl.formatMessage({ id: "commandCenter.open" }),
+        shortcutLabel: commandCenterShortcutLabel,
+        onSelect: onOpenCommandCenter,
+      },
+      {
+        id: "automations",
+        icon: CalendarClock,
+        label: intl.formatMessage({ id: "workspace.openScheduledSettings" }),
+        testId: TID_AUTOMATIONS_OPEN,
+        active: automationsActive,
+        section: "secondary",
+        onSelect: handleOpenAutomationsMain,
+      },
+      {
+        id: "plugin-store",
+        icon: Blocks,
+        label: intl.formatMessage({ id: "workspace.openPluginsSettings" }),
+        testId: "plugin-store-sidebar-open",
+        active: pluginStoreActive,
+        section: "secondary",
+        onSelect: handleOpenPluginStoreMain,
+      },
+    ],
+    [
+      intl,
+      newTaskShortcutLabel,
+      workspaceReadOnlyReason,
+      workspaceReadOnly,
+      handleCreateTaskFromRail,
+      commandCenterShortcutLabel,
+      onOpenCommandCenter,
+      automationsActive,
+      handleOpenAutomationsMain,
+      pluginStoreActive,
+      handleOpenPluginStoreMain,
+    ],
+  );
+
   return (
     <aside
       data-testid={TID_SIDEBAR}
-      // 这里用设计系统的结构面 token 固定侧栏层级，避免不同合成器把左侧容器混成异常灰块。
-      className="flex h-full flex-col overflow-hidden"
+      // 导航轨与侧栏同属一块导航面（background-alt），右侧一条发丝线把它和内容面分开；
+      // 之前侧栏没有自己的底色，和窗口背景混成一片，整列读不出"这是一个面板"。
+      className="flex h-full flex-row overflow-hidden border-r border-border bg-sidebar"
     >
-      <div className="h-12 [app-region:drag]"></div>
-      <div className="relative flex-1 min-h-0 overflow-hidden">
+      <AppNavRail items={navRailItems} ariaLabel={intl.formatMessage({ id: "navRail.ariaLabel" })} />
+      <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden">
+        {/* 顶带即侧栏页头：拖拽区和视图切换共用同一行。
+            之前这里是一条 48px 空拖拽带，工具行再单独排在它下面，
+            侧栏要在两行空白之后才出现第一条内容。 */}
+        <div className="flex h-12 shrink-0 items-center border-b border-border pr-2 pl-3 [app-region:drag]">
+          <div className="min-w-0 flex-1 [app-region:no-drag]">{workspaceTaskToolbar()}</div>
+        </div>
+        <div className="relative flex-1 min-h-0 overflow-hidden">
         <div
           className={cn(
             "absolute inset-0 flex min-h-0 flex-col transition-transform duration-200 ease-out",
@@ -1263,90 +1338,7 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
           )}
           aria-hidden={isFileTreeOpen}
         >
-          <div className={cn("flex flex-col gap-1 px-2", isWindowsDesktop ? "py-2" : "py-3")}>
-            <WorkspaceNewTaskTooltip disabledReason={workspaceReadOnlyReason}>
-              <NewTaskButtonGroup
-                disabled={workspaceReadOnly}
-                onCreateTask={() => {
-                  if (workspaceReadOnly) {
-                    return;
-                  }
-                  if (taskViewMode === "grouped") {
-                    if (createGroupedTaskDraftAction) {
-                      createGroupedTaskDraftAction();
-                      return;
-                    }
-                    onCreateTask({ groupedDraftPlacement: { type: "top" } });
-                    return;
-                  }
-                  onCreateTask({ createSource: "project" });
-                }}
-              />
-            </WorkspaceNewTaskTooltip>
-            <Button
-              variant="ghost"
-              onClick={onOpenCommandCenter}
-              data-icon="inline-start"
-              size="lg"
-              className="w-full justify-start gap-2 text-foreground hover:bg-surface-hover hover:text-foreground"
-            >
-              <Search className="size-4" />
-              <span className="min-w-0 flex-1 truncate text-left">
-                {intl.formatMessage({ id: "commandCenter.open" })}
-              </span>
-              <span className="ml-auto shrink-0 text-ui-xs font-normal text-foreground-subtlest">
-                {commandCenterShortcutLabel}
-              </span>
-            </Button>
-            {/* 远程入口展示策略统一走 useRemoteConnectionEntryVisibility，避免与其他入口出现分叉。*/}
-            {/* {showRemoteConnectionEntry ? (
-              <SSHDialog
-                onConnect={onConnectRemote}
-                onSelectProject={onSelectRemoteProject}
-                onCancelSession={onCancelRemoteProject}
-                isWindowsDesktop={isWindowsDesktop}
-                triggerVariant="ghost"
-                triggerSize="lg"
-                triggerClassName="w-full justify-start gap-2 text-foreground hover:bg-surface-hover hover:text-foreground"
-                trigger={
-                  <>
-                    <Cloud className="size-4" />
-                    <span>{intl.formatMessage({ id: "remote.trigger" })}</span>
-                  </>
-                }
-              />
-            ) : null} */}
-            <Button
-              variant="ghost"
-              onClick={handleOpenAutomationsMain}
-              data-icon="inline-start"
-              data-testid={TID_AUTOMATIONS_OPEN}
-              size="lg"
-              aria-pressed={automationsActive}
-              className={cn(
-                "w-full justify-start gap-2 text-foreground hover:bg-surface-hover hover:text-foreground",
-                automationsActive && "bg-selected text-foreground",
-              )}
-            >
-              <CalendarClock className="size-4" />
-              {intl.formatMessage({ id: "workspace.openScheduledSettings" })}
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={handleOpenPluginStoreMain}
-              data-icon="inline-start"
-              data-testid="plugin-store-sidebar-open"
-              size="lg"
-              aria-pressed={pluginStoreActive}
-              className={cn(
-                "w-full justify-start gap-2 text-foreground hover:bg-surface-hover hover:text-foreground",
-                pluginStoreActive && "bg-selected text-foreground",
-              )}
-            >
-              <Blocks className="size-4" />
-              {intl.formatMessage({ id: "workspace.openPluginsSettings" })}
-            </Button>
-          </div>
+          {/* 四个「去处」已移到 AppNavRail；此列只承载内容与视图操作。 */}
 
           <div className="relative flex min-h-0 flex-1 flex-col">
             <StickyGroupHeaderSlot header={groupedStickyHeader} />
@@ -1358,7 +1350,6 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
               }
               style={workspaceScrollMaskStyle}
             >
-              {workspaceTaskToolbar()}
               {shouldShowPinnedTasks ? (
                 // 归档切换主任务区时不应隐藏 pinned。
                 // pinned 是全局置顶区，归档态保持置顶区可见。
@@ -1694,6 +1685,7 @@ export const WorkspaceSidebar = memo(function WorkspaceSidebarComponent({
             />
           ) : null}
         </div>
+      </div>
       </div>
     </aside>
   );

@@ -138,7 +138,7 @@ export function WorkspaceHeader({
       data-workspace-header-variant={variant}
       className={cn(
         "@container/workspace-header relative flex w-full shrink-0 h-12 border-b",
-        variant === "draft" ? "border-transparent" : "border-border/50",
+        variant === "draft" ? "border-transparent" : "border-border",
       )}
     >
       {variant === "draft" && draftDropTargetController?.active ? (

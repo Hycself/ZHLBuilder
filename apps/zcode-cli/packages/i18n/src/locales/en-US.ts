@@ -7,16 +7,17 @@ export const enUS: ZCodeCopy = {
       localeUnsupported: (value) =>
         `Unsupported --locale value: ${value}. Supported locales: en-US, zh-CN, auto.`,
     },
-    help: (version) => `zcode ${version}
+    help: (version) => `zhlbuilder ${version}
 
 Usage:
   zhlbuilder [command] [options]
 
-With no command, zcode opens the full-screen TUI.
+With no command, zhlbuilder opens the full-screen TUI.
 
 Commands:
   app-server Run the ZHLBuilder Protocol stdio app server
   commands   List custom slash commands (\`commands list\`)
+  device     Connect this machine as a controlled device to the ZHL hub (\`device pair|start|status\`); the mobile app dispatches tasks through it
   doctor     Inspect runtime and packaging assumptions
   login [zai|bigmodel]  Sign in through browser authorization
   logout     Remove the shared Z.AI login credentials
@@ -43,6 +44,7 @@ Options:
   --force-mcs      Force mid-conversation system projection for Anthropic providers
   --locale <locale>  UI locale: en-US, zh-CN, or auto
   --mode <mode>    Permission mode for prompts: build, edit, plan, or yolo (default: yolo for --prompt)
+  --model <provider/model>  Run this invocation with the given model; may include $reasoningLevel. Does not change the saved default model (--prompt/--target only)
   --resume <sessionId>  Resume a persisted session by sessionId (sess_...)
   --target <text>  Run or set the session goal in headless mode
   --target-replace Replace any existing session goal set by --target

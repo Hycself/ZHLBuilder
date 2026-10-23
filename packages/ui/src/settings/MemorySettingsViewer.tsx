@@ -75,7 +75,7 @@ export function MemorySettingsViewer({
 
   if (catalogState === "loading" && workspaces.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
+      <div className="rounded-lg border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
         {intl.formatMessage({ id: "settings.memory.viewer.loading" })}
       </div>
     );
@@ -83,7 +83,7 @@ export function MemorySettingsViewer({
 
   if (!selectedWorkspace) {
     return (
-      <div className="rounded-xl border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
+      <div className="rounded-lg border border-dashed border-border bg-transparent px-4 py-8 text-center text-ui-base text-foreground-subtle">
         {intl.formatMessage({ id: "settings.memory.viewer.empty" })}
       </div>
     );
@@ -150,7 +150,7 @@ export function MemorySettingsViewer({
               })}
             />
           </div>
-          <div className="overflow-hidden rounded-xl bg-surface">
+          <div className="overflow-hidden rounded-lg bg-surface">
             {visibleFiles.map((file, index) => (
               <Fragment key={file.name}>
                 {index > 0 ? <div className="h-px bg-border/50" aria-hidden="true" /> : null}
@@ -161,7 +161,7 @@ export function MemorySettingsViewer({
                   >
                     <span
                       data-testid={testId(TID_SETTINGS_MEMORY_FILE_ICON, file.name)}
-                      className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-background"
+                      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-background"
                     >
                       <FileDisplayIcon
                         src={resolveFileDisplayDescriptor(file.path).fileIconSrc}
