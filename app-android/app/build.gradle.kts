@@ -16,9 +16,18 @@ android {
         versionName = "0.1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../keystore/zhlbuilder.keystore")
+            storePassword = "ZHLBuilder2026"
+            keyAlias = "zhlbuilder"
+            keyPassword = "ZHLBuilder2026"
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

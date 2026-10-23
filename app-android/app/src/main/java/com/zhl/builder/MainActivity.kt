@@ -64,6 +64,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        com.zhl.builder.store.NotificationHelper.createChannel(this)
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 100)
+        }
         setContent {
             MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(
                 background = ZhlColors.bg, surface = ZhlColors.panel,
@@ -343,11 +347,28 @@ class MainActivity : ComponentActivity() {
         var err by remember { mutableStateOf("") }
 
         // 状态 + 任务列表轮询
+        val prevStatuses = remember { mutableStateOf<Map<Long, Int>>(emptyMap()) }
         LaunchedEffect(deviceId, pinSession) {
             while (true) {
                 try {
                     status = Api.deviceStatus(this@MainActivity, deviceId, pinSession)
-                    tasks = Api.tasks(this@MainActivity, deviceId, pinSession)
+                    val newTasks = Api.tasks(this@MainActivity, deviceId, pinSession)
+                    // 任务从运行中变为终态 → 系统通知
+                    val prev = prevStatuses.value
+                    for (t in newTasks) {
+                        val tid = t.optLong("id")
+                        val tstat = t.optInt("status")
+                        val old = prev[tid]
+                        if (old == 1 && tstat >= 2) {
+                            com.zhl.builder.store.NotificationHelper.notifyTaskFinished(
+                                this@MainActivity, deviceId,
+                                status?.optString("name") ?: "设备", tstat,
+                                t.optString("exitNote").takeIf { it.isNotBlank() }
+                            )
+                        }
+                    }
+                    prevStatuses.value = newTasks.associate { it.optLong("id") to it.optInt("status") }
+                    tasks = newTasks
                     err = ""
                 } catch (e: ApiException) {
                     err = e.message ?: ""
