@@ -4,6 +4,7 @@ import { hostname } from "node:os";
 import { join } from "node:path";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import QRCode from "qrcode";
+import { WebSocket } from "ws";
 import { agentCapabilitiesPayload, runZhlTask } from "./zhlDeviceTaskRunner.js";
 
 /**
@@ -291,7 +292,7 @@ function loadOrCreateDeviceUid(): string {
 
 async function startAgentLoop(state0: DeviceIdentity): Promise<void> {
   if (state.runtime && !state.runtime.stopped) return; // 已在运行
-  const wsUrl = `${state0.server.replace(/^http/, "ws")}/api/builder/ws?token=${state0.deviceToken}`;
+  const wsUrl = `${state0.server.replace(/^http/, "ws")}/api/builder/ws`;
   const runtime: AgentRuntime = {
     ws: null,
     heartbeat: null,
@@ -309,7 +310,9 @@ async function startAgentLoop(state0: DeviceIdentity): Promise<void> {
 
   const connect = (): Promise<void> =>
     new Promise((resolveWs, rejectWs) => {
-      const ws = new WebSocket(wsUrl);
+      // 令牌走 X-Builder-Token 头而不是 URL query：query 会落进 nginx 访问日志，
+      // 设备令牌一泄露就是别人家的设备。全局 WebSocket 带不了自定义头，用 ws 包。
+      const ws = new WebSocket(wsUrl, { headers: { "X-Builder-Token": state0.deviceToken } });
       let opened = false;
       let openedAt = 0;
       ws.onopen = () => {
