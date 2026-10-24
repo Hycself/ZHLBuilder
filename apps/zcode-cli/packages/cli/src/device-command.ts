@@ -3,6 +3,7 @@ import { homedir, hostname, platform as osPlatform } from "node:os";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { randomBytes } from "node:crypto";
+import { WebSocket } from "ws";
 import { ZHL_MODE_CHOICES } from "@zhlbuilder/shared/zhlTaskEvents";
 import { runDeviceTask } from "./deviceTaskRunner.js";
 
@@ -276,7 +277,9 @@ export const runDeviceCommand = async (
 
 /** agent 主循环：WS 长连 + 心跳 + 任务执行 */
 const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string): void }; stderr: { write(s: string): void } }): Promise<number> => {
-  const wsUrl = `${state.server.replace(/^http/, "ws")}/api/builder/ws?token=${state.deviceToken}`;
+  // 令牌走 X-Builder-Token 头而不是 URL query：query 会落进 nginx 访问日志。
+  // 全局 WebSocket 带不了自定义头，用 ws 包（构建时整体打进 bundle）。
+  const wsUrl = `${state.server.replace(/^http/, "ws")}/api/builder/ws`;
   let stopped = false;
   const tasks = new Map<number, { child: ReturnType<typeof spawn> }>();
 
@@ -287,7 +290,7 @@ const runAgentLoop = async (state: DeviceState, ctx: { stdout: { write(s: string
 
   const connect = (): Promise<void> =>
     new Promise((resolve, reject) => {
-      const ws = new WebSocket(wsUrl);
+      const ws = new WebSocket(wsUrl, { headers: { "X-Builder-Token": state.deviceToken ?? "" } });
       let opened = false;
       ws.onopen = () => {
         opened = true;
